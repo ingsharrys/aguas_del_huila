@@ -1,6 +1,6 @@
 # 💧 Aguas del Huila
 
-**Aguas del Huila** es un sistema web desarrollado en **Laravel 11** con **Livewire** y **Volt**, diseñado para dinamizar la gestión de contenido institucional, incluyendo noticias, servicios y secciones informativas administrables mediante un panel CRUD moderno y seguro.
+**Aguas del Huila** es un sistema web desarrollado en **Laravel 12** con **Livewire** y **Volt**, diseñado para dinamizar la gestión de contenido institucional, incluyendo noticias, servicios y secciones informativas administrables mediante un panel CRUD moderno y seguro.
 
 ---
 
@@ -19,7 +19,7 @@
 
 | Componente | Versión / Descripción |
 |-------------|-----------------------|
-| **Laravel** | 11.x |
+| **Laravel** | 12.x |
 | **PHP** | 8.4.x |
 | **Composer** | 2.x |
 | **Node.js** | 24.x |
@@ -79,3 +79,10 @@ O
 ```bash
 npm run dev
 ```
+
+🧑‍💻 Autor
+
+Desarrollado por:
+William Sabi
+👨‍💻 Ingeniero en Sistemas — Desarrollo Web y Móvil
+📧 Contacto: sabicriollo@gmail.com
