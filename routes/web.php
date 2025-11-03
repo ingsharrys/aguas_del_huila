@@ -4,12 +4,22 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
+// Controladores para administrador
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ArchivoController;
+use App\Http\Controllers\BannerController;
+// Controladores para páginas
+use App\Http\Controllers\HomeController;
+// Manejar imagenes dentro del editor de texto
+use App\Http\Controllers\UploadController;
+Route::post('/upload-image', [UploadController::class, 'uploadImage'])->name('upload.image');
 
 // Página principal pública
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Dashboard (solo usuarios autenticados y verificados)
 Route::view('dashboard', 'dashboard')
@@ -39,6 +49,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Grupo de rutas del panel de administración
+// Administrador y Editor
 Route::middleware(['auth', 'role:Administrador|Editor'])->group(function () {
     Route::resource('noticias', NoticiaController::class);
+    Route::resource('servicios', ServicioController::class);
+    Route::resource('posts', PostController::class);
+    Route::resource('archivos', ArchivoController::class);
+    Route::resource('banners', BannerController::class);
+});
+
+// Grupo de rutas del panel de administración
+// Administrador
+Route::middleware(['auth', 'role:Administrador'])->group(function () {
+    Route::resource('categorias', CategoriaController::class);
+    Route::resource('usuarios', UsuarioController::class);
 });

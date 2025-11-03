@@ -3,69 +3,147 @@
 namespace App\Http\Controllers;
 
 use App\Models\Noticia;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class NoticiaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $noticias = Noticia::with('autor')->latest()->paginate(10);
-        return view('noticias.index', compact('noticias'));
+        $query = Noticia::query()->with('categoria', 'autor');
+
+        // Filtro por título o contenido
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
+            $query->where(function($q) use ($buscar) {
+                $q->where('titulo', 'like', "%{$buscar}%");
+            });
+        }
+
+        // Filtro por categoría
+        if ($request->filled('categoria_id')) {
+            $query->where('categoria_id', $request->categoria_id);
+        }
+
+        // Filtro por rango de fechas
+        if ($request->filled('fecha_inicio') && $request->filled('fecha_fin')) {
+            $query->whereBetween('created_at', [
+                $request->fecha_inicio . ' 00:00:00',
+                $request->fecha_fin . ' 23:59:59'
+            ]);
+        } elseif ($request->filled('fecha_inicio')) {
+            $query->whereDate('created_at', '>=', $request->fecha_inicio);
+        } elseif ($request->filled('fecha_fin')) {
+            $query->whereDate('created_at', '<=', $request->fecha_fin);
+        }
+
+        $noticias = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        $categorias = Categoria::orderBy('nombre')->get();
+        
+        return view('noticias.index', compact('noticias', 'categorias'));
     }
 
     public function create()
     {
-        return view('noticias.create');
+        $categorias = Categoria::orderBy('nombre')->get();
+
+        return view('noticias.create', compact('categorias'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'titulo' => 'required|max:255',
-            'contenido' => 'required',
-            'imagen_portada' => 'nullable|image|max:2048',
+            'titulo' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'categoria_id' => 'required|exists:categorias,id',
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
+        // Guardamos la imagen si se sube
         $rutaImagen = null;
         if ($request->hasFile('imagen_portada')) {
             $rutaImagen = $request->file('imagen_portada')->store('noticias', 'public');
         }
 
-        Noticia::create([
-            'titulo' => $request->titulo,
-            'slug' => Str::slug($request->titulo),
-            'contenido' => $request->contenido,
-            'imagen_portada' => $rutaImagen,
-            'user_id' => Auth::id(),
-            'publicado' => true
-        ]);
+        // Creamos el slug del título
+        $slug = Str::slug($request->titulo);
 
-        return redirect()->route('noticias.index')->with('success', 'Noticia creada correctamente.');
+        // Verificamos si ya existe otro slug igual (para evitar duplicados)
+        $contador = Noticia::where('slug', $slug)->count();
+        if ($contador > 0) {
+            $slug .= '-' . ($contador + 1);
+        }
+
+        // Creamos la noticia
+        $noticia = new Noticia();
+        $noticia->titulo = $request->titulo;
+        $noticia->slug = $slug;
+        $noticia->contenido = $request->contenido;
+        $noticia->categoria_id = $request->categoria_id;
+        $noticia->user_id = Auth::id(); // guarda el id del usuario logueado
+        $noticia->imagen_portada = $rutaImagen;
+        $noticia->save();
+
+        // Redirigimos con mensaje de éxito
+        session()->flash('success', 'Noticia creada correctamente');
+        return redirect()->route('noticias.index');
     }
 
     public function edit(Noticia $noticia)
     {
-        return view('noticias.edit', compact('noticia'));
+        // Traemos todas las categorías para el select
+        $categorias = Categoria::all();
+
+        return view('noticias.edit', compact('noticia', 'categorias'));
     }
 
     public function update(Request $request, Noticia $noticia)
     {
-        $request->validate([
-            'titulo' => 'required|max:255',
-            'contenido' => 'required',
+        $validated = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'imagen_portada' => 'nullable|image|max:2048',
         ]);
 
-        $noticia->update($request->all());
+        $noticia->titulo = $validated['titulo'];
+        $noticia->slug = Str::slug($validated['titulo']);
+        $noticia->contenido = $validated['contenido'];
+        $noticia->categoria_id = $validated['categoria_id'] ?? null;
 
-        return redirect()->route('noticias.index')->with('success', 'Noticia actualizada correctamente.');
+        // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
+        if ($request->hasFile('imagen_portada')) {
+            if ($noticia->imagen_portada) {
+                Storage::delete('public/' . $noticia->imagen_portada);
+            }
+
+            $imagen = $request->file('imagen_portada')->store('noticias', 'public');
+            $noticia->imagen_portada = $imagen;
+        }
+
+        $noticia->save();
+
+        session()->flash('success', 'Noticia actualizada correctamente');
+        return redirect()->route('noticias.index');
     }
 
     public function destroy(Noticia $noticia)
     {
+        // Verificar si existe una imagen asociada y eliminarla del almacenamiento
+        if ($noticia->imagen_portada && Storage::disk('public')->exists($noticia->imagen_portada)) {
+            Storage::disk('public')->delete($noticia->imagen_portada);
+        }
+
+        // Eliminar la noticia de la base de datos
         $noticia->delete();
 
-        return redirect()->route('noticias.index')->with('success', 'Noticia eliminada.');
+        // Redirigir con mensaje de éxito
+        session()->flash('success', 'Noticia eliminada correctamente');
+        return redirect()->route('noticias.index');
     }
+
 }

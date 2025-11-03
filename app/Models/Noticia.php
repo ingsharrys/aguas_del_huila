@@ -12,11 +12,11 @@ class Noticia extends Model
     protected $fillable = [
         'titulo',
         'slug',
-        'imagen_portada',
         'contenido',
         'categoria_id',
         'user_id',
-        'publicado'
+        'publicado',
+        'imagen_portada',
     ];
 
     public function autor()
@@ -26,7 +26,7 @@ class Noticia extends Model
 
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
     // Generar slug automáticamente

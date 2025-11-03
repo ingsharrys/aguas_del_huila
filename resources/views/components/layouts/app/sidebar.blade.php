@@ -12,16 +12,20 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
+                <flux:navlist.group :heading="__('Secciones')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    @role('Administrador')
-                        <flux:navlist.item icon="home" :href="route('noticias.index')" :current="request()->routeIs('noticias')" wire:navigate>{{ __('Noticias') }}</flux:navlist.item>
+                    @role('Administrador|Editor')
+                        <flux:navlist.item icon="flag" :href="route('banners.index')" :current="request()->routeIs('banners.*')" wire:navigate>{{ __('Banners') }}</flux:navlist.item>
+                        <flux:navlist.item icon="newspaper" :href="route('noticias.index')" :current="request()->routeIs('noticias.*')" wire:navigate>{{ __('Noticias') }}</flux:navlist.item>
+                        <flux:navlist.item icon="server" :href="route('servicios.index')" :current="request()->routeIs('servicios.*')" wire:navigate>{{ __('Servicios') }}</flux:navlist.item>
+                        <flux:navlist.item icon="folder" :href="route('posts.index')" :current="request()->routeIs('posts.*')" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
+                        <flux:navlist.item icon="plus" :href="route('archivos.index')" :current="request()->routeIs('archivos.*')" wire:navigate>{{ __('Archivos') }}</flux:navlist.item>
                     @endrole
                     @role('Administrador')
-                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Descargas') }}</flux:navlist.item>
+                        <flux:navlist.item icon="calendar" :href="route('categorias.index')" :current="request()->routeIs('categorias.*')" wire:navigate>{{ __('Categorias') }}</flux:navlist.item>
                     @endrole
                     @role('Administrador')
-                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Usuarios') }}</flux:navlist.item>
+                        <flux:navlist.item icon="users" :href="route('usuarios.index')" :current="request()->routeIs('usuarios.*')" wire:navigate>{{ __('Usuarios') }}</flux:navlist.item>
                     @endrole
                 </flux:navlist.group>
             </flux:navlist>

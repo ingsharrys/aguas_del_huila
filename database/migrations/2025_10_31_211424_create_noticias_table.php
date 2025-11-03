@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('titulo');
             $table->string('slug')->unique();
-            $table->string('imagen_portada')->nullable();
             $table->longText('contenido');
             $table->foreignId('categoria_id')->nullable()->constrained('categorias')->nullOnDelete();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('publicado')->default(true);
+            $table->string('imagen_portada')->nullable();
             $table->timestamps();
         });
     }
