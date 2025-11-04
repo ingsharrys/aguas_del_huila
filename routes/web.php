@@ -20,6 +20,10 @@ Route::post('/upload-image', [UploadController::class, 'uploadImage'])->name('up
 
 // Página principal pública
 Route::get('/', [HomeController::class, 'index'])->name('home');
+// Página general de noticias
+Route::get('/noticias/blogs', [NoticiaController::class, 'blog'])->name('noticias.blog');
+// Página individual de noticias
+Route::get('/noticias/{slug}/{id}', [NoticiaController::class, 'article'])->name('noticias.article');
 
 // Dashboard (solo usuarios autenticados y verificados)
 Route::view('dashboard', 'dashboard')

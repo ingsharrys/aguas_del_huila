@@ -146,4 +146,36 @@ class NoticiaController extends Controller
         return redirect()->route('noticias.index');
     }
 
+    // Vista publica general de las noticias
+    public function blog()
+    {
+        // Obtener noticias activas, ordenadas de más reciente a más antigua
+        $noticias = Noticia::where('publicado', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12); // número de noticias por página
+
+        return view('noticias.blog', compact('noticias'));
+    }
+
+    // Vista publica individual de las noticias
+    public function article($slug, $id)
+    {
+        // Buscar la noticia por ID
+        $noticia = Noticia::findOrFail($id);
+
+        // Validar que el slug coincida (para evitar duplicados o URL incorrectas)
+        if ($noticia->slug !== $slug) {
+            return redirect()->route('noticias.article', ['slug' => $noticia->slug, 'id' => $noticia->id]);
+        }
+
+        // Obtener noticias relacionadas (por ejemplo, las 3 más recientes distintas de la actual)
+        $relacionadas = Noticia::where('id', '!=', $id)
+            ->where('publicado', 1)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('noticias.article', compact('noticia', 'relacionadas'));
+    }
+
 }

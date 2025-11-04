@@ -198,7 +198,7 @@
                         <div class="p-4 text-[#0047DC] text-left">
                             <!-- Título -->
                             <h3 class="text-lg font-bold mb-2 hover:text-[#00C81F] transition-colors">
-                                <a href="{{ route('noticias.show', $noticia->id) }}">
+                                <a href="{{ route('noticias.article', [$noticia->slug, $noticia->id]) }}">
                                     {{ Str::limit($noticia->titulo, 70) }}
                                 </a>
                             </h3>

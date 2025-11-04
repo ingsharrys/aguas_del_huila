@@ -24,7 +24,7 @@
             <div>
                 <p class="font-bold text-lg">Sede Principal:</p>
                 <p>Calle 21 No. 1C - 17</p>
-                <a href="#" class="underline">Ubicación</a>
+                <a href="https://maps.app.goo.gl/uie1wGNNpJ7UNiBV6" target="_blank" class="underline">Ubicación</a>
             </div>
 
             <div>
@@ -38,8 +38,8 @@
                 <ul class="space-y-1">
                     <li><a href="#" class="hover:underline">Correo Electrónico para Notificaciones Judiciales</a></li>
                     <li><a href="mailto:notificacionesjudiciales@aguasdelhuila.gov.co" class="hover:underline">notificacionesjudiciales@aguasdelhuila.gov.co</a></li>
-                    <li><a href="#" class="hover:underline">Política de Tratamiento de Datos Personales</a></li>
-                    <li><a href="#" class="hover:underline">Carta de Trato Digno al Usuario</a></li>
+                    <li><a href="#" target="_blank" class="hover:underline">Política de Tratamiento de Datos Personales</a></li>
+                    <li><a href="#" target="_blank" class="hover:underline">Carta de Trato Digno al Usuario</a></li>
                 </ul>
             </div>
         </div>
