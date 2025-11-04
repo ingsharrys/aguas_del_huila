@@ -24,7 +24,7 @@
 | **Composer** | 2.x |
 | **Node.js** | 24.x |
 | **npm** | 11.x |
-| **Livewire** | 3.x |
+| **Livewire** | 4.x |
 | **Volt** | Interfaz dinámica moderna |
 | **Tailwind CSS** | Framework CSS utilitario |
 | **MySQL / MariaDB** | Motor de base de datos |
