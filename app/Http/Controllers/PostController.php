@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Archivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -102,5 +103,58 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Post eliminado correctamente.');
+    }
+
+    // Vista publica individual de los posts PDA
+    public function show($slug = null)
+    {
+        // Obtener posts de PDA
+        $pda = Post::where('id', 4)->first();
+        // Obtener hijos del posts de PDA
+        $pdaPosts = Post::where('parent_id', 4)->orderBy('nombre')->get();
+        // Determinar tab activo
+        $activeTab = $slug
+            ? Post::where('slug', $slug)->firstOrFail()
+            : $pda;
+
+        // Obtener archivos del padre y los hijos
+        $archivos = Archivo::whereIn('post_id', 
+            $pdaPosts->pluck('id')->push($pda->id)
+        )
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->groupBy('post_id'); // Agrupa los archivos por post_id 👈
+
+        return view('posts.show', compact('pda', 'pdaPosts', 'activeTab', 'archivos'));
+    }
+
+    // Vista publica general de los posts
+    public function download()
+    {
+        // Obtener posts padres, ordenadas de más reciente a más antigua
+        $posts = Post::where('parent_id', null)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12); // número de posts por página
+
+        return view('posts.download', compact('posts'));
+    }
+
+    // Vista publica individual de los posts
+    public function file($slug)
+    {
+        // Buscar el post padre
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // Obtener los posts hijos
+        $hijos = Post::where('parent_id', $post->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Obtener archivos asociados
+        $archivos = Archivo::where('post_id', $post->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('posts.file', compact('post', 'hijos', 'archivos'));
     }
 }

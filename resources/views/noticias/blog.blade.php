@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        @include('partials.head')
-        <!--<title>Aguas del Huila</title>-->
+        @include('partials.header')
+        <title>Aguas del Huila | Blogs</title>
         <!-- Styles -->
         <style>
-            /*! tailwindcss v4.0.14 | MIT License | https://tailwindcss.com */
-            @layer theme{:root,:host{--font-sans:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--font-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--color-green-600:oklch(.627 .194 149.214);--color-gray-900:oklch(.21 .034 264.665);--color-zinc-50:oklch(.985 0 0);--color-zinc-200:oklch(.92 .004 286.32);--color-zinc-400:oklch(.705 .015 286.067);--color-zinc-500:oklch(.552 .016 285.938);--color-zinc-600:oklch(.442 .017 285.786);--color-zinc-700:oklch(.37 .013 285.805);--color-zinc-800:oklch(.274 .006 286.033);--color-zinc-900:oklch(.21 .006 285.885);--color-neutral-100:oklch(.97 0 0);--color-neutral-200:oklch(.922 0 0);--color-neutral-700:oklch(.371 0 0);--color-neutral-800:oklch(.269 0 0);--color-neutral-900:oklch(.205 0 0);--color-neutral-950:oklch(.145 0 0);--color-stone-800:oklch(.268 .007 34.298);--color-stone-950:oklch(.147 .004 49.25);--color-black:#000;--color-white:#fff;--spacing:.25rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-4xl:56rem;--text-xs:.75rem;--text-xs--line-height:calc(1/.75);--text-sm:.875rem;--text-sm--line-height:calc(1.25/.875);--text-lg:1.125rem;--text-lg--line-height:calc(1.75/1.125);--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--leading-tight:1.25;--leading-normal:1.5;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--aspect-video:16/9;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4,0,.2,1);--default-font-family:var(--font-sans);--default-font-feature-settings:var(--font-sans--font-feature-settings);--default-font-variation-settings:var(--font-sans--font-variation-settings);--default-mono-font-family:var(--font-mono);--default-mono-font-feature-settings:var(--font-mono--font-feature-settings);--default-mono-font-variation-settings:var(--font-mono--font-variation-settings)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}body{line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1;color:color-mix(in oklab,currentColor 50%,transparent)}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.sr-only{clip:rect(0,0,0,0);white-space:nowrap;border-width:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}.absolute{position:absolute}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-0{inset:calc(var(--spacing)*0)}.inset-y-\[3px\]{inset-block:3px}.start-0{inset-inline-start:calc(var(--spacing)*0)}.end-0{inset-inline-end:calc(var(--spacing)*0)}.top-0{top:calc(var(--spacing)*0)}.z-20{z-index:20}.container{width:100%}@media (width>=40rem){.container{max-width:40rem}}@media (width>=48rem){.container{max-width:48rem}}@media (width>=64rem){.container{max-width:64rem}}@media (width>=80rem){.container{max-width:80rem}}@media (width>=96rem){.container{max-width:96rem}}.mx-auto{margin-inline:auto}.my-6{margin-block:calc(var(--spacing)*6)}.-ms-8{margin-inline-start:calc(var(--spacing)*-8)}.ms-1{margin-inline-start:calc(var(--spacing)*1)}.ms-2{margin-inline-start:calc(var(--spacing)*2)}.ms-4{margin-inline-start:calc(var(--spacing)*4)}.me-1\.5{margin-inline-end:calc(var(--spacing)*1.5)}.me-2{margin-inline-end:calc(var(--spacing)*2)}.me-3{margin-inline-end:calc(var(--spacing)*3)}.me-5{margin-inline-end:calc(var(--spacing)*5)}.me-10{margin-inline-end:calc(var(--spacing)*10)}.-mt-\[4\.9rem\]{margin-top:-4.9rem}.mt-2{margin-top:calc(var(--spacing)*2)}.mt-4{margin-top:calc(var(--spacing)*4)}.mt-5{margin-top:calc(var(--spacing)*5)}.mt-6{margin-top:calc(var(--spacing)*6)}.mt-10{margin-top:calc(var(--spacing)*10)}.mt-auto{margin-top:auto}.-mb-px{margin-bottom:-1px}.mb-0\.5{margin-bottom:calc(var(--spacing)*.5)}.mb-1{margin-bottom:calc(var(--spacing)*1)}.mb-2{margin-bottom:calc(var(--spacing)*2)}.mb-4{margin-bottom:calc(var(--spacing)*4)}.mb-5{margin-bottom:calc(var(--spacing)*5)}.mb-6{margin-bottom:calc(var(--spacing)*6)}.mb-\[2px\]{margin-bottom:2px}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.aspect-\[335\/376\]{aspect-ratio:335/376}.aspect-square{aspect-ratio:1}.aspect-video{aspect-ratio:var(--aspect-video)}.size-3\!{width:calc(var(--spacing)*3)!important;height:calc(var(--spacing)*3)!important}.size-5{width:calc(var(--spacing)*5);height:calc(var(--spacing)*5)}.size-8{width:calc(var(--spacing)*8);height:calc(var(--spacing)*8)}.size-9{width:calc(var(--spacing)*9);height:calc(var(--spacing)*9)}.size-full{width:100%;height:100%}.\!h-10{height:calc(var(--spacing)*10)!important}.h-1\.5{height:calc(var(--spacing)*1.5)}.h-2\.5{height:calc(var(--spacing)*2.5)}.h-3\.5{height:calc(var(--spacing)*3.5)}.h-7{height:calc(var(--spacing)*7)}.h-8{height:calc(var(--spacing)*8)}.h-9{height:calc(var(--spacing)*9)}.h-10{height:calc(var(--spacing)*10)}.h-14\.5{height:calc(var(--spacing)*14.5)}.h-dvh{height:100dvh}.h-full{height:100%}.min-h-screen{min-height:100vh}.min-h-svh{min-height:100svh}.w-1\.5{width:calc(var(--spacing)*1.5)}.w-2\.5{width:calc(var(--spacing)*2.5)}.w-3\.5{width:calc(var(--spacing)*3.5)}.w-8{width:calc(var(--spacing)*8)}.w-9{width:calc(var(--spacing)*9)}.w-10{width:calc(var(--spacing)*10)}.w-\[220px\]{width:220px}.w-\[448px\]{width:448px}.w-full{width:100%}.w-px{width:1px}.max-w-\[335px\]{max-width:335px}.max-w-lg{max-width:var(--container-lg)}.max-w-md{max-width:var(--container-md)}.max-w-none{max-width:none}.max-w-sm{max-width:var(--container-sm)}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-y-0{--tw-translate-y:calc(var(--spacing)*0);translate:var(--tw-translate-x)var(--tw-translate-y)}.cursor-pointer{cursor:pointer}.auto-rows-min{grid-auto-rows:min-content}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing)*2)}.gap-3{gap:calc(var(--spacing)*3)}.gap-4{gap:calc(var(--spacing)*4)}.gap-6{gap:calc(var(--spacing)*6)}:where(.space-y-2>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*2)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*3)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*3)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-6>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing)*6)*var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing)*6)*calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-\[2px\]>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(2px*var(--tw-space-y-reverse));margin-block-end:calc(2px*calc(1 - var(--tw-space-y-reverse)))}:where(.space-x-0\.5>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing)*.5)*var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing)*.5)*calc(1 - var(--tw-space-x-reverse)))}:where(.space-x-1>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing)*1)*var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing)*1)*calc(1 - var(--tw-space-x-reverse)))}:where(.space-x-2>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing)*2)*var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing)*2)*calc(1 - var(--tw-space-x-reverse)))}.self-stretch{align-self:stretch}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:3.40282e38px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-sm{border-radius:var(--radius-sm)}.rounded-xl{border-radius:var(--radius-xl)}.rounded-ee-lg{border-end-end-radius:var(--radius-lg)}.rounded-es-lg{border-end-start-radius:var(--radius-lg)}.rounded-t-lg{border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg)}.border{border-style:var(--tw-border-style);border-width:1px}.border-r{border-right-style:var(--tw-border-style);border-right-width:1px}.border-b{border-bottom-style:var(--tw-border-style);border-bottom-width:1px}.border-\[\#19140035\]{border-color:#19140035}.border-\[\#e3e3e0\]{border-color:#e3e3e0}.border-black{border-color:var(--color-black)}.border-neutral-200{border-color:var(--color-neutral-200)}.border-transparent{border-color:#0000}.border-zinc-200{border-color:var(--color-zinc-200)}.bg-\[\#1b1b18\]{background-color:#1b1b18}.bg-\[\#FDFDFC\]{background-color:#fdfdfc}.bg-\[\#dbdbd7\]{background-color:#dbdbd7}.bg-\[\#fff2f2\]{background-color:#fff2f2}.bg-neutral-100{background-color:var(--color-neutral-100)}.bg-neutral-200{background-color:var(--color-neutral-200)}.bg-neutral-900{background-color:var(--color-neutral-900)}.bg-white{background-color:var(--color-white)}.bg-zinc-50{background-color:var(--color-zinc-50)}.bg-zinc-200{background-color:var(--color-zinc-200)}.fill-current{fill:currentColor}.stroke-gray-900\/20{stroke:color-mix(in oklab,var(--color-gray-900)20%,transparent)}.p-0{padding:calc(var(--spacing)*0)}.p-6{padding:calc(var(--spacing)*6)}.p-10{padding:calc(var(--spacing)*10)}.px-1{padding-inline:calc(var(--spacing)*1)}.px-5{padding-inline:calc(var(--spacing)*5)}.px-8{padding-inline:calc(var(--spacing)*8)}.px-10{padding-inline:calc(var(--spacing)*10)}.py-0\!{padding-block:calc(var(--spacing)*0)!important}.py-1{padding-block:calc(var(--spacing)*1)}.py-1\.5{padding-block:calc(var(--spacing)*1.5)}.py-2{padding-block:calc(var(--spacing)*2)}.py-8{padding-block:calc(var(--spacing)*8)}.ps-3{padding-inline-start:calc(var(--spacing)*3)}.ps-7{padding-inline-start:calc(var(--spacing)*7)}.pe-4{padding-inline-end:calc(var(--spacing)*4)}.pb-4{padding-bottom:calc(var(--spacing)*4)}.pb-12{padding-bottom:calc(var(--spacing)*12)}.text-center{text-align:center}.text-start{text-align:start}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\[13px\]{font-size:13px}.leading-\[20px\]{--tw-leading:20px;line-height:20px}.leading-none{--tw-leading:1;line-height:1}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.leading-tight{--tw-leading:var(--leading-tight);line-height:var(--leading-tight)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.\!text-green-600{color:var(--color-green-600)!important}.text-\[\#1b1b18\]{color:#1b1b18}.text-\[\#706f6c\]{color:#706f6c}.text-\[\#F53003\],.text-\[\#f53003\]{color:#f53003}.text-black{color:var(--color-black)}.text-green-600{color:var(--color-green-600)}.text-stone-800{color:var(--color-stone-800)}.text-white{color:var(--color-white)}.text-zinc-400{color:var(--color-zinc-400)}.text-zinc-500{color:var(--color-zinc-500)}.text-zinc-600{color:var(--color-zinc-600)}.lowercase{text-transform:lowercase}.underline{text-decoration-line:underline}.underline-offset-4{text-underline-offset:4px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-100{opacity:1}.shadow-\[0px_0px_1px_0px_rgba\(0\,0\,0\,0\.03\)\,0px_1px_2px_0px_rgba\(0\,0\,0\,0\.06\)\]{--tw-shadow:0px 0px 1px 0px var(--tw-shadow-color,#00000008),0px 1px 2px 0px var(--tw-shadow-color,#0000000f);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[inset_0px_0px_0px_1px_rgba\(26\,26\,0\,0\.16\)\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#1a1a0029);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-xs{--tw-shadow:0 1px 2px 0 var(--tw-shadow-color,#0000000d);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-opacity{transition-property:opacity;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.delay-300{transition-delay:.3s}.duration-750{--tw-duration:.75s;transition-duration:.75s}.not-has-\[nav\]\:hidden:not(:has(:is(nav))){display:none}.group-data-open\/disclosure-button\:block:is(:where(.group\/disclosure-button)[data-open] *){display:block}.group-data-open\/disclosure-button\:hidden:is(:where(.group\/disclosure-button)[data-open] *){display:none}.before\:absolute:before{content:var(--tw-content);position:absolute}.before\:start-\[0\.4rem\]:before{content:var(--tw-content);inset-inline-start:.4rem}.before\:top-0:before{content:var(--tw-content);top:calc(var(--spacing)*0)}.before\:top-1\/2:before{content:var(--tw-content);top:50%}.before\:bottom-0:before{content:var(--tw-content);bottom:calc(var(--spacing)*0)}.before\:bottom-1\/2:before{content:var(--tw-content);bottom:50%}.before\:left-\[0\.4rem\]:before{content:var(--tw-content);left:.4rem}.before\:border-l:before{content:var(--tw-content);border-left-style:var(--tw-border-style);border-left-width:1px}.before\:border-\[\#e3e3e0\]:before{content:var(--tw-content);border-color:#e3e3e0}@media (hover:hover){.hover\:border-\[\#1915014a\]:hover{border-color:#1915014a}.hover\:border-\[\#19140035\]:hover{border-color:#19140035}.hover\:border-black:hover{border-color:var(--color-black)}.hover\:bg-black:hover{background-color:var(--color-black)}.hover\:bg-zinc-800\/5:hover{background-color:color-mix(in oklab,var(--color-zinc-800)5%,transparent)}.hover\:text-zinc-800:hover{color:var(--color-zinc-800)}}.data-open\:block[data-open]{display:block}@media (width<64rem){.max-lg\:hidden{display:none}}@media (width<48rem){.max-md\:flex-col{flex-direction:column}.max-md\:pt-6{padding-top:calc(var(--spacing)*6)}}@media (width>=40rem){.sm\:w-\[350px\]{width:350px}.sm\:px-0{padding-inline:calc(var(--spacing)*0)}}@media (width>=48rem){.md\:hidden{display:none}.md\:w-\[220px\]{width:220px}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:p-10{padding:calc(var(--spacing)*10)}}@media (width>=64rem){.lg\:-ms-px{margin-inline-start:-1px}.lg\:ms-0{margin-inline-start:calc(var(--spacing)*0)}.lg\:-mt-\[6\.6rem\]{margin-top:-6.6rem}.lg\:mb-0{margin-bottom:calc(var(--spacing)*0)}.lg\:mb-6{margin-bottom:calc(var(--spacing)*6)}.lg\:block{display:block}.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:aspect-auto{aspect-ratio:auto}.lg\:h-8{height:calc(var(--spacing)*8)}.lg\:w-\[438px\]{width:438px}.lg\:max-w-4xl{max-width:var(--container-4xl)}.lg\:max-w-none{max-width:none}.lg\:grow{flex-grow:1}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:flex-row{flex-direction:row}.lg\:justify-center{justify-content:center}.lg\:rounded-ss-lg{border-start-start-radius:var(--radius-lg)}.lg\:rounded-e-lg{border-start-end-radius:var(--radius-lg);border-end-end-radius:var(--radius-lg)}.lg\:rounded-e-lg\!{border-start-end-radius:var(--radius-lg)!important;border-end-end-radius:var(--radius-lg)!important}.lg\:rounded-ee-none{border-end-end-radius:0}.lg\:rounded-t-none{border-top-left-radius:0;border-top-right-radius:0}.lg\:p-8{padding:calc(var(--spacing)*8)}.lg\:p-20{padding:calc(var(--spacing)*20)}.lg\:px-0{padding-inline:calc(var(--spacing)*0)}}:where(.rtl\:space-x-reverse:where(:dir(rtl),[dir=rtl],[dir=rtl] *)>:not(:last-child)){--tw-space-x-reverse:1}@media (prefers-color-scheme:dark){.dark\:block{display:block}.dark\:hidden{display:none}.dark\:border-r{border-right-style:var(--tw-border-style);border-right-width:1px}.dark\:border-\[\#3E3E3A\]{border-color:#3e3e3a}.dark\:border-\[\#eeeeec\]{border-color:#eeeeec}.dark\:border-neutral-700{border-color:var(--color-neutral-700)}.dark\:border-neutral-800{border-color:var(--color-neutral-800)}.dark\:border-stone-800{border-color:var(--color-stone-800)}.dark\:border-zinc-700{border-color:var(--color-zinc-700)}.dark\:bg-\[\#0a0a0a\]{background-color:#0a0a0a}.dark\:bg-\[\#1D0002\]{background-color:#1d0002}.dark\:bg-\[\#3E3E3A\]{background-color:#3e3e3a}.dark\:bg-\[\#161615\]{background-color:#161615}.dark\:bg-\[\#eeeeec\]{background-color:#eeeeec}.dark\:bg-neutral-700{background-color:var(--color-neutral-700)}.dark\:bg-stone-950{background-color:var(--color-stone-950)}.dark\:bg-white\/30{background-color:color-mix(in oklab,var(--color-white)30%,transparent)}.dark\:bg-zinc-800{background-color:var(--color-zinc-800)}.dark\:bg-zinc-900{background-color:var(--color-zinc-900)}.dark\:bg-linear-to-b{--tw-gradient-position:to bottom in oklab;background-image:linear-gradient(var(--tw-gradient-stops))}.dark\:from-neutral-950{--tw-gradient-from:var(--color-neutral-950);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position),var(--tw-gradient-from)var(--tw-gradient-from-position),var(--tw-gradient-to)var(--tw-gradient-to-position))}.dark\:to-neutral-900{--tw-gradient-to:var(--color-neutral-900);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position),var(--tw-gradient-from)var(--tw-gradient-from-position),var(--tw-gradient-to)var(--tw-gradient-to-position))}.dark\:stroke-neutral-100\/20{stroke:color-mix(in oklab,var(--color-neutral-100)20%,transparent)}.dark\:text-\[\#1C1C1A\]{color:#1c1c1a}.dark\:text-\[\#A1A09A\]{color:#a1a09a}.dark\:text-\[\#EDEDEC\]{color:#ededec}.dark\:text-\[\#F61500\]{color:#f61500}.dark\:text-\[\#FF4433\]{color:#f43}.dark\:text-black{color:var(--color-black)}.dark\:text-white{color:var(--color-white)}.dark\:text-white\/80{color:color-mix(in oklab,var(--color-white)80%,transparent)}.dark\:text-zinc-400{color:var(--color-zinc-400)}.dark\:shadow-\[inset_0px_0px_0px_1px_\#fffaed2d\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#fffaed2d);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.dark\:before\:border-\[\#3E3E3A\]:before{content:var(--tw-content);border-color:#3e3e3a}@media (hover:hover){.dark\:hover\:border-\[\#3E3E3A\]:hover{border-color:#3e3e3a}.dark\:hover\:border-\[\#62605b\]:hover{border-color:#62605b}.dark\:hover\:border-white:hover{border-color:var(--color-white)}.dark\:hover\:bg-white:hover{background-color:var(--color-white)}.dark\:hover\:bg-white\/\[7\%\]:hover{background-color:color-mix(in oklab,var(--color-white)7%,transparent)}.dark\:hover\:text-white:hover{color:var(--color-white)}}}@starting-style{.starting\:translate-y-4{--tw-translate-y:calc(var(--spacing)*4);translate:var(--tw-translate-x)var(--tw-translate-y)}}@starting-style{.starting\:translate-y-6{--tw-translate-y:calc(var(--spacing)*6);translate:var(--tw-translate-x)var(--tw-translate-y)}}@starting-style{.starting\:opacity-0{opacity:0}}.\[\&\>div\>svg\]\:size-5>div>svg{width:calc(var(--spacing)*5);height:calc(var(--spacing)*5)}:where(.\[\:where\(\&\)\]\:size-4){width:calc(var(--spacing)*4);height:calc(var(--spacing)*4)}:where(.\[\:where\(\&\)\]\:size-5){width:calc(var(--spacing)*5);height:calc(var(--spacing)*5)}:where(.\[\:where\(\&\)\]\:size-6){width:calc(var(--spacing)*6);height:calc(var(--spacing)*6)}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-space-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-space-x-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-duration{syntax:"*";inherits:false}@property --tw-content{syntax:"*";inherits:false;initial-value:""}@property --tw-gradient-position{syntax:"*";inherits:false}@property --tw-gradient-from{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-via{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-to{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-stops{syntax:"*";inherits:false}@property --tw-gradient-via-stops{syntax:"*";inherits:false}@property --tw-gradient-from-position{syntax:"<length-percentage>";inherits:false;initial-value:0%}@property --tw-gradient-via-position{syntax:"<length-percentage>";inherits:false;initial-value:50%}@property --tw-gradient-to-position{syntax:"<length-percentage>";inherits:false;initial-value:100%}
+            
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
         </style>
     </head>
     <body class="bg-white">
@@ -14,16 +28,17 @@
         @include('partials.navbar')
 
         <!-- banner inicial -->
-        <div class="w-full h-[400px] sm:h-[300px] lg:h-[500px] overflow-hidden shadow-lg -top-8">
-
+        <div class="w-full h-[200px] sm:h-[150px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
+            <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-center text-white text-center px-16 md:px-32">
+                <h2 class="text-3xl md:text-5xl font-bold mb-2">Últimas Noticias</h2>
+                <p class="text-lg">Inicio </span class="font-bold">/ Blog de noticias</span></p>
+            </div>
         </div>
 
 
         <!-- noticias -->
         <section class="px-2 lg:px-32 py-8">
-            <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
-                <h2 class="text-4xl">Últimas Noticias</h2>
-            </div>
+
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-8 text-[#0047DC] font-bold text-center">
 
                 @foreach($noticias as $noticia)
@@ -59,6 +74,705 @@
                     <p>No hay noticias disponibles por el momento.</p>
                 </div>
             @endif
+
+        </section>
+
+        <!-- Indicadores -->
+        <section class="px-2 lg:px-32 py-8">
+
+            <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
+                <h2 class="text-4xl">Indicadores</h2>
+            </div>
+
+            <img 
+                src="{{ asset('storage/img/inversiones.webp') }}" 
+                alt="Indicadores" 
+                class="w-full h-full object-cover"
+                >
+
+        </section>
+
+        <!-- inversiones -->
+        <section class="px-2 lg:px-32 py-8">
+
+            <div class="w-full pt-8 text-gray-900 text-center">
+
+                <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
+                    <h2 class="text-4xl">Otras Inversiones</h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="border-collapse">
+                        <tbody>
+                            <tr class="font-bold">
+                                <td   rowspan="2">
+                                    MUNICIPIOS INTEVENIDOS</td>
+                                <td rowspan="2"   >
+                                    PROYECTO</td>
+                                <td rowspan="2"  >
+                                    AVANCE FISICO</td>
+                                <td rowspan="2"  >
+                                    POBLACION BENEFICIADA</td>
+                                <td rowspan="2"  >
+                                    VALOR TOTAL </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                            <tr>
+                                <td rowspan="4">
+                                    ACEVEDO</td>
+                                <td   >
+                                    Elaboración De Estudios  Y Diseños  Del Acueducto Vereda El Mirador </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    180</td>
+                                <td  >
+                                    $73.445.610</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Acueducto Regional Siberia, Berlín, La Esperanza, Centro Poblado San Adolfo</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    1194</td>
+                                <td  >
+                                    $1.478.279.270</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Alcantarillado  Sanitario Centro Poblado  San Marcos  Acevedo   Fase  I  </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    1000</td>
+                                <td  >
+                                    $654.269.165</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Y Optimización del Alcantarillado Sanitario de la Vereda Pueblo Viejo -regalias</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    320</td>
+                                <td  >
+                                    $1.050.108.155</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    AGRADO</td>
+                                <td   >
+                                    Construcción  Unidades Sanitarias  Con Sistema De Tratamiento   En Zona Rural Y Zona  Urbana (50)</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    200</td>
+                                <td  >
+                                    $415.553.476</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción pozo profundo vereda la cañada - OCAD 2015</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    220</td>
+                                <td  >
+                                    $ 800.000.000</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    ALTAMIRA</td>
+                                <td   >
+                                    Ampliación Redes de Acueducto, Vereda Llano de la Virgen</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    636</td>
+                                <td  >
+                                    $419.073.809</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Plan Maestro de Acueducto Fase I</td>
+                                <td  >
+                                    50%</td>
+                                <td  >
+                                    3012</td>
+                                <td  >
+                                    $3.350.916.532</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    ALGECIRAS</td>
+                                <td   >
+                                    Construcción Alcantarillado Barrio Nuevo Horizonte del Municipio de Algeciras, Departamento del Huila</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    350</td>
+                                <td  >
+                                    $506.212.637</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    OPTIMIZACION DEL ALCANTARILLADO SANITARIO EN EL CENTRO POBLADO LA ARCADIA  DEL MUNICIPIO DE ALGECIRAS DEPARTAMENTO DEL HUILA.      </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    537</td>
+                                <td  >
+                                    $1.419.864.239</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    BARAYA</td>
+                                <td   >
+                                    Construcción De Sistemas De Tratamiento Y Mejoramientos De Baterías Sanitaria En Zona Rural</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    225</td>
+                                <td  >
+                                    $389.924.930</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    CAMPOALEGRE</td>
+                                <td   >
+                                    Estudios  Y Diseños  Acueducto De  Las   Veredas  Rio Negro Y Tinajitas  </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    245</td>
+                                <td  >
+                                    $42.000.000</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Rehabilitación bocatoma Acueducto casco Urbano</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    26.424</td>
+                                <td  >
+                                    $930.000.000</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="3"  >
+                                    COLOMBIA</td>
+                                <td   >
+                                    Construcción Acueducto  Rural  En La Vereda  El Valle</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    130</td>
+                                <td  >
+                                    $79.582.746</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Estudios Y Diseños Ptar Colombia</td>
+                                <td  >
+                                    85%</td>
+                                <td>
+                                    2.582</td>
+                                <td  >
+                                    $22.461.440</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    OPTIMIZACIÓN SISTEMA DE ACUEDUCTO DEL ÁREA URBANA DEL MUNICIPIO DE COLOMBIA HUILA</td>
+                                <td>
+                                    79%</td>
+                                <td>
+                                    3.336</td>
+                                <td  >
+                                    $460.005.772</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    DEPARTAMENTO</td>
+                                <td   >
+                                    Construcción 765 unidades sanitarias en el sector rural del Departamento, - OCAD 2015</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    3.825</td>
+                                <td  >
+                                    $5.657.066.881</td>
+                            </tr>
+                            <tr height="102">
+                                <td   rowspan="2"  >
+                                    ELIAS</td>
+                                <td   >
+                                    Construcción  Del Colector  De Aguas Residuales  De  La Urbanización  Oritoguaz, En La Vereda  Oritoguaz </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    175</td>
+                                <td  >
+                                    $63.384.606</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Plan maestro de acueducto urbano Fase I</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.282</td>
+                                <td  >
+                                    $8.821.666.927</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="3"  >
+                                    GARZON</td>
+                                <td   >
+                                    Ampliación Acueducto  De Zuluaga  Hacia  La Vereda  El Encanto  Del Municipio De Garzón </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    400</td>
+                                <td  >
+                                    $15.960.770</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Alcantarillado La Independencia</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.200</td>
+                                <td  >
+                                    $774.891.215</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Acueducto Y Alcantarillado Ciudadela El Oasis</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.000</td>
+                                <td  >
+                                    $149.987.684</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="4"  >
+                                    GIGANTE</td>
+                                <td   >
+                                    Optimización  Sistema De Acueducto  Veredas Algarrobo,  Cascajal, Agua Blanca,  Primavera,  Libertador, Centro  Poblado  Tres Esquinas Y Centro Poblado Silvania</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1400</td>
+                                <td  >
+                                    $1.806.247.055</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    REPOSICION DE LOS SISTEMAS DE ALCANTARILLADO SANITARIO EN LOS CENTROS POBLADOS: PUEBLO NUEVO, RIO LORO Y REPOSICION ALCANTARILLADO SANITARIO Y CONSTRUCCION  RED DE AGUAS LLUVIAS EN EL CENTRO POBLADO POTRERILLOS GIGANTE - HUILA</td>
+                                <td>
+                                    10%</td>
+                                <td>
+                                    5.396</td>
+                                <td  >
+                                    $536.224.177</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    AMPLIACION DE ACUEDUCTO Y ALCANTARILLADO PARA EL BARRIO SAN JUAN EUDES DEL CENTRO POBLADO RIO LORO MUNICIPIO DE GIGANTE.</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    168</td>
+                                <td  >
+                                    $327.183.401</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    AMPLIACION DEL ACUEDUCTO Y ALCANTARILLADO SANITARIO PARA EL BARRIO BRISAS DEL PALMAR MUNICIPIO DE GIGANTE. DEPARTAMENTO DEL HUILA.</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    172</td>
+                                <td  >
+                                    $184.355.092</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    LA ARGENTINA</td>
+                                <td   >
+                                    CONSTRUCCIÓN DE UNIDADES SANITARIAS CON SISTEMA DE TRATAMIENTO EN LA ZONA RURAL DEL MUNICIPIO DE LA ARGENTINA DEPARTAMENTO DEL HUILA.</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    400</td>
+                                <td  >
+                                    $873.411.969</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Alcantarillado Sanitario Barrio El Jardín</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    800</td>
+                                <td  >
+                                    $511.273.161</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    NATAGA</td>
+                                <td   >
+                                    Reposición Del Sistema De Alcantarillado Sanitario De Diferentes Sectores Del Casco Urbano</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    2.242</td>
+                                <td  >
+                                    $463.618.472</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    CONSTRUCCION Y OPTIMIZACION SISTEMA DE ALCANTARILLADO DEL MUNICIPIO DE NATAGA</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    3.508</td>
+                                <td  >
+                                    $418.021.147</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="5"  >
+                                    NEIVA</td>
+                                <td   >
+                                    Optimización De La Red De Acueducto En La  Carrera 7  Entre Avenida Circulvalar  Y Calle  21 En Las Comunas  3 Y 4 De La Ciudad De Neiva  </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    896</td>
+                                <td  >
+                                    $1.975.236.326</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Estudios  Y Diseños   Zona Rural   - Acueducto  Y Alcantarillado </td>
+                                <td  >
+                                    90%</td>
+                                <td>
+                                    </td>
+                                <td  >
+                                    $413.895.280</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción   De  Obras  Para El Control   Del Cauce  Y Mitigacion  De Amanaza  Por  Inundación  Del Rio Las Ceibas En La Zona Urbana</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    4.650</td>
+                                <td  >
+                                    $8.514.421.089</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Mejoramiento Y  optimización   De La Red De Alcantarillado Sanitario  En Varios Sectores De La Ciuda De  Neiva </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.392</td>
+                                <td  >
+                                    $2.654.197.446</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    OPTIMIZACION DE LA RED DE ALCANTARILLADO SANITARIO PARA EL CORREGIMIENTO DE AIPECITO MUNICIPIO DE NEIVA DEPARTAMENTO DEL HUILA</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    461</td>
+                                <td  >
+                                    $1.136.323.936</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="3"  >
+                                    PAICOL</td>
+                                <td   >
+                                    Mejoramiento   Y Construcción   De Baterías  Sanitarias  Fase  II  En El Sector  Rural  </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    200</td>
+                                <td  >
+                                    $409.455.000</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Para  Mejoramiento  Y Construcción De  Baterias Sanitarias  En El Sector   Rural  Del Municipio De  Paicol  </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    200</td>
+                                <td  >
+                                    $400.000.000</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    CONSTRUCCIÓN DE UNA PLANTA DE TRATAMIENTO DE AGUAS RESIDUALES VEREDA LA LAJITA DEL MUNICIPIO DE PAICOL HUILA</td>
+                                <td>
+                                    0%</td>
+                                <td>
+                                    118</td>
+                                <td  >
+                                    $239.864.101</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    PAICOL-TESALIA</td>
+                                <td   >
+                                    Construcción Sistemas De Ac. Alc.  Municipio Descertificado</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    7.964</td>
+                                <td  >
+                                    $97.050.279</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    PALERMO</td>
+                                <td   >
+                                    Ampliación Acueducto Centro Poblado El Juncal</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    2.826</td>
+                                <td  >
+                                    $163.313.711</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    PALESTINA</td>
+                                <td   >
+                                    Construcción Sistema De Alcantarillado Sanitario  Vereda  Santa Barbara  (Sector Alto  Santa Barbara ) Palestina </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    230</td>
+                                <td  >
+                                    $ 486.457.214</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    PITAL-AGRADO</td>
+                                <td   >
+                                    Optimización Red de aducción urbano</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    5.220</td>
+                                <td  >
+                                    $411.843.906</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="5"  >
+                                    PITALITO </td>
+                                <td   >
+                                    Adecuación  Y Optimización Del Sistema  De Acueducto De La Vereda  El Tigre, Corregimiento  De Guacallo, Municipio De Pitalito  Departamento Del  Huila .</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.000</td>
+                                <td  >
+                                    $68.000.000</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Cubierta Metálica En La Zona De Recibo Y Distribución De Residuos Sólidos En La Planta De Tratamiento De Biorganicos Del Sur Huila</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td  >
+                                    8 Mpios(SAN AGUSTIN , ISNOS, PALESTINA, SALADOBLANCO, ACEVEDO, ELIAS, PITALITO Y OPORAPA)</td>
+                                <td  >
+                                    $ 222.829.314</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción Y Optimización Alcantarillado Sanitario Barrio Madelena</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.725</td>
+                                <td  >
+                                    $1.559.670.823</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    Construcción  Del Alcantarillado   Sanitario De La Urbanización   Villas Del Tesoro</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    313</td>
+                                <td  >
+                                    $1.160.167.431</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    OPTIMIZACION ACUEDUCTO REGIONAL SAN FRANCISCO </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    1.517</td>
+                                <td  >
+                                    $ 220.062.576</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    RIVERA</td>
+                                <td   >
+                                    Rehabilitación Provisional Acueducto Urbano Rivera</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    10.973</td>
+                                <td  >
+                                    $301.328.026</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    SALADOBLANCO</td>
+                                <td   >
+                                    Construcción De  Unidades Sanitarias  Con Sistema De Tratamiento  En Zona Rural </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    115</td>
+                                <td  >
+                                    $196.498.899</td>
+                            </tr>
+                            <tr  >
+                                <td    >
+                                    CONSTRUCCIÓN SISTEMA DE ACUEDUCTO VEREDA EL DIAMANTE </td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    255</td>
+                                <td  >
+                                    $903.157.895</td>
+                            </tr>
+                            <tr  >
+                                <td   >
+                                    SAN AGUSTIN</td>
+                                <td   >
+                                    Rehabilitación   Del Alcantarillado Sanitario  Del Centro  Poblado  El Palmar - Sector  Anillo  Turistico</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    385</td>
+                                <td  >
+                                    $147.304.166</td>
+                            </tr>
+                            <tr  >
+                                <td   >
+                                    SUAZA</td>
+                                <td   >
+                                    CONSTRUCCION DEL SISTEMA DE ACUEDUCTO REGIONAL PARA LAS VEREDAS SAN CALIXTO Y HATO VIEJO MUNICIPIO DE SUAZA </td>
+                                <td>
+                                    24%</td>
+                                <td>
+                                    429</td>
+                                <td  >
+                                    $602.053.947</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="3"  >
+                                    TARQUI </td>
+                                <td   >
+                                    Restitución Alcantarillado Sanitario Barrio Minuto De Dios</td>
+                                <td  >
+                                    TERMINADO</td>
+                                <td>
+                                    325</td>
+                                <td  >
+                                    $163.007.821</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="2"  >
+                                    CONSTRUCCION SISTEMA  DE ALCANTARILLADO  SANITARIO  EN LA VERDA  LA   ESMERALDA</td>
+                                <td rowspan="2">
+                                    TERMINADO</td>
+                                <td rowspan="2">
+                                    400</td>
+                                <td rowspan="2"  >
+                                    $1.626.311.555</td>
+                            </tr>
+                            <tr  >
+                            </tr>
+                            <tr  >
+                                <td   rowspan="3"  >
+                                    TERUEL</td>
+                                <td rowspan="2"   >
+                                    Estudios Y Diseños Ptar Teruel</td>
+                                <td rowspan="2">
+                                    TERMINADO</td>
+                                <td rowspan="2">
+                                    4.428</td>
+                                <td rowspan="2"  >
+                                    $22.461.440</td>
+                            </tr>
+                            <tr  >
+                            </tr>
+                            <tr  >
+                                <td   >
+                                    Construcción Cerramiento Y Mejoramiento De La Ptap Del Municipio De Teruel</td>
+                                <td>
+                                    TERMINADO </td>
+                                <td>
+                                    4.428</td>
+                                <td  >
+                                    $175.778.371</td>
+                            </tr>
+                            <tr  >
+                                <td   rowspan="4" >
+                                    TIMANA  </td>
+                                <td rowspan="2"   >
+                                    Construcción Sistema De Alcantarillado  Sanitario Centro  Poblado  Cosanza   </td>
+                                <td rowspan="2">
+                                    TERMINADO </td>
+                                <td rowspan="2">
+                                    1.000</td>
+                                <td rowspan="2"  >
+                                    $         1.098.498.148</td>
+                            </tr>
+                            <tr  >
+                            </tr>
+                            <tr >
+                                <td  >
+                                    Construcción Alcantarillado San Marcos  Municipo de Timana, Departamento del Huila</td>
+                                <td  >
+                                    TERMINADO </td>
+                                <td>
+                                    324</td>
+                                <td  >
+                                    $         1.748.787.865</td>
+                            </tr>
+                            <tr  >
+                                <td   >
+                                    Construcción Alcantarillado San Antonio Municipo de Timana, Departamento del Huila</td>
+                                <td  >
+                                    TERMINADO </td>
+                                <td>
+                                    517</td>
+                                <td  >
+                                    $         1.393.318.381</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
 
         </section>
 

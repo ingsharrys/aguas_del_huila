@@ -134,12 +134,32 @@ class ServicioController extends Controller
             Storage::disk('public')->delete($servicio->imagen_portada);
         }
 
-        // Eliminar la noticia de la base de datos
+        // Eliminar la servicio de la base de datos
         $servicio->delete();
 
         // Redirigir con mensaje de éxito
         session()->flash('success', 'Servicio eliminada correctamente');
         return redirect()->route('servicios.index');
+    }
+
+    // Vista publica individual de los servicios
+    public function article($slug, $id)
+    {
+        // Buscar la servicio por ID
+        $servicio = Servicio::findOrFail($id);
+
+        // Validar que el slug coincida (para evitar duplicados o URL incorrectas)
+        if ($servicio->slug !== $slug) {
+            return redirect()->route('servicios.article', ['slug' => $servicio->slug, 'id' => $servicio->id]);
+        }
+
+        // Obtener servicios relacionadas (por ejemplo, las 3 más recientes distintas de la actual)
+        $relacionadas = Servicio::where('id', '!=', $id)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('servicios.article', compact('servicio', 'relacionadas'));
     }
 
 }
