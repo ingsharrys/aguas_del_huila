@@ -19,7 +19,7 @@
                     class="w-full h-full object-cover"
                     >
                     <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-start text-white text-center px-16 md:px-32">
-                    <h2 class="text-3xl md:text-5xl font-bold mb-4">{{ $banner->titulo }}</h2>
+                    <h2 class="text-3xl lg:text-5xl font-bold mb-4">{{ $banner->titulo }}</h2>
                     <p class="text-lg mb-6">{{ $banner->subtitulo }}</p>
                     @if($banner->enlace)
                         <a href="{{ $banner->enlace }}" target="_blank" class="bg-[#00C81F] px-3 py-1 border border-white rounded-lg text-white hover:bg-[#00A038] transition">{{ $banner->boton }}</a>
@@ -40,17 +40,17 @@
             <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
                 <h2 class="text-4xl">Servicios en línea</h2>
             </div>
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-16 pt-8 text-[#0047DC] font-bold text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 pt-8 text-[#0047DC] font-bold text-center">
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank">
-                        <img src="{{ asset('storage/img/servicios-linea.png') }}" class="w-50 h-auto" alt="img servicios">
+                        <img src="{{ asset('storage/img/servicios-linea.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3 class="">Servicios en línea</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank" class="justify-items-center">
-                        <img src="{{ asset('storage/img/pqrs.png') }}" class="w-50 h-auto" alt="img servicios">
+                        <img src="{{ asset('storage/img/pqrs.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Petición, Quejas, Recargas y Sugerencia</h3>
                     </a>
                 </div>
@@ -58,21 +58,21 @@
 
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank">
-                        <img src="{{ asset('storage/img/preguntas.png') }}" class="w-50 h-auto" alt="img servicios">
+                        <img src="{{ asset('storage/img/preguntas.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Preguntas Frecuentes</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank" class="justify-items-center">
-                        <img src="{{ asset('storage/img/transparencia.png') }}" class="w-50 h-auto" alt="img servicios">
+                        <img src="{{ asset('storage/img/transparencia.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Ley de Transparencia y Acceso a la Información</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank">
-                        <img src="{{ asset('storage/img/plan-departamental.png') }}" class="w-50 h-auto" alt="img servicios">
+                        <img src="{{ asset('storage/img/plan-departamental.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Plan Departamental de Aguas</h3>
                     </a>
                 </div>
@@ -88,12 +88,12 @@
         </section>
 
         <!-- pago facturas -->
-        <section class="w-full h-full px-2 lg:px-32 pb-16 pt-32 bg-bottom bg-no-repeat bg-cover" style="background-image: url('{{ asset('storage/img/fondo-pagos-home.webp') }}');">
+        <section class="px-2 lg:px-32 py-4">
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 h-100 content-end justify-center">
+            <div class="grid grid-cols-1 w-full h-[500px] pb-8 md:pb-16 content-end justify-center bg-bottom bg-no-repeat bg-cover" style="background-image: url('{{ asset('storage/img/fondo-pagos-home.webp') }}');">
                 <div class="flex flex-column justify-center">
                     <a href="#" target="_blank" class="justify-items-center">
-                        <h2 class="text-5xl text-center py-8">Ahora Tus Facturas<br>Las Puedes<br><span class="font-bold">Pagar en línea</span></h2>
+                        <h2 class="text-2xl md:text-5xl text-center py-8">Ahora Tus Facturas<br>Las Puedes<br><span class="font-bold">Pagar en línea</span></h2>
                         <img src="{{ asset('storage/img/btn-pse.png') }}" class="w-50 h-auto" alt="img servicios">
                     </a>
                 </div>
@@ -136,13 +136,13 @@
         <!-- Imagen limpieza -->
         <section class="px-2 lg:px-32 py-8 flex" style="background: linear-gradient(to bottom, #00C81F 50%, #FFF 50%); flex-direction: column; align-items: center;">
             <div class="w-full md:w-4xl text-center pb-8 text-white font-bold">
-                <h2 class="text-4xl">Aprende a separar correctamente tus residuos con nuestras guías visuales y fáciles de seguir</h2>
+                <h2 class="text-2xl md:text-4xl">Aprende a separar correctamente tus residuos con nuestras guías visuales y fáciles de seguir</h2>
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-8 text-[#0047DC] font-bold text-center">
                 
             <!-- Imagen 1 -->
             <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos">
+                <img src="{{ asset('storage/img/Tips-residuos.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos" title="Tips residuos">
                 <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span class="text-white text-lg font-semibold">Código de colores</span>
                 </div>
@@ -150,7 +150,7 @@
 
             <!-- Imagen 2 -->
             <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-1.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos">
+                <img src="{{ asset('storage/img/Tips-residuos-1.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos orgánicos" title="Residuos orgánicos">
                 <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span class="text-white text-lg font-semibold">Residuos orgánicos</span>
                 </div>
@@ -158,7 +158,7 @@
 
             <!-- Imagen 3 -->
             <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-2.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos">
+                <img src="{{ asset('storage/img/Tips-residuos-2.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos reciclables" title="Residuos reciclables">
                 <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span class="text-white text-lg font-semibold">Residuos reciclables</span>
                 </div>
@@ -166,7 +166,7 @@
 
             <!-- Imagen 4 -->
             <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-3.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos">
+                <img src="{{ asset('storage/img/Tips-residuos-3.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos peligrosos" title="Residuos peligrosos">
                 <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <span class="text-white text-lg font-semibold">Residuos peligrosos</span>
                 </div>
@@ -187,6 +187,7 @@
                         <!-- Imagen de portada -->
                         <img src="{{ asset('storage/' . $noticia->imagen_portada) }}" 
                             alt="{{ $noticia->titulo }}" 
+                            title="{{ $noticia->titulo }}" 
                             class="w-full h-48 object-cover">
 
                         <!-- Contenido -->
@@ -224,12 +225,12 @@
                 <h2 class="text-4xl">Portafolio de Servicios</h2>
                 <h2 class="text-xl">Aguas del Huila S.A E.S.P Llevamos más que agua</h2>
             </div>
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-16 pt-8 text-white font-bold text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 pt-8 text-white font-bold text-center">
 
                 @foreach($servicios as $servicio)
                     <div class="flex flex-column justify-center">
                         <a href="{{ route('servicios.article', [$servicio->slug, $servicio->id]) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $servicio->icono) }}" class="w-50 h-auto" alt="{{ $servicio->titulo }}">
+                            <img src="{{ asset('storage/' . $servicio->icono) }}" class="w-50 h-auto mb-2" alt="{{ $servicio->titulo }}" title="{{ $servicio->titulo }}">
                             <h3 class="">{{ $servicio->nombre }}</h3>
                         </a>
                     </div>
@@ -244,12 +245,12 @@
             <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
                 <h2 class="text-4xl">Sitios de Interés</h2>
             </div>
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-16 py-8 text-white font-bold text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 py-8 text-white font-bold text-center">
 
                 <div class="flex justify-center items-center">
                     <a href="https://www.presidencia.gov.co/" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/Presidencia-logo.png') }}" 
-                            alt="Presidencia" 
+                            alt="Presidencia" title="Presidencia" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>
@@ -257,7 +258,7 @@
                 <div class="flex justify-center items-center">
                     <a href="https://www.minhacienda.gov.co/" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/minvivienda.png') }}" 
-                            alt="Minvivienda" 
+                            alt="Minvivienda" title="Minvivienda" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>
@@ -265,7 +266,7 @@
                 <div class="flex justify-center items-center">
                     <a href="https://www.huila.gov.co/" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/huilacrecegober.png') }}" 
-                            alt="Huila Crece" 
+                            alt="Huila Crece" title="Huila Crece" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>
@@ -273,7 +274,7 @@
                 <div class="flex justify-center items-center">
                     <a href="#" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/gobierno-linea.png') }}" 
-                            alt="Gobierno en Línea" 
+                            alt="Gobierno en Línea" title="Gobierno en Línea" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>
@@ -281,7 +282,7 @@
                 <div class="flex justify-center items-center">
                     <a href="https://www.mintic.gov.co/portal/inicio/" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/superservicios.png') }}" 
-                            alt="Superservicios" 
+                            alt="Superservicios" title="Superservicios" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>
@@ -289,7 +290,7 @@
                 <div class="flex justify-center items-center">
                     <a href="https://www.procuraduria.gov.co/Pages/Inicio.aspx" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/logo-procuraduria.png') }}" 
-                            alt="Procuraduría" 
+                            alt="Procuraduría" title="Procuraduría" 
                             class="w-full h-full object-contain">
                     </a>
                 </div>

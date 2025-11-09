@@ -109,9 +109,9 @@ class PostController extends Controller
     public function show($slug = null)
     {
         // Obtener posts de PDA
-        $pda = Post::where('id', 4)->first();
+        $pda = Post::where('id', 13)->first();
         // Obtener hijos del posts de PDA
-        $pdaPosts = Post::where('parent_id', 4)->orderBy('nombre')->get();
+        $pdaPosts = Post::where('parent_id', 13)->orderBy('nombre')->get();
         // Determinar tab activo
         $activeTab = $slug
             ? Post::where('slug', $slug)->firstOrFail()

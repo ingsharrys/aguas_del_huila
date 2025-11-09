@@ -57,8 +57,17 @@ class ArchivoController extends Controller
             $slug .= '-' . uniqid();
         }
 
-        // Guardar archivo físicamente
-        $ruta = $request->file('archivo')->store('posts/archivos', 'public');
+        // Obtener año actual
+        $year = now()->format('Y');
+
+        // Obtener la extensión del archivo
+        $extension = $request->file('archivo')->getClientOriginalExtension();
+
+        // Definir el nombre final del archivo
+        $filename = $slug . '.' . $extension;
+
+        // Guardar en la carpeta 'posts/archivos/AÑO/'
+        $ruta = $request->file('archivo')->storeAs("posts/archivos/{$year}", $filename, 'public');
 
         Archivo::create([
             'nombre' => $request->nombre,
@@ -75,7 +84,7 @@ class ArchivoController extends Controller
     /**
      * Eliminar un archivo
      */
-    public function destroy(Post $post, Archivo $archivo)
+    public function destroy(Archivo $archivo)
     {
         if (Storage::disk('public')->exists($archivo->archivo)) {
             Storage::disk('public')->delete($archivo->archivo);

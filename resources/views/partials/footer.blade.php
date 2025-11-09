@@ -4,8 +4,8 @@
         <!-- Columna 1: Información institucional -->
         <div class="space-y-4">
             <div class="flex items-center gap-4">
-                <img src="{{ asset('storage/img/logo-aguas-huila-white.png') }}" alt="Aguas del Huila" class="h-auto">
-                <img src="{{ asset('storage/img/logo-gobernacion-white.png') }}" alt="Gobernación del Huila" class="h-auto">
+                <img src="{{ asset('storage/img/logo-aguas-huila-white.png') }}" alt="Aguas del Huila" title="Aguas del Huila" class="h-auto">
+                <img src="{{ asset('storage/img/logo-gobernacion-white.png') }}" alt="Gobernación del Huila" title="Gobernación del Huila" class="h-auto">
             </div>
 
             <div>
@@ -46,7 +46,7 @@
 
         <!-- Columna 3: Certificaciones y redes -->
         <div class="flex flex-col justify-between h-full">
-            <img src="{{ asset('storage/img/certificados-iso.png') }}" alt="Certificados ISO" class="h-14 mb-6">
+            <img src="{{ asset('storage/img/certificados-iso.png') }}" alt="Certificados ISO" title="Certificados ISO" class="h-14 mb-6">
 
             <div class="flex flex-col items-start space-y-3">
                 <p class="font-semibold text-2xl">Síguenos</p>

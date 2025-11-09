@@ -12,7 +12,7 @@
     <div class="bg-[#0047DC] text-white text-sm flex justify-between items-center px-32 py-2">
         <div class="flex items-center gap-2">
             <a href="https://www.gov.co/" target="_blank" >
-                <img src="{{ asset('storage/img/logo/logo_gov.png') }}" alt="GOV.CO" class="h-10">
+                <img src="{{ asset('storage/img/logo/logo_gov.png') }}" alt="GOV.CO" title="GOV" class="h-10">
             </a>
         </div>
     </div>
@@ -30,7 +30,7 @@
                     Extranet
                 </a>
                 <a href="https://aguapotable.aguasdelhuila.gov.co/ControlDoc" target="_blank" class="hover:underline">Diagnóstico Rural</a>
-                <a href="#" target="_blank" class="hover:underline">Nacedero</a>
+                <a href="{{ route('nacederos') }}" target="_blank" class="hover:underline">Nacedero</a>
                 <a href="{{ route('noticias.blog') }}" target="_blank" class="hover:underline">Noticias</a>
             </div>
 
@@ -46,12 +46,12 @@
 
         <nav class="w-full py-4 flex justify-between">
             <div class="flex items-center gap-2">
-                <img src="{{ asset('storage/img/logo/logo_aguas_huila.png') }}" alt="Aguas del Huila" class="h-12">
-                <img src="{{ asset('storage/img/logo/logo_gobernacion_huila.png') }}" alt="Gobernación del Huila" class="h-12">
+                <img src="{{ asset('storage/img/logo/logo_aguas_huila.png') }}" alt="Aguas del Huila" title="Aguas del Huila" class="h-12">
+                <img src="{{ asset('storage/img/logo/logo_gobernacion_huila.png') }}" alt="Gobernación del Huila" title="Gobernación del Huila" class="h-12">
             </div>
 
             <!-- Menú -->
-            <ul class="hidden items-center gap-2 font-medium" id="menu-desktop">
+            <ul class="hidden items-center gap-1 font-medium" id="menu-desktop">
                 <li><a href="{{ url('/') }}" target="_blank" class="hover:text-[#0047DC]">Inicio</a></li>
                 <!-- Institucional con submenu -->
                 <li class="relative group">
@@ -161,7 +161,7 @@
                         @if ($descarga->id == 4)
                         <a href="{{ $descarga->slug }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">
                         @else
-                        <a href="{{ route('posts.file', $descarga->slug) }}" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">
+                        <a href="{{ route('posts.file', $descarga->slug) }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">
                         @endif
                           {{ $descarga->nombre }}
                         </a>
@@ -183,18 +183,43 @@
                   <ul
                     class="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-300 z-50"
                   >
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
+                    <li><a href="{{ route('participacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
+                    <li><a href="{{ route('calendario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
                   </ul>
                 </li>   
                 <!-- Botón y lupa -->
-                <div class="flex items-center gap-2">
-                    <a href="#" target="_blank" class="bg-[#00C81F] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#00A038] transition">
+                <div class="flex items-center gap-1">
+                    <a href="{{ route('pagos') }}" target="_blank" class="bg-[#00C81F] text-white px-4 py-2 rounded-full text-sm hover:bg-[#00A038] transition">
                       PAGOS EN LÍNEA
                   </a>
-                  <button class="text-[#00C81F] hover:text-green-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z"/></svg>
-                  </button>
+                  <!-- Lupa -->
+                  <div class="relative group">
+                    <button class="relative group text-[#00C81F] hover:text-green-900">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z"/>
+                      </svg>
+                    </button>
+
+                    <ul
+                      class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-300 z-50"
+                    >
+                      <form action="{{ route('search') }}" method="GET" class="flex">
+                        <input 
+                          type="text" 
+                          name="q" 
+                          placeholder="Buscar..." 
+                          class="flex w-full border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:border-[#00C81F]"
+                          required
+                        >
+                        <button 
+                          type="submit" 
+                          class="bg-[#00C81F] text-white px-3 py-2 rounded-r-md hover:bg-green-600"
+                        >
+                          Buscar
+                        </button>
+                      </form>
+                    </ul>
+                  </div>  
                 </div>
             </ul>
               
@@ -230,24 +255,24 @@
             </svg>
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
+            <li><a href="{{ route('historia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
+            <li><a href="{{ route('funcionesgenerales') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Nuestro Gerente</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Transparencia</a></li>
+            <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Nuestro Gerente</a></li>
+            <li><a href="{{ route('gestioncalidad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
+            <li><a href="{{ route('transparencia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Transparencia</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Inducción</a></li>
+            <li><a href="{{ route('induccion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Inducción</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Aguas del Huila</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Glosario</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Preguntas Frecuentes</a></li>
+            <li><a href="{{ route('directorio') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Aguas del Huila</a></li>
+            <li><a href="{{ route('glosario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Glosario</a></li>
+            <li><a href="{{ route('preguntasfrecuentes') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Preguntas Frecuentes</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></li>
           </ul>
         </li>
 
-        <li><a href="#" target="_blank" class="block py-2 border-b">Transparencia</a></li>
-        <li><a href="#" target="_blank" class="block py-2 border-b">Convocatorias</a></li>
+        <li><a href="{{ route('transparencia') }}" target="_blank" class="block py-2 border-b">Transparencia</a></li>
+        <li><a href="{{ route('convocatoria') }}" target="_blank" class="block py-2 border-b">Convocatorias</a></li>
 
         <!-- Contratación con submenú -->
         <li class="border-b" x-data="{ open: false }">
@@ -263,10 +288,10 @@
             </svg>
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
+            <li><a href="{{ route('contratacionuno') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
+            <li><a href="{{ route('contrataciondos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
             <li><a href="https://procesos.aguasdelhuila.gov.co/login" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Acceso de Proponente</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historico Contratación</a></li>
+            <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historico Contratación</a></li>
           </ul>
         </li>
 
@@ -350,25 +375,35 @@
             </svg>
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
+            <li><a href="{{ route('participacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
+            <li><a href="{{ route('calendario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
           </ul>
         </li>
 
         <!-- Pagos -->
         <li>
-          <a href="#" target="_blank" class="block bg-[#00C81F] text-white font-semibold py-2 px-4 rounded-full text-center hover:bg-[#00A038] transition">
+          <a href="{{ route('pagos') }}" target="_blank" class="block bg-[#00C81F] text-white font-semibold py-2 px-4 rounded-full text-center hover:bg-[#00A038] transition">
             Pagos en Línea
           </a>
         </li>
 
         <!-- Buscador -->
-        <li class="flex justify-center pt-2">
-          <button class="text-[#00C81F] hover:text-green-900">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z"/>
-            </svg>
-          </button>
+        <li class="flex justify-start pt-2">
+          <form action="{{ route('search') }}" method="GET" class="flex">
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Buscar..." 
+              class="flex w-full border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:border-[#00C81F]"
+              required
+            >
+            <button 
+              type="submit" 
+              class="bg-[#00C81F] text-white px-3 py-2 rounded-r-md hover:bg-green-600"
+            >
+              Buscar
+            </button>
+          </form>
         </li>
       </ul>
     </div>

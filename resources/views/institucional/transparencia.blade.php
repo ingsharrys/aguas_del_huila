@@ -21,9 +21,9 @@
         @include('partials.navbar')
 
         <!-- banner inicial -->
-        <div class="w-full h-[200px] sm:h-[150px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
+        <div class="w-full h-[200px] sm:h-[150px] md:h-[200px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
             <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-center text-white text-center px-16 md:px-32">
-                <h2 class="text-3xl md:text-5xl font-bold mb-2">Transparencia y Acceso a la Información Pública</h2>
+                <h2 class="text-3xl lg:text-5xl font-bold mb-2">Transparencia y Acceso a la Información Pública</h2>
                 <p class="text-lg">Inicio / Institucional </span class="font-bold"> / Transparencia y Acceso a la Información Pública</span></p>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 De conformidad con lo establecido en la <a href="https://www.archivogeneral.gov.co/sites/default/files/Estructura_Web/3_Transparencia/Ley_1712_Del_06_De_Marzo_De_2014.pdf" target="_blank" class="text-[#0047DC]" class="text-[#0047DC]">Ley 1712 de 2014</a>, el <a href="https://www.archivogeneral.gov.co/sites/default/files/Estructura_Web/3_Transparencia/Decreto_103_Del_20_De_Enero_De_2015.pdf">Decreto 103 de 2015</a>&nbsp;compilado en el <a href="http://es.presidencia.gov.co/normativa/normativa/Decreto-1081-2015.pdf" target="_blank" class="text-[#0047DC]">Decreto 1081 de 2015</a> y la <a href="https://www.archivogeneral.gov.co/sites/default/files/Estructura_Web/3_Transparencia/Resolucion_3564_De_2015.pdf" target="_blank" class="text-[#0047DC]">Resolución 3564 de 2015</a> emitidos por MinTIC, se dispone para los interesados y el público en general la siguiente información:
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 my-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-4">
                 
                 <!-- Información de la Entidad -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white text-[#0047DC] border-t-8 border-[#0047DC] text-center justify-center content-center hover:bg-gray-100">
@@ -203,6 +203,48 @@
                             Material
                         </div>
                     </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="px-2 lg:px-32 py-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-4">
+                
+                <!-- Información de la Entidad -->
+                <div class="w-full">
+
+                    <h3 class="text-xl font-bold text-[#0047DC]">Mecanismos para la atención al ciudadano</h3>
+                    <h3 class="text-md font-bold text-[#0047DC]">Dirección</h3>
+                    <p class="text-sm text-black">Calle 21 No. 1C - 17 Neiva (Huila) - Colombia</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Código postal</h3>
+                    <p class="text-sm text-black">410010</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Teléfono de contacto</h3>
+                    <p class="text-sm text-black">(+57) 8 8753181</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Línea Gratuita</h3>
+                    <p class="text-sm text-black">01 8000 952858 </p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Correo electrónico</h3>
+                    <p class="text-sm text-black">info@aguasdelhuila.gov.co</p>
+                    <p class="text-sm text-black">Radicación de Correspondecia y PQR en la web</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Sede Principal </h3>
+                    <p class="text-sm text-black">Calle 21 No. 1C - 17</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Horarios de Atención</h3>
+                    <p class="text-sm text-black">Lunes a Jueves: Mañana: 7AM a 12M - Tarde: 2PM a 6PM</p>
+                    <p class="text-sm text-black">Viernes: Mañana: 7AM a 12M - Tarde: 2PM a 5PM</p>
+                    <p class="text-sm text-black">Sedes</p>
+                    
+                    <h3 class="text-md font-bold text-[#0047DC]">Correo electrónico para notificaciones judiciales</h3>
+                    <p class="text-sm text-black">notificacionesjudiciales@aguasdelhuila.gov.co</p>
+                    <p class="text-sm text-black">Servicio Ciudadano</p>
+
                 </div>
 
             </div>

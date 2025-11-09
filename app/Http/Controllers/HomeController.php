@@ -50,4 +50,16 @@ class HomeController extends Controller
         return view('home', compact('banners', 'videosYouTube', 'noticias', 'servicios'));
     }
 
+    public function blog()
+    {
+
+        // Mostrar notiicas
+        $noticias = Noticia::with('autor')
+                ->orderBy('created_at', 'desc')
+                ->take(8)
+                ->get();
+
+        return view('participacion', compact('noticias'));
+    }
+
 }

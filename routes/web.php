@@ -14,6 +14,8 @@ use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\BannerController;
 // Controladores para páginas
 use App\Http\Controllers\HomeController;
+// Controladores para páginel buscadoras
+use App\Http\Controllers\SearchController;
 // Manejar imagenes dentro del editor de texto
 use App\Http\Controllers\UploadController;
 Route::post('/upload-image', [UploadController::class, 'uploadImage'])->name('upload.image');
@@ -70,6 +72,35 @@ Route::view('/institucional/preguntas-frecuentes', 'institucional.preguntasfrecu
 // convocatoria =================================================================================================
 Route::view('/institucional/convocatoria', 'institucional.convocatoria')->name('convocatoria');
 
+// nacederos =================================================================================================
+Route::view('/nacederos', 'nacederos')->name('nacederos');
+
+// calendario =================================================================================================
+Route::view('/calendario', 'calendario')->name('calendario');
+
+// participacion =================================================================================================
+Route::get('/participacion', [HomeController::class, 'blog'])->name('participacion');
+
+// pqr =================================================================================================
+Route::view('/pqr', 'pqr')->name('pqr');
+
+// foro =================================================================================================
+Route::view('/foro', 'foro')->name('foro');
+
+// chat =================================================================================================
+Route::view('/chat', 'chat')->name('chat');
+
+// denuncias =================================================================================================
+Route::view('/denuncias', 'denuncias')->name('denuncias');
+
+// directorio-funcionarios =================================================================================================
+Route::view('/directorio-funcionarios', 'directoriofuncionarios')->name('directoriofuncionarios');
+
+// pagos =================================================================================================
+Route::view('/pagos-linea', 'pagos')->name('pagos');
+
+// pagos =================================================================================================
+Route::get('/buscar', [SearchController::class, 'index'])->name('search');
 
 // Dashboard (solo usuarios autenticados y verificados)
 Route::view('dashboard', 'dashboard')
