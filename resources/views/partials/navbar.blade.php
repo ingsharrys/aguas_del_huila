@@ -68,9 +68,8 @@
                     <li><a href="{{ route('historia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
                     <li><a href="{{ route('funcionesgenerales') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
                     <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
-                    <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Nuestro Gerente</a></li>
+                    <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Representante Legal</a></li>
                     <li><a href="{{ route('gestioncalidad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
-                    <li><a href="{{ route('transparencia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Transparencia</a></li>
                     <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
                     <li><a href="{{ route('induccion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Inducción</a></li>
                     <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
@@ -81,7 +80,6 @@
                   </ul>
                 </li>  
                 <li><a href="{{ route('transparencia') }}" target="_blank" class="hover:text-[#0047DC]">Transparencia</a></li>
-                <li><a href="{{ route('convocatoria') }}" target="_blank" class="hover:text-[#0047DC]">Convocatorias</a></li>
                 <!-- Contratación con submenu -->
                 <li class="relative group">
                   <button class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none">
@@ -97,7 +95,7 @@
                     <li><a href="{{ route('contratacionuno') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
                     <li><a href="{{ route('contrataciondos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
                     <li><a href="https://procesos.aguasdelhuila.gov.co/login" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Acceso de Proponente</a></li>
-                    <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historico Contratación</a></li>
+                    <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Histórico Contratación</a></li>
                   </ul>
                 </li>  
                 <!-- Servicios con submenú -->
@@ -147,7 +145,7 @@
                 <!-- Descargas con submenu -->
                 <li class="relative group">
                   <a class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none" href="{{ route('posts.download') }}">
-                    Descargas
+                    Documentos
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -174,7 +172,7 @@
                 <!-- Participacion con submenu -->
                 <li class="relative group">
                   <button class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none">
-                    Participación
+                    Participa
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -184,6 +182,7 @@
                     class="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-300 z-50"
                   >
                     <li><a href="{{ route('participacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
+                    <li><a href="{{ route('convocatoria') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Convocatorias</a></li>
                     <li><a href="{{ route('calendario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
                   </ul>
                 </li>   
@@ -258,7 +257,7 @@
             <li><a href="{{ route('historia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
             <li><a href="{{ route('funcionesgenerales') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
-            <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Nuestro Gerente</a></li>
+            <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Representante Legal</a></li>
             <li><a href="{{ route('gestioncalidad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
             <li><a href="{{ route('transparencia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Transparencia</a></li>
             <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
@@ -272,7 +271,6 @@
         </li>
 
         <li><a href="{{ route('transparencia') }}" target="_blank" class="block py-2 border-b">Transparencia</a></li>
-        <li><a href="{{ route('convocatoria') }}" target="_blank" class="block py-2 border-b">Convocatorias</a></li>
 
         <!-- Contratación con submenú -->
         <li class="border-b" x-data="{ open: false }">
@@ -291,7 +289,7 @@
             <li><a href="{{ route('contratacionuno') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
             <li><a href="{{ route('contrataciondos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
             <li><a href="https://procesos.aguasdelhuila.gov.co/login" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Acceso de Proponente</a></li>
-            <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historico Contratación</a></li>
+            <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Histórico Contratación</a></li>
           </ul>
         </li>
 
@@ -346,7 +344,7 @@
           <button 
             @click="open = !open" 
             class="flex justify-between items-center w-full py-2 text-left hover:text-blue-600 focus:outline-none">
-            Descargas
+            Documentos
             <svg xmlns="http://www.w3.org/2000/svg" 
               class="w-5 h-5 transform transition-transform duration-300" 
               :class="{ 'rotate-180': open }"
@@ -376,6 +374,7 @@
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <li><a href="{{ route('participacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Participación Ciudadana</a></li>
+            <li><a href="{{ route('convocatoria') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Convocatorias</a></li>
             <li><a href="{{ route('calendario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Calendario de Actividades</a></li>
           </ul>
         </li>

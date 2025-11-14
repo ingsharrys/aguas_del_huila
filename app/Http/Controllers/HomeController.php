@@ -59,7 +59,7 @@ class HomeController extends Controller
                 ->take(8)
                 ->get();
 
-        return view('participacion', compact('noticias'));
+        return view('participacion.participacion', compact('noticias'));
     }
 
 }

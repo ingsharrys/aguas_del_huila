@@ -216,34 +216,164 @@
                 <!-- Información de la Entidad -->
                 <div class="w-full">
 
-                    <h3 class="text-xl font-bold text-[#0047DC]">Mecanismos para la atención al ciudadano</h3>
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-person-standing-icon lucide-person-standing"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>
+                    Mecanismos para la atención al ciudadano</h2>
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Dirección</h3>
                     <p class="text-sm text-black">Calle 21 No. 1C - 17 Neiva (Huila) - Colombia</p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Código postal</h3>
                     <p class="text-sm text-black">410010</p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Teléfono de contacto</h3>
                     <p class="text-sm text-black">(+57) 8 8753181</p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Línea Gratuita</h3>
                     <p class="text-sm text-black">01 8000 952858 </p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Correo electrónico</h3>
-                    <p class="text-sm text-black">info@aguasdelhuila.gov.co</p>
-                    <p class="text-sm text-black">Radicación de Correspondecia y PQR en la web</p>
-                    
+                    <a href="mailto:info@aguasdelhuila.gov.co" class="text-sm text-black hover:text-[#0047DC]">info@aguasdelhuila.gov.co</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Radicación de Correspondecia y PQR en la web</a>
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Sede Principal </h3>
                     <p class="text-sm text-black">Calle 21 No. 1C - 17</p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Horarios de Atención</h3>
                     <p class="text-sm text-black">Lunes a Jueves: Mañana: 7AM a 12M - Tarde: 2PM a 6PM</p>
                     <p class="text-sm text-black">Viernes: Mañana: 7AM a 12M - Tarde: 2PM a 5PM</p>
                     <p class="text-sm text-black">Sedes</p>
-                    
+                    </br>
                     <h3 class="text-md font-bold text-[#0047DC]">Correo electrónico para notificaciones judiciales</h3>
-                    <p class="text-sm text-black">notificacionesjudiciales@aguasdelhuila.gov.co</p>
-                    <p class="text-sm text-black">Servicio Ciudadano</p>
+                    <a href="mailto:notificacionesjudiciales@aguasdelhuila.gov.co" class="text-sm text-black hover:text-[#0047DC]">notificacionesjudiciales@aguasdelhuila.gov.co</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Servicio Ciudadano</a>
+                    </br>
+                    </br>
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-icon lucide-book-open"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+                        Información de interés</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Datos abiertos</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Glosario</a></br>   
+                    </br>   
+                    <h3 class="text-md font-bold text-[#0047DC]">Estudios e investigaciones</h3>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Nacederos y fuentes hídiricas del departamento del Huila</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Convocatorias</a></br>
+                    </br>   
+                    <h3 class="text-md font-bold text-[#0047DC]">Para niños y niñas</h3>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Revista Súper Gota</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Buenas prácticas</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Noticias</a></br>
+                    </br>   
+
+                </div>
+
+                <div class="w-full">
+
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-panel-top-icon lucide-layout-panel-top"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg>
+                    Estructura orgánica y talento humano</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Misión y Visión</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Funciones deberes</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Manual de Funciones</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Reglamento Interno de Trabajo</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Manual de Calidad</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Procesos y Documentos</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Organigrama</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Directorio de información de servidores públicos, empleados y contratistas SIGEP</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Directorio de entidades</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informes de Talento Humano</a></br>
+                    </br>   
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-text-icon lucide-notebook-text"><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9.5 8h5"/><path d="M9.5 12H16"/><path d="M9.5 16H14"/></svg>
+                    Normatividad</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Normatividad Aguas del Huila</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Gaceta Departamental</a></br>
+                    </br>   
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dollar-sign-icon lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    Presupuesto</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Presupuesto</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Ejecución Presupuestal</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Estados financieros</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Manual de Contratación</a></br>
+                    </br>   
+
+                </div>
+
+                <div class="w-full">
+
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg>
+                    Planeación</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Autodiagnóstico</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Presentación Rendición de Cuentas</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Código de Integridad del Servidor Público</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan de Desarrollo Institucional</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan Departamental de Aguas - PDA</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Planes de Acción</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Planes Institucionales</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Políticas</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan anual de adquisiciones</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Matriz de Riesgo</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informe de gestión</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Modelo Integrado de Planeación y Gestión – MIPG</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Planes de Acción MIPG</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Gobierno Digital</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Matriz de Veedurías</a></br>
+                    </br>   
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-search-icon lucide-scan-search"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></svg>
+                    Control</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Calidad del Agua 1 y 2 Bimenstre de 2021</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Información de Rendición de Cuentas</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informe de Gestión</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Reportes Control Interno</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informes pormenorizados del estado de Control Interno</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan Anticorrupción y Atención al Ciudadano</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informe de indicadores</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informes de ejecución presupuestal</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Entes de control</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Defensa Judicial</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Informes Auditorias Internas y Externas</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Planes de Mejoramiento Entes Externos</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Reportes PQR Electrónicas</a></br>
+                    </br>
+
+                </div>
+
+                <div class="w-full">
+
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                    Contratación</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Información Contratación SECOP</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Procesos de contratación</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Relación de contratos</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Proceso de Gestión de Bienes y Servicios</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan anual de adquisiciones</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Plan anual de adquisiciones SECOP</a></br>
+                    </br>   
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-left-icon lucide-arrow-right-left"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+                    Trámites y Servicios</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Portal Gov.co</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">SUIT</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Procesos y Documentos</a></br>
+                    </br>
+                    </br>   
+                    <h2 class="flex gap-4 text-xl font-bold text-[#0047DC]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-left-icon lucide-arrow-right-left"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+                    Instrumentos de gestión de información pública</h2>
+                    </br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Información mínima requerida</a></br>   
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Esquema de publicación de información</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Gestión Documental</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Programa de Gestión Documental</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Tablas de Retención Documental - TRD</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">PINAR</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">SIC</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Procesos</a></br>
+                    <a href="#" class="text-sm text-black hover:text-[#0047DC]">Procesos</a></br>
+                    </br>
 
                 </div>
 

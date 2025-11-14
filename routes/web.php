@@ -41,6 +41,7 @@ Route::get('/descargas/{slug}', [PostController::class, 'file'])->name('posts.fi
 Route::view('/contratacion/procesos-contractuales', 'contratacion.contrato')->name('contratacionuno');
 // Pagina contratacion parte 2
 Route::view('/contratacion/procesos-contractuales-dos', 'contratacion.contratodos')->name('contrataciondos');
+
 // ===============================================================================================================
 // Institucional =================================================================================================
 // historia - institucional
@@ -69,37 +70,34 @@ Route::view('/institucional/glosario', 'institucional.glosario')->name('glosario
 Route::view('/institucional/preguntas-frecuentes', 'institucional.preguntasfrecuentes')->name('preguntasfrecuentes');
 // Planes de Desarrollo Departamental
 
-// convocatoria =================================================================================================
-Route::view('/institucional/convocatoria', 'institucional.convocatoria')->name('convocatoria');
+// ===============================================================================================================
+// Participa =================================================================================================
+// participacion 
+Route::get('/participa', [HomeController::class, 'blog'])->name('participacion');
+// convocatoria 
+Route::view('/participa/convocatoria', 'participacion.convocatoria')->name('convocatoria');
+// calendario 
+Route::view('/participa/calendario', 'participacion.calendario')->name('calendario');
+// pqr 
+Route::view('/participa/pqr', 'participacion.pqr')->name('pqr');
+// foro 
+Route::view('/participa/foro', 'participacion.foro')->name('foro');
+// chat 
+Route::view('/participa/chat', 'participacion.chat')->name('chat');
+// denuncias 
+Route::view('/participa/denuncias', 'participacion.denuncias')->name('denuncias');
+// directorio-funcionarios 
+Route::view('/participa/directorio-funcionarios', 'participacion.directoriofuncionarios')->name('directoriofuncionarios');
 
+// ===============================================================================================================
+// pagos =================================================================================================
+Route::view('/pagos-en-linea', 'pagos')->name('pagos');
+
+// ===============================================================================================================
 // nacederos =================================================================================================
 Route::view('/nacederos', 'nacederos')->name('nacederos');
 
-// calendario =================================================================================================
-Route::view('/calendario', 'calendario')->name('calendario');
-
-// participacion =================================================================================================
-Route::get('/participacion', [HomeController::class, 'blog'])->name('participacion');
-
-// pqr =================================================================================================
-Route::view('/pqr', 'pqr')->name('pqr');
-
-// foro =================================================================================================
-Route::view('/foro', 'foro')->name('foro');
-
-// chat =================================================================================================
-Route::view('/chat', 'chat')->name('chat');
-
-// denuncias =================================================================================================
-Route::view('/denuncias', 'denuncias')->name('denuncias');
-
-// directorio-funcionarios =================================================================================================
-Route::view('/directorio-funcionarios', 'directoriofuncionarios')->name('directoriofuncionarios');
-
-// pagos =================================================================================================
-Route::view('/pagos-linea', 'pagos')->name('pagos');
-
-// pagos =================================================================================================
+// buscador =================================================================================================
 Route::get('/buscar', [SearchController::class, 'index'])->name('search');
 
 // Dashboard (solo usuarios autenticados y verificados)

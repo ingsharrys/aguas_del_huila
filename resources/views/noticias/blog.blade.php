@@ -75,6 +75,10 @@
                 </div>
             @endif
 
+            <div class="mt-3">
+                {{ $noticias->links() }}
+            </div>
+
         </section>
 
         <!-- Indicadores -->
