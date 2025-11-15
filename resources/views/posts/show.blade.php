@@ -56,7 +56,16 @@
                             <h3 class="text-xl font-semibold text-[#0047DC] mb-2">Archivos disponibles:</h3>
                             <ul class="list-disc ml-6">
                                 @foreach($archivos[$pda->id] as $archivo)
-                                    <li><a href="{{ asset('storage/' . $archivo->archivo) }}" class="text-[#00C81F] hover:text-[#0047DC]" target="_blank">{{ $archivo->nombre }}</a></li>
+                                    <li class="flex justify-between py-4">
+                                        <div class="flex gap-4 pr-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-corner-down-right-icon lucide-corner-down-right text-black"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+                                            <a href="{{ asset('storage/' . $archivo->archivo) }}" 
+                                            class="text-black hover:text-[#0047DC]" target="_blank">
+                                                {{ $archivo->nombre }}
+                                            </a>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $archivo->archivo) }}" class="flex w-48 px-4 py-2 border-green-700 rounded-lg text-white bg-[#00C81F] hover:bg-green-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Descargar</a>
+                                    </li>
                                 @endforeach
                             </ul>
                         @endif
@@ -69,10 +78,19 @@
                         <div class="text-gray-900 leading-relaxed">{!! $pdaHijo->contenido !!}</div>
 
                         @if(isset($archivos[$pdaHijo->id]) && $archivos[$pdaHijo->id]->count())
-                            <h3 class="text-xl font-semibold text-[#0047DC] mb-2">Archivos disponibles:</h3>
+                            <h3 class="text-xl font-semibold text-[#0047DC] mt-6 mb-3">Archivos disponibles:</h3>
                             <ul class="list-disc ml-6">
                                 @foreach($archivos[$pdaHijo->id] as $archivo)
-                                    <li><a href="{{ asset('storage/' . $archivo->archivo) }}" class="text-[#00C81F] hover:text-[#0047DC]" target="_blank">{{ $archivo->nombre }}</a></li>
+                                    <li class="flex justify-between py-4">
+                                        <div class="flex gap-4 pr-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-corner-down-right-icon lucide-corner-down-right text-black"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+                                            <a href="{{ asset('storage/' . $archivo->archivo) }}" 
+                                            class="text-black hover:text-[#0047DC]" target="_blank">
+                                                {{ $archivo->nombre }}
+                                            </a>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $archivo->archivo) }}" class="flex w-48 px-4 py-2 border-green-700 rounded-lg text-white bg-[#00C81F] hover:bg-green-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Descargar</a>
+                                    </li>
                                 @endforeach
                             </ul>
                         @endif

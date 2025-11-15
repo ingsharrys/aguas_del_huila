@@ -69,7 +69,7 @@
 
             <!-- Plan de participación ciudadana -->            
                 <div class="w-full mx-auto text-[#0047DC] hover:text-[#00C81F]">
-                    <a href="#" target="_blank" class="flex flex-col items-center text-center">
+                    <a href="/storage/posts/archivos/2019/MIPG/PlanesInstitucionales/2.%20%20Plan%20de%20Participacin%20Ciudadana.pdf" target="_blank" class="flex flex-col items-center text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text-icon lucide-file-text"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                         <h3 class="text-2xl font-bold py-4">Plan de participación ciudadana</h3>
                     </a>               
@@ -85,7 +85,7 @@
 
             <!-- Informes de gestión -->            
                 <div class="w-full mx-auto text-[#0047DC] hover:text-[#00C81F]">
-                    <a href="#" target="_blank" class="flex flex-col items-center text-center">
+                    <a href="{{ route('posts.file', 'informes-de-gestion') }}" target="_blank" class="flex flex-col items-center text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-line-icon lucide-chart-line"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                         <h3 class="text-2xl font-bold py-4">Informes de gestión</h3>
                     </a>               
@@ -93,7 +93,7 @@
 
             <!-- actividades -->            
                 <div class="w-full mx-auto text-[#0047DC] hover:text-[#00C81F]">
-                    <a href="#" target="_blank" class="flex flex-col items-center text-center">
+                    <a href="{{ route('posts.file', 'actividades-de-participacion-ciudadana') }}" target="_blank" class="flex flex-col items-center text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days-icon lucide-calendar-days"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
                         <h3 class="text-2xl font-bold py-4">Actividades de Participación Ciudadana</h3>
                     </a>               

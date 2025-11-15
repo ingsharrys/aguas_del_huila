@@ -42,14 +42,14 @@
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 pt-8 text-[#0047DC] font-bold text-center">
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank">
+                    <a href="{{ route('pagos') }}" target="_blank">
                         <img src="{{ asset('storage/img/servicios-linea.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3 class="">Servicios en línea</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank" class="justify-items-center">
+                    <a href="{{ route('pqr') }}" target="_blank" class="justify-items-center">
                         <img src="{{ asset('storage/img/pqrs.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Petición, Quejas, Recargas y Sugerencia</h3>
                     </a>
@@ -57,28 +57,28 @@
                 
 
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank">
+                    <a href="{{ route('preguntasfrecuentes') }}" target="_blank">
                         <img src="{{ asset('storage/img/preguntas.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Preguntas Frecuentes</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank" class="justify-items-center">
+                    <a href="{{ route('transparencia') }}" target="_blank" class="justify-items-center">
                         <img src="{{ asset('storage/img/transparencia.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Ley de Transparencia y Acceso a la Información</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank">
+                    <a href="{{ route('posts.show') }}" target="_blank">
                         <img src="{{ asset('storage/img/plan-departamental.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
                         <h3>Plan Departamental de Aguas</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank">
+                    <a href="https://aguapotable.aguasdelhuila.gov.co/ControlDoc" target="_blank">
                         <img src="{{ asset('storage/img/sanitario-rural.png') }}" class="w-50 h-auto" alt="img servicios">
                         <h3>Diágnostico Sanitario Rural</h3>
                     </a>
@@ -92,7 +92,7 @@
 
             <div class="grid grid-cols-1 w-full h-[500px] pb-8 md:pb-16 content-end justify-center bg-bottom bg-no-repeat bg-cover" style="background-image: url('{{ asset('storage/img/fondo-pagos-home.webp') }}');">
                 <div class="flex flex-column justify-center">
-                    <a href="#" target="_blank" class="justify-items-center">
+                    <a href="{{ route('pagos') }}" target="_blank" class="justify-items-center">
                         <h2 class="text-2xl md:text-5xl text-center py-8">Ahora Tus Facturas<br>Las Puedes<br><span class="font-bold">Pagar en línea</span></h2>
                         <img src="{{ asset('storage/img/btn-pse.png') }}" class="w-50 h-auto" alt="img servicios">
                     </a>
@@ -272,7 +272,7 @@
                 </div>
 
                 <div class="flex justify-center items-center">
-                    <a href="#" target="_blank" class="block w-40 h-20">
+                    <a href="https://www.mintic.gov.co/portal/inicio/Glosario/G/5306:Gobierno-en-Linea-GEL" target="_blank" class="block w-40 h-20">
                         <img src="{{ asset('storage/img/gobierno-linea.png') }}" 
                             alt="Gobierno en Línea" title="Gobierno en Línea" 
                             class="w-full h-full object-contain">

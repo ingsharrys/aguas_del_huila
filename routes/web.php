@@ -31,9 +31,9 @@ Route::get('/servicios/{slug}/{id}', [ServicioController::class, 'article'])->na
 // Página general de posts
 Route::get('/pda/{slug?}', [PostController::class, 'show'])->name('posts.show');
 // Página general de descargas
-Route::get('/descargas', [PostController::class, 'download'])->name('posts.download');
+Route::get('/documentos', [PostController::class, 'download'])->name('posts.download');
 // Página general de descargas por posts
-Route::get('/descargas/{slug}', [PostController::class, 'file'])->name('posts.file');
+Route::get('/documentos/{slug}', [PostController::class, 'file'])->name('posts.file');
 
 // ===============================================================================================================
 // Contratacion ==================================================================================================
@@ -51,11 +51,9 @@ Route::view('/institucional/funciones-generales', 'institucional.funcionesgenera
 // imagen corporativa
 
 // nuestro gerente
-Route::view('/institucional/nuestro-gerente', 'institucional.nuestrogerente')->name('nuestrogerente');
+Route::view('/institucional/representante-legal', 'institucional.nuestrogerente')->name('nuestrogerente');
 // gestion calidad
 Route::view('/institucional/gestion-calidad', 'institucional.gestioncalidad')->name('gestioncalidad');
-// transparencia
-Route::view('/institucional/transparencia', 'institucional.transparencia')->name('transparencia');
 // normatividad
 
 // induccion-aguas-del-huila
@@ -71,11 +69,20 @@ Route::view('/institucional/preguntas-frecuentes', 'institucional.preguntasfrecu
 // Planes de Desarrollo Departamental
 
 // ===============================================================================================================
+// transparencia =================================================================================================
+// transparencia
+Route::view('/transparencia-y-acceso-a-la-informacion-publica', 'transparencia.transparencia')->name('transparencia');
+// entes-de-control
+Route::view('/transparencia-y-acceso-a-la-informacion-publica/entes-de-control', 'transparencia.entescontrol')->name('entescontrol');
+// oficinas
+Route::view('/transparencia-y-acceso-a-la-informacion-publica/oficinas-aguas-del-huila', 'transparencia.oficinas')->name('oficinas');
+
+// ===============================================================================================================
 // Participa =================================================================================================
 // participacion 
 Route::get('/participa', [HomeController::class, 'blog'])->name('participacion');
 // convocatoria 
-Route::view('/participa/convocatoria', 'participacion.convocatoria')->name('convocatoria');
+Route::view('/participa/convocatorias', 'participacion.convocatoria')->name('convocatoria');
 // calendario 
 Route::view('/participa/calendario', 'participacion.calendario')->name('calendario');
 // pqr 

@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.header')
-        <title>Aguas del Huila - Nuestro Gerente</title>
+        <title>Aguas del Huila - Representante Legal</title>
     </head>
     <body class="bg-white">
 
@@ -11,8 +11,8 @@
         <!-- banner inicial -->
         <div class="w-full h-[200px] sm:h-[150px] md:h-[200px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
             <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-center text-white text-center px-16 md:px-32">
-                <h2 class="text-3xl lg:text-5xl font-bold mb-2">Nuestro Gerente</h2>
-                <p class="text-lg">Inicio / Institucional </span class="font-bold"> / Nuestro Gerente</span></p>
+                <h2 class="text-3xl lg:text-5xl font-bold mb-2">Representante Legal</h2>
+                <p class="text-lg">Inicio / Institucional </span class="font-bold"> / Representante Legal</span></p>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
 
             <div class="grid grid-cols-[30%_70%] gap-8">
                 <div class="w-full mx-auto">
-                    <img src="{{ asset('storage/img/gerente_genaro_lozada.jpeg') }}" alt="Nuestro Gerente" title="Nuestro Gerente" class="w-full h-auto object-cover rounded-lg">
+                    <img src="{{ asset('storage/img/gerente_genaro_lozada.jpeg') }}" alt="Representante Legal" title="Representante Legal" class="w-full h-auto object-cover rounded-lg">
                 </div>
 
                 <div class="w-full mx-auto">

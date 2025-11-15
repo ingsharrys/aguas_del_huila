@@ -51,7 +51,7 @@
             </div>
 
             <!-- Menú -->
-            <ul class="hidden items-center gap-1 font-medium" id="menu-desktop">
+            <ul class="hidden items-center gap-4 font-medium" id="menu-desktop">
                 <li><a href="{{ url('/') }}" target="_blank" class="hover:text-[#0047DC]">Inicio</a></li>
                 <!-- Institucional con submenu -->
                 <li class="relative group">
@@ -67,16 +67,16 @@
                   >
                     <li><a href="{{ route('historia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
                     <li><a href="{{ route('funcionesgenerales') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
+                    <li><a href="{{ route('posts.file', 'imagen-corporativa') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
                     <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Representante Legal</a></li>
                     <li><a href="{{ route('gestioncalidad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
+                    <li><a href="{{ route('posts.file', 'normatividad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
                     <li><a href="{{ route('induccion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Inducción</a></li>
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
+                    <li><a href="{{ route('posts.file', 'directorio-entidades-del-sector') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
                     <li><a href="{{ route('directorio') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Aguas del Huila</a></li>
                     <li><a href="{{ route('glosario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Glosario</a></li>
                     <li><a href="{{ route('preguntasfrecuentes') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Preguntas Frecuentes</a></li>
-                    <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></li>
+                    <li><a href="{{ route('posts.file', 'planes-de-desarrollo-departamental') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></li>
                   </ul>
                 </li>  
                 <li><a href="{{ route('transparencia') }}" target="_blank" class="hover:text-[#0047DC]">Transparencia</a></li>
@@ -122,12 +122,12 @@
                 </li>
                 <!-- PDA con submenú -->
                 <li class="relative group">
-                  <button class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none">
+                  <a class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none" href="{{ route('posts.show') }}" target="_blank">
                     PDA
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
-                  </button>
+                  </a>
                   <ul
                     class="absolute left-0 top-full mt-2 w-96 bg-white shadow-lg rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-300 z-50 grid grid-cols-2 gap-0"
                   >
@@ -144,7 +144,7 @@
                 </li>
                 <!-- Descargas con submenu -->
                 <li class="relative group">
-                  <a class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none" href="{{ route('posts.download') }}">
+                  <a class="flex items-center gap-1 hover:text-[#0047DC] focus:outline-none" href="{{ route('posts.download') }}" target="_blank">
                     Documentos
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -256,17 +256,17 @@
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <li><a href="{{ route('historia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Historia</a></li>
             <li><a href="{{ route('funcionesgenerales') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Funciones Generales</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
+            <li><a href="{{ route('posts.file', 'imagen-corporativa') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Imagen Corporativa</a></li>
             <li><a href="{{ route('nuestrogerente') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Representante Legal</a></li>
             <li><a href="{{ route('gestioncalidad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Gestión de Calidad</a></li>
             <li><a href="{{ route('transparencia') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Transparencia</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
+            <li><a href="{{ route('posts.file', 'normatividad') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Normatividad</a></li>
             <li><a href="{{ route('induccion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Inducción</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
+            <li><a href="{{ route('posts.file', 'directorio-entidades-del-sector') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Entidades del Sector</a></li>
             <li><a href="{{ route('directorio') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Directorio de Aguas del Huila</a></li>
             <li><a href="{{ route('glosario') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Glosario</a></li>
             <li><a href="{{ route('preguntasfrecuentes') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Preguntas Frecuentes</a></li>
-            <li><a href="#" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></li>
+            <li><a href="{{ route('posts.file', 'planes-de-desarrollo-departamental') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Plan de Desarrollo Departamental</a></li>
           </ul>
         </li>
 
@@ -353,6 +353,7 @@
             </svg>
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            <li><a href="{{ route('posts.download') }}" target="_blank" class="block py-1 hover:text-blue-500">Documentos</a></li>
             @foreach ($descargas as $descargas)
               <li><a href="{{ $descargas->slug }}" target="_blank" class="block py-1 hover:text-blue-500">{{ $descargas->nombre }}</a></li>
             @endforeach

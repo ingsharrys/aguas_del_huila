@@ -34,12 +34,12 @@
             </div>
 
             <div>
-                <p class="font-bold text-lg">Sedes</p>
+                <a href="{{ route('oficinas') }}" target="_blank" class="font-bold text-lg text-white hover:text-gray">Sedes</a>
                 <ul class="space-y-1">
-                    <li><a href="#" class="hover:underline">Correo Electrónico para Notificaciones Judiciales</a></li>
+                    <li>Correo Electrónico para Notificaciones Judiciales</li>
                     <li><a href="mailto:notificacionesjudiciales@aguasdelhuila.gov.co" class="hover:underline">notificacionesjudiciales@aguasdelhuila.gov.co</a></li>
-                    <li><a href="#" target="_blank" class="hover:underline">Política de Tratamiento de Datos Personales</a></li>
-                    <li><a href="#" target="_blank" class="hover:underline">Carta de Trato Digno al Usuario</a></li>
+                    <li><a href="/storage/posts/archivos/politicas/6.%20Politica%20de%20tratamiento%20de%20datos.pdf" target="_blank" class="hover:underline">Política de Tratamiento de Datos Personales</a></li>
+                    <li><a href="/storage/posts/archivos/atencion_ciudadano/CARTA%20DEL%20TRATO%20DIGNO%20AGUAS%20DEL%20HUILA.pdf" target="_blank" class="hover:underline">Carta de Trato Digno al Usuario</a></li>
                 </ul>
             </div>
         </div>

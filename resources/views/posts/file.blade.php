@@ -12,7 +12,7 @@
         <div class="w-full h-[200px] sm:h-[150px] md:h-[200px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
             <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-center text-white text-center px-16 md:px-32">
                 <h2 class="text-3xl lg:text-5xl font-bold mb-2">{{ $post->nombre }}</h2>
-                <p class="text-lg">Inicio / Descargas </span class="font-bold">/ {{ $post->nombre }}</span></p>
+                <p class="text-lg">Inicio / Documentos </span class="font-bold">/ {{ $post->nombre }}</span></p>
             </div>
         </div>
 
