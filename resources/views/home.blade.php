@@ -135,7 +135,7 @@
 
         <!-- Imagen limpieza -->
         <section class="px-2 lg:px-32 py-8 flex" style="background: linear-gradient(to bottom, #00C81F 50%, #FFF 50%); flex-direction: column; align-items: center;">
-            <div class="w-full md:w-4xl text-center pb-8 text-white font-bold">
+            <div class="w-full lg:w-4xl text-center pb-8 text-white font-bold">
                 <h2 class="text-2xl md:text-4xl">Aprende a separar correctamente tus residuos con nuestras guías visuales y fáciles de seguir</h2>
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-8 text-[#0047DC] font-bold text-center">

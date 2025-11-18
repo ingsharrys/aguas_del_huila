@@ -16,13 +16,13 @@
                     name="buscar" 
                     value="{{ request('buscar') }}" 
                     placeholder="Buscar por título..."
-                    class="border border-gray-300 rounded-lg p-2 w-full sm:w-1/5"
+                    class="border border-gray-300 rounded-lg p-2 w-2/5 sm:w-1/5"
                 >
 
                 <!-- Filtros de categoria -->
                 <select 
                     name="categoria_id" 
-                    class="border border-gray-300 rounded-lg p-2 w-full sm:w-1/5"
+                    class="border border-gray-300 rounded-lg p-2 w-2/5 sm:w-1/5"
                 >
                     <option class="text-gray-900" value="">Todas las categorías</option>
                     @foreach($categorias as $categoria)
@@ -41,19 +41,19 @@
                     type="date" 
                     name="fecha_inicio" 
                     value="{{ request('fecha_inicio') }}" 
-                    class="border border-gray-300 rounded-lg p-2 w-full sm:w-1/5"
+                    class="border border-gray-300 rounded-lg p-2 w-2/5 sm:w-1/5"
                 >
 
                 <input 
                     type="date" 
                     name="fecha_fin" 
                     value="{{ request('fecha_fin') }}" 
-                    class="border border-gray-300 rounded-lg p-2 w-full sm:w-1/5"
+                    class="border border-gray-300 rounded-lg p-2 w-2/5 sm:w-1/5"
                 >
 
                 <button 
                     type="submit" 
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex w-full sm:w-48 text-center justify-center gap-2 cursor-pointer"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex w-4/5 sm:w-48 text-center justify-center gap-2 cursor-pointer"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> Buscar
                 </button>
@@ -88,7 +88,7 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-2 border text-center flex justify-center gap-2">
-                                    <a href="https://aguasdelhuila.gov.co/noticia/{{ $noticia->slug }}/{{ $noticia->id }}" target="_blank"
+                                    <a href="/noticias/{{ $noticia->slug }}/{{ $noticia->id }}" target="_blank"
                                     class="p-2 text-yellow-500 hover:text-yellow-700 transition" 
                                     title="Ver">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>

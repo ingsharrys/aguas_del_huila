@@ -17,5 +17,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
 
+<!-- Herramienta de accecibilidad -->
+<script src="https://cdn.userway.org/widget.js" data-account="EvnCUKYTJM"></script>
+
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @fluxAppearance

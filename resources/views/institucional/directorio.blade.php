@@ -44,7 +44,7 @@
                 <a href="mailto:info@aguasdelhuila.gov.co" target="_blank" class="flex items-center gap-1 hover:underline text-gray-900">
                     info@aguasdelhuila.gov.co
                 </a></h3>
-            <h3 class="text-xl text-black">Web: <a href="https://aguasdelhuila.gov.co/" target="_blank" class="flex items-center gap-1 hover:underline text-gray-900">www.aguasdelhuila.gov.co</a></h3>
+            <h3 class="text-xl text-black">Web: <a href="/" target="_blank" class="flex items-center gap-1 hover:underline text-gray-900">www.aguasdelhuila.gov.co</a></h3>
             <h3 class="text-xl text-black">Sedes: Tarqui - Nátaga - Paicol - Santa María</h3>
 
             <h3 class="text-2xl font-bold text-[#0047DC] mb-4">Directorio de funcionarios</h3>

@@ -135,18 +135,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Grupo de rutas del panel de administración
-// Administrador y Editor
-Route::middleware(['auth', 'role:Administrador|Editor'])->group(function () {
-    Route::resource('noticias', NoticiaController::class);
-    Route::resource('servicios', ServicioController::class);
-    Route::resource('posts', PostController::class);
-    Route::resource('archivos', ArchivoController::class);
-    Route::resource('banners', BannerController::class);
-});
+Route::prefix('dashboard')->group(function () {
 
-// Grupo de rutas del panel de administración
-// Administrador
-Route::middleware(['auth', 'role:Administrador'])->group(function () {
-    Route::resource('categorias', CategoriaController::class);
-    Route::resource('usuarios', UsuarioController::class);
+    // Administrador y Editor
+    Route::middleware(['auth', 'role:Administrador|Editor'])->group(function () {
+        Route::resource('noticias', NoticiaController::class);
+        Route::resource('servicios', ServicioController::class);
+        Route::resource('posts', PostController::class);
+        Route::resource('archivos', ArchivoController::class);
+        Route::resource('banners', BannerController::class);
+    });
+
+    // Solo Administrador
+    Route::middleware(['auth', 'role:Administrador'])->group(function () {
+        Route::resource('categorias', CategoriaController::class);
+        Route::resource('usuarios', UsuarioController::class);
+    });
+
 });

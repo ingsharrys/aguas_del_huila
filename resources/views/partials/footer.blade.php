@@ -63,3 +63,33 @@
         © {{ date('Y') }} Aguas del Huila S.A. E.S.P. - Todos los derechos reservados.
     </div>
 </footer>
+
+<!-- BOTÓN FLOTANTE "IR ARRIBA" -->
+<button id="scrollTopBtn" 
+    class="hidden fixed bottom-6 right-6 bg-[#0047DC] text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition transform hover:scale-110 cursor-pointer"
+    onclick="scrollToTop()"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+</button>
+
+<script>
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.remove('hidden');
+        } else {
+            scrollTopBtn.classList.add('hidden');
+        }
+    });
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>

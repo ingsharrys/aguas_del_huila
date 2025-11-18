@@ -12,7 +12,7 @@
     <div class="bg-[#0047DC] text-white text-sm flex justify-between items-center px-32 py-2">
         <div class="flex items-center gap-2">
             <a href="https://www.gov.co/" target="_blank" >
-                <img src="{{ asset('storage/img/logo/logo_gov.png') }}" alt="GOV.CO" title="GOV" class="h-10">
+                <img src="{{ asset('storage/img/logo/logo_gov.png') }}" alt="GOV.CO" title="GOV" class="h-6">
             </a>
         </div>
     </div>
