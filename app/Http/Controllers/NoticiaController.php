@@ -60,13 +60,22 @@ class NoticiaController extends Controller
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
             'categoria_id' => 'required|exists:categorias,id',
-            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
+        ], [
+                'imagen_portada.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         // Guardamos la imagen si se sube
         $rutaImagen = null;
         if ($request->hasFile('imagen_portada')) {
-            $rutaImagen = $request->file('imagen_portada')->store('noticias', 'public');
+            // Obtener año actual
+            $year = now()->format('Y');
+            // Obtener el nombre y la extensión del archivo
+            $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $request->file('imagen_portada')->getClientOriginalExtension();
+            $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
+            // Guardar en la carpeta 'posts/archivos/AÑO/'
+            $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');
         }
 
         // Creamos el slug del título
@@ -107,8 +116,10 @@ class NoticiaController extends Controller
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
             'categoria_id' => 'nullable|exists:categorias,id',
-            'imagen_portada' => 'nullable|image|max:2048',
-        ]);
+            'imagen_portada' => 'nullable|image|max:500',
+        ], [
+                'imagen_portada.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         $noticia->titulo = $validated['titulo'];
         $noticia->slug = Str::slug($validated['titulo']);
@@ -118,11 +129,17 @@ class NoticiaController extends Controller
         // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
         if ($request->hasFile('imagen_portada')) {
             if ($noticia->imagen_portada) {
-                Storage::delete('public/' . $noticia->imagen_portada);
+                Storage::disk('public')->delete($noticia->imagen_portada);
             }
-
-            $imagen = $request->file('imagen_portada')->store('noticias', 'public');
-            $noticia->imagen_portada = $imagen;
+            // Obtener año actual
+            $year = now()->format('Y');
+            // Obtener el nombre y la extensión del archivo
+            $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $request->file('imagen_portada')->getClientOriginalExtension();
+            $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
+            // Guardar en la carpeta 'posts/archivos/AÑO/'
+            $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');
+            $noticia->imagen_portada = $rutaImagen;
         }
 
         $noticia->save();

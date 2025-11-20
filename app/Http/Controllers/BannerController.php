@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BannerController extends Controller
 {
@@ -37,14 +38,23 @@ class BannerController extends Controller
             'subtitulo' => 'nullable|string|max:255',
             'boton' => 'nullable|string|max:255',
             'enlace' => 'nullable|string|max:255',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
             'activo' => 'nullable|boolean',
-        ]);
+        ], [
+                'imagen.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         // Guardamos la imagen si se sube
         $rutaImagen = null;
         if ($request->hasFile('imagen')) {
-            $rutaImagen = $request->file('imagen')->store('banners', 'public');
+            // Obtener año actual
+            $year = now()->format('Y');
+            // Obtener el nombre y la extensión del archivo
+            $originalName = pathinfo($request->file('imagen')->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $request->file('imagen')->getClientOriginalExtension();
+            $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
+            // Guardar en la carpeta 'posts/archivos/AÑO/'
+            $rutaImagen = $request->file('imagen')->storeAs("banners/{$year}", $filename, 'public');
         }
 
         // Creamos la banner
@@ -70,12 +80,14 @@ class BannerController extends Controller
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
-            'subtitulo' => 'string',
-            'boton' => 'string',
-            'enlace' => 'string',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'subtitulo' => 'nullable|string|max:255',
+            'boton' => 'nullable|string|max:255',
+            'enlace' => 'nullable|string|max:255',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
             'activo' => 'nullable|boolean',
-        ]);
+        ], [
+                'imagen.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         $banner->titulo = $validated['titulo'];
         $banner->subtitulo = $validated['subtitulo'] ?? null;
@@ -86,11 +98,17 @@ class BannerController extends Controller
         // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
         if ($request->hasFile('imagen')) {
             if ($banner->imagen) {
-                Storage::delete('public/' . $banner->imagen);
+                Storage::disk('public')->delete($banner->imagen);
             }
-
-            $imagen = $request->file('imagen')->store('banners', 'public');
-            $banner->imagen = $imagen;
+            // Obtener año actual
+            $year = now()->format('Y');
+            // Obtener el nombre y la extensión del archivo
+            $originalName = pathinfo($request->file('imagen')->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $request->file('imagen')->getClientOriginalExtension();
+            $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
+            // Guardar en la carpeta 'posts/archivos/AÑO/'
+            $rutaImagen = $request->file('imagen')->storeAs("banners/{$year}", $filename, 'public');
+            $banner->imagen = $rutaImagen;
         }
 
         $banner->save();

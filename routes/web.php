@@ -38,9 +38,9 @@ Route::get('/documentos/{slug}', [PostController::class, 'file'])->name('posts.f
 // ===============================================================================================================
 // Contratacion ==================================================================================================
 // Pagina contratacion parte 1
-Route::view('/contratacion/procesos-contractuales', 'contratacion.contrato')->name('contratacionuno');
+Route::view('/contratacion/procesos-contractuales', 'contratacion.contrato')->name('contrato');
 // Pagina contratacion parte 2
-Route::view('/contratacion/procesos-contractuales-dos', 'contratacion.contratodos')->name('contrataciondos');
+Route::view('/contratacion/procesos-contractuales-dos', 'contratacion.contratodos')->name('contratodos');
 
 // ===============================================================================================================
 // Institucional =================================================================================================

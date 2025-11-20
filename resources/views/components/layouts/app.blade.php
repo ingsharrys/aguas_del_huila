@@ -1,4 +1,25 @@
 <x-layouts.app.sidebar :title="$title ?? null">
+    <style>
+    /* Cambiar color del texto del dropdown */
+    .select2-container--classic .select2-results__option {
+        color: black !important;
+    }
+
+    .select2-container--classic .select2-results__option:hover {
+        color: white !important;
+        background: #0047DC !important;
+    }
+
+    /* Cambiar color del placeholder */
+    .select2-container--classic .select2-selection__placeholder {
+        color: black !important; /* Tailwind gray-500 */
+    }
+
+    /* Cambiar color del texto en el área de búsqueda dentro del dropdown */
+    .select2-search__field {
+        color: black !important;
+    }
+</style>
     <flux:main>
         {{ $slot }}
         <!-- sistema de alerta -->
@@ -32,4 +53,14 @@
             </script>
         @endif
     </flux:main>
+    <script>
+        $(document).ready(function () {
+            $('.select2-field').select2({
+                placeholder: "Seleccionar un post...",
+                allowClear: true,
+                width: '100%',
+                theme: 'classic'
+            });
+        });
+    </script>
 </x-layouts.app.sidebar>

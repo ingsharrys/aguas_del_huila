@@ -75,11 +75,14 @@
                         accept="image/*"
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                     >
+                    @error('icono')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Imagen Portada -->
                 <div>
-                    <label for="imagen_portada" class="block text-sm font-semibold text-gray-700 mb-1">Imagen Portada</label>
+                    <label for="imagen_portada" class="block text-sm font-semibold text-gray-700 mb-1">Imagen Portada (1200*628px)</label>
                     <div class="mt-2 border rounded-lg p-2 flex items-center justify-center bg-gray-50">
                         <img 
                             id="preview-imagen" 
@@ -95,6 +98,9 @@
                         accept="image/*"
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                     >
+                    @error('imagen_portada')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Botón -->

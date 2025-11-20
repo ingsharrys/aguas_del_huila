@@ -33,7 +33,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $postsPadres = Post::whereNull('parent_id')->pluck('nombre', 'id');
+        $postsPadres = Post::orderBy('id', 'desc')->get();
         return view('posts.create', compact('postsPadres'));
     }
 
@@ -68,9 +68,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $postsPadres = Post::whereNull('parent_id')
-            ->where('id', '!=', $post->id)
-            ->pluck('nombre', 'id');
+        $postsPadres = Post::where('id', '!=', $post->id)->get();
 
         return view('posts.edit', compact('post', 'postsPadres'));
     }

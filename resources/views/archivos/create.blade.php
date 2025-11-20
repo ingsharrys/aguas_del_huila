@@ -23,6 +23,7 @@
                         type="text" 
                         name="nombre" 
                         id="nombre"
+                        value="{{ old('titulo') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el título de la archivo"
                         required
@@ -35,7 +36,7 @@
                     <select 
                         name="post_id" 
                         id="post_id"
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900 select2-field"
                     >
                         <option value="">Seleccionar...</option>
                         @foreach ($posts as $post)
@@ -56,6 +57,9 @@
                     <label for="archivo" class="block text-sm font-semibold text-gray-700 mb-1">Seleccionar archivo</label>
                     <input type="file" name="archivo" id="archivo" required
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900">
+                    @error('archivo')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Botón -->
@@ -70,5 +74,4 @@
             </div>
         </form>
     </div>
-
 </x-layouts.app>

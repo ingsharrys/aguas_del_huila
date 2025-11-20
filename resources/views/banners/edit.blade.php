@@ -36,7 +36,7 @@
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el subtítulo del banner"
                         value="{{ old('subtitulo', $banner->subtitulo) }}"
-                        required
+                        
                     >
                 </div>
 
@@ -50,7 +50,7 @@
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el texto del botón del banner"
                         value="{{ old('boton', $banner->boton) }}"
-                        required
+                        
                     >
                 </div>
 
@@ -64,7 +64,7 @@
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el enlace del botón"
                         value="{{ old('enlace', $banner->enlace) }}"
-                        required
+                        
                     >
                 </div>
 
@@ -75,7 +75,7 @@
 
                 <!-- Imagen Portada -->
                 <div>
-                    <label for="imagen" class="block text-sm font-semibold text-gray-700 mb-1">Imagen Portada</label>
+                    <label for="imagen" class="block text-sm font-semibold text-gray-700 mb-1">Imagen del banner (1350*400px)</label>
                     <div class="mt-2 border rounded-lg p-2 flex items-center justify-center bg-gray-50">
                         <img 
                             id="preview-imagen" 
@@ -91,6 +91,9 @@
                         accept="image/*"
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                     >
+                    @error('imagen')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Estado del banner -->

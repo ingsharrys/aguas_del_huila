@@ -9,7 +9,7 @@
 <header class="w-full shadow-md relative z-50">
 
     <!-- Franja azul GOV.CO -->
-    <div class="bg-[#0047DC] text-white text-sm flex justify-between items-center px-32 py-2">
+    <div class="bg-[#0047DC] text-white text-sm flex justify-between items-center px-32 py-2" id="mainNavbarblue">
         <div class="flex items-center gap-2">
             <a href="https://www.gov.co/" target="_blank" >
                 <img src="{{ asset('storage/img/logo/logo_gov.png') }}" alt="GOV.CO" title="GOV" class="h-6">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="bg-white text-gray-800 flex flex-wrap justify-center px-2 lg:px-32 rounded-bl-4xl rounded-br-4xl">
+    <div class="bg-white text-gray-800 flex flex-wrap justify-center px-2 lg:px-32 rounded-bl-4xl rounded-br-4xl transition-all duration-900 ease-out" id="mainNavbarFijo">
         <!-- Franja verde -->
         <div class="w-full bg-[#00C81F] text-white text-sm flex justify-between mx-0 sm:mx-8 px-2 sm:px-8 py-2 rounded-bl-4xl rounded-br-4xl">
             <div class="flex flex-wrap items-center gap-1 sm:gap-5">
@@ -92,8 +92,8 @@
                   <ul
                     class="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-300 z-50"
                   >
-                    <li><a href="{{ route('contratacionuno') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
-                    <li><a href="{{ route('contrataciondos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
+                    <li><a href="{{ route('contrato') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
+                    <li><a href="{{ route('contratodos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
                     <li><a href="https://procesos.aguasdelhuila.gov.co/login" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Acceso de Proponente</a></li>
                     <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Histórico Contratación</a></li>
                   </ul>
@@ -286,8 +286,8 @@
             </svg>
           </button>
           <ul x-show="open" x-collapse class="pl-4 mt-1 space-y-1 text-gray-600 grid gap-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <li><a href="{{ route('contratacionuno') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
-            <li><a href="{{ route('contrataciondos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
+            <li><a href="{{ route('contrato') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 1</a></li>
+            <li><a href="{{ route('contratodos') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Procesos Contractuales Parte 2</a></li>
             <li><a href="https://procesos.aguasdelhuila.gov.co/login" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Acceso de Proponente</a></li>
             <li><a href="{{ route('posts.file', 'contratacion') }}" target="_blank" class="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-[#0047DC]">Histórico Contratación</a></li>
           </ul>
@@ -416,4 +416,39 @@
         const menu = document.getElementById('mobile-menu');
         menu.classList.toggle('hidden');
     });
+</script>
+
+<script>
+// navbar fijo al scroll
+document.addEventListener("scroll", function () {
+    const navbar = document.getElementById("mainNavbarblue");
+    const navbarfijo = document.getElementById("mainNavbarFijo");
+
+    if (window.scrollY > 150) {
+        navbar.classList.add("hidden");
+
+        navbarfijo.classList.add(
+            "opacity-100",
+            "translate-y-0",
+            "fixed",
+        );
+
+        navbarfijo.classList.remove(
+            "-translate-y-1",
+        );
+
+    } else {
+        navbar.classList.remove("hidden");
+
+        navbarfijo.classList.add(
+            "-translate-y-1",
+        );
+
+        navbarfijo.classList.remove(
+            "opacity-100",
+            "translate-y-0",
+            "fixed",
+        );
+    }
+});
 </script>

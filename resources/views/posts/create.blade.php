@@ -52,12 +52,12 @@
                     <select 
                         name="parent_id" 
                         id="parent_id"
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900 select2-field"
                     >
                         <option value="">-- Ninguno --</option>
-                        @foreach ($postsPadres as $id => $nombre)
-                            <option value="{{ $id }}" {{ old('parent_id') == $id ? 'selected' : '' }}>
-                                {{ $nombre }}
+                        @foreach ($postsPadres as $post)
+                            <option value="{{ $post->id }}" {{ old('parent_id') == $post->id ? 'selected' : '' }}>
+                                {{ $post->nombre }}
                             </option>
                         @endforeach
                     </select>

@@ -37,9 +37,12 @@ class ServicioController extends Controller
             'nombre' => 'required|string|max:255',
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
-            'icono' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+            'icono' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
+        ], [
+                'imagen_portada.max' => 'La imagen no debe superar los 500 KB.',
+                'icono.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         // Guardamos el icono si se sube
         $rutaIcono = null;
@@ -88,9 +91,12 @@ class ServicioController extends Controller
             'nombre' => 'required|string|max:255',
             'contenido' => 'required|string',
             'titulo' => 'required|string|max:255',
-            'icono' => 'nullable|image|max:2048',
-            'imagen_portada' => 'nullable|image|max:2048',
-        ]);
+            'icono' => 'nullable|image|max:500',
+            'imagen_portada' => 'nullable|image|max:500',
+        ], [
+                'icono.max' => 'La imagen no debe superar los 500 KB.',
+                'imagen_portada.max' => 'La imagen no debe superar los 500 KB.',
+            ]);
 
         $servicio->titulo = $validated['titulo'];
         $servicio->slug = Str::slug($validated['titulo']);

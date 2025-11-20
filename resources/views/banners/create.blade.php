@@ -23,6 +23,7 @@
                         type="text" 
                         name="titulo" 
                         id="titulo"
+                        value="{{ old('titulo') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el título de la banner"
                         required
@@ -36,6 +37,7 @@
                         type="text" 
                         name="subtitulo" 
                         id="subtitulo"
+                        value="{{ old('subtitulo') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el subtítulo de la banner"
                     >
@@ -48,6 +50,7 @@
                         type="text" 
                         name="boton" 
                         id="boton"
+                        value="{{ old('boton') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el texto del boton del banner"
                     >
@@ -60,6 +63,7 @@
                         type="text" 
                         name="enlace" 
                         id="enlace"
+                        value="{{ old('enlace') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el enlace del botón"
                     >
@@ -89,6 +93,9 @@
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                         required
                     >
+                    @error('imagen')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Botón -->

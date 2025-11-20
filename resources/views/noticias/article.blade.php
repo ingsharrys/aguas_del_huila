@@ -3,6 +3,27 @@
     <head>
         @include('partials.header')
         <title>{{ $noticia->titulo }}</title>
+        <!-- Metadatos para Facebook y redes sociales -->
+        <meta property="og:title" content="{{ $noticia->titulo }}" />
+        @php
+            // Quitar HTML y limpiar espacios
+            $desc = trim(strip_tags($noticia->contenido));
+            $desc = preg_replace('/\s+/', ' ', $desc);
+        @endphp
+
+        <meta property="og:description" content="{{ $desc !== '' ? Str::limit($desc, 150) : 'Lee la noticia completa en Aguas del Huila' }}" />
+        <!-- Imagen principal (URL absoluta) -->
+        <meta property="og:image" content="{{ asset('storage/'.$noticia->imagen_portada) }}" />
+        <meta property="og:image:secure_url" content="{{ asset('storage/'.$noticia->imagen_portada) }}" />
+        <meta property="og:image:alt" content="{{ $noticia->titulo }}" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <!-- URL absoluta del artículo -->
+        <meta property="og:url" content="{{ url('/noticias/'.$noticia->slug.'/'.$noticia->id) }}" />
+        <!-- Tipo de contenido -->
+        <meta property="og:type" content="article" />
+
+        <meta property="og:site_name" content="Aguas del Huila" />
     </head>
     <body class="bg-white">
 

@@ -23,6 +23,7 @@
                         type="text" 
                         name="titulo" 
                         id="titulo"
+                        value="{{ old('titulo') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el título de la servicio"
                         required
@@ -39,7 +40,7 @@
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none px-2 py-4 text-gray-900"
                         placeholder="Escribe el contenido completo de la servicio..."
                         required
-                    ></textarea>
+                    >{{ old('contenido') }}</textarea>
                 </div>
             </div>
 
@@ -53,6 +54,7 @@
                         type="text" 
                         name="nombre" 
                         id="nombre"
+                        value="{{ old('nombre') }}"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                         placeholder="Escribe el nombre de la servicio"
                         required
@@ -76,11 +78,14 @@
                         accept="image/*"
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                     >
+                    @error('icono')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Imagen Portada -->
                 <div>
-                    <label for="imagen_portada" class="block text-sm font-semibold text-gray-700 mb-1">Imagen Portada</label>
+                    <label for="imagen_portada" class="block text-sm font-semibold text-gray-700 mb-1">Imagen Portada (1200*628px)</label>
                     <div 
                         id="preview-container" 
                         class="w-full h-48 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 overflow-hidden mb-3"
@@ -96,6 +101,9 @@
                         class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
                         required
                     >
+                    @error('imagen_portada')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Botón -->

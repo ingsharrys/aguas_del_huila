@@ -49,8 +49,10 @@ class ArchivoController extends Controller
         $request->validate([
             'nombre' => 'required|string',
             'post_id' => 'required|int',
-            'archivo' => 'required|file|max:10240', // máx 10MB
-        ]);
+            'archivo' => 'required|file|max:20480', // máx 20MB
+        ], [
+                'archivo.max' => 'El documento no debe superar los 20 MB.',
+            ]);
 
         $slug = Str::slug($request->nombre);
         if (Archivo::where('slug', $slug)->exists()) {

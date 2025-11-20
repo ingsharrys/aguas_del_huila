@@ -7,6 +7,7 @@ use App\Models\Noticia;
 use App\Models\Servicio;
 use App\Models\Post;
 use App\Models\Archivo;
+use Illuminate\Support\Facades\File;
 
 class SearchController extends Controller
 {
