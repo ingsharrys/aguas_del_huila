@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
+use App\Http\Controllers\EstadisticasController;
 // Controladores para administrador
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\CategoriaController;
@@ -108,8 +109,8 @@ Route::view('/nacederos', 'nacederos')->name('nacederos');
 Route::get('/buscar', [SearchController::class, 'index'])->name('search');
 
 // Dashboard (solo usuarios autenticados y verificados)
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+Route::get('/dashboard', [EstadisticasController::class, 'index'])
+    ->middleware(['auth'])
     ->name('dashboard');
 
 // Grupo de rutas de configuración (solo autenticados)

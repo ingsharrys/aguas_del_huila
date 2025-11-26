@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Post;
 use App\Models\Servicio;
+// Contador de vistas
+use App\Helpers\ViewStats;
+use Illuminate\Support\Facades\Route;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,18 @@ class ViewServiceProvider extends ServiceProvider
                 'descargas' => $descargasPosts,
                 'servicios' => $servicios,
             ]);
+        });
+
+        // Composer global: se ejecuta en TODAS las vistas
+        View::composer('*', function ($view) {
+
+            $route = optional(Route::current())->getName();
+
+            // Si la ruta no tiene nombre, no se muestra contador
+            if ($route) {
+                $stats = ViewStats::stats($route);
+                $view->with('stats', $stats);
+            }
         });
     }
 }

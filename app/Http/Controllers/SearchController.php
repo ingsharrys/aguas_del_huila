@@ -7,7 +7,8 @@ use App\Models\Noticia;
 use App\Models\Servicio;
 use App\Models\Post;
 use App\Models\Archivo;
-use Illuminate\Support\Facades\File;
+use App\Models\Section;
+
 
 class SearchController extends Controller
 {
@@ -30,7 +31,10 @@ class SearchController extends Controller
         // Buscar en archvivos
         $archivos = Archivo::where('nombre', 'like', "%$q%")->get();
 
-        return view('search.results', compact('q', 'noticias', 'servicios', 'paginas', 'archivos'));
+        // Buscar en secciones
+        $secciones = Section::where('titulo', 'like', "%$q%")->orWhere('etiquetas', 'like', "%$q%")->get();
+
+        return view('search.results', compact('q', 'noticias', 'servicios', 'paginas', 'archivos', 'secciones'));
     }
 
 }

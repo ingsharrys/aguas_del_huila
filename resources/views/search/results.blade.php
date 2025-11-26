@@ -70,6 +70,17 @@
                 </div>
                 @endif
 
+                @if($secciones->count())
+                <div class="w-full">
+                    <h2 class="text-xl font-semibold text-[#0047DC] my-4">Secciones</h2>
+                    @foreach($secciones as $sec)
+                        <a href="{{ route($sec->route) }}" target="_blank" class="block py-2 hover:text-[#00C81F]">
+                            {{ $sec->titulo }}
+                        </a>
+                    @endforeach
+                </div>
+                @endif
+
             </div>
 
             @else

@@ -1,3 +1,11 @@
+
+<!-- Contador de visitas -->
+<section class="px-2 lg:px-32 bg-white">
+    <div class="w-full">
+        @include('partials.counter')
+    </div>
+</section>
+
 <footer class="bg-[#0047DC] text-white pt-12 pb-4 px-4 lg:px-32 text-sm shadow-md">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
 
