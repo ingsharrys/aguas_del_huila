@@ -62,8 +62,8 @@
                         name="imagen_portada" 
                         id="imagen_portada"
                         accept="image/*"
-                        class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
-                        required
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4 text-gray-900"
+                        
                     >
                     @error('imagen_portada')
                         <span class="text-red-500 text-sm">{{ $message }}</span>

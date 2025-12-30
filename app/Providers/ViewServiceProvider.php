@@ -33,7 +33,7 @@ class ViewServiceProvider extends ServiceProvider
         // Composer global: se ejecuta en TODAS las vistas
         View::composer('*', function ($view) {
 
-            $route = optional(Route::current())->getName();
+            $route = request()->path(); 
 
             // Si la ruta no tiene nombre, no se muestra contador
             if ($route) {

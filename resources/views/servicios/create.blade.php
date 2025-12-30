@@ -39,7 +39,7 @@
                         rows="15"
                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none px-2 py-4 text-gray-900"
                         placeholder="Escribe el contenido completo de la servicio..."
-                        required
+                        
                     >{{ old('contenido') }}</textarea>
                 </div>
             </div>
