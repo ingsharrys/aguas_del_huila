@@ -40,46 +40,46 @@
             <div class="w-full text-center pb-8 text-[#0047DC] font-bold">
                 <h2 class="text-4xl">Servicios en línea</h2>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 pt-8 text-[#0047DC] font-bold text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8 px-2 md:px-32 pt-8 text-[#0047DC] font-bold text-center">
                 <div class="flex flex-column justify-center">
-                    <a href="{{ route('pagos') }}" target="_blank">
-                        <img src="{{ asset('storage/img/servicios-linea.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
+                    <a href="{{ route('pagos') }}" target="_blank" class="justify-items-center">
+                        <img src="{{ asset('storage/img/servicios-linea.png') }}" class="h-auto mb-2" alt="img servicios">
                         <h3 class="">Servicios en línea</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
                     <a href="{{ route('pqr') }}" target="_blank" class="justify-items-center">
-                        <img src="{{ asset('storage/img/pqrs.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
+                        <img src="{{ asset('storage/img/pqrs.png') }}" class="h-auto mb-2" alt="img servicios">
                         <h3>Petición, Quejas, Recargas y Sugerencia</h3>
                     </a>
                 </div>
                 
 
                 <div class="flex flex-column justify-center">
-                    <a href="{{ route('preguntasfrecuentes') }}" target="_blank">
-                        <img src="{{ asset('storage/img/preguntas.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
+                    <a href="{{ route('preguntasfrecuentes') }}" target="_blank" class="justify-items-center">
+                        <img src="{{ asset('storage/img/preguntas.png') }}" class="h-auto mb-2" alt="img servicios">
                         <h3>Preguntas Frecuentes</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
                     <a href="{{ route('transparencia') }}" target="_blank" class="justify-items-center">
-                        <img src="{{ asset('storage/img/transparencia.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
+                        <img src="{{ asset('storage/img/transparencia.png') }}" class="h-auto mb-2" alt="img servicios">
                         <h3>Ley de Transparencia y Acceso a la Información</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="{{ route('posts.show') }}" target="_blank">
-                        <img src="{{ asset('storage/img/plan-departamental.png') }}" class="w-50 h-auto mb-2" alt="img servicios">
+                    <a href="{{ route('posts.show') }}" target="_blank" class="justify-items-center">
+                        <img src="{{ asset('storage/img/plan-departamental.png') }}" class="h-auto mb-2" alt="img servicios">
                         <h3>Plan Departamental de Aguas</h3>
                     </a>
                 </div>
 
                 <div class="flex flex-column justify-center">
-                    <a href="https://aguapotable.aguasdelhuila.gov.co/ControlDoc" target="_blank">
-                        <img src="{{ asset('storage/img/sanitario-rural.png') }}" class="w-50 h-auto" alt="img servicios">
+                    <a href="https://aguapotable.aguasdelhuila.gov.co/ControlDoc" target="_blank" class="justify-items-center">
+                        <img src="{{ asset('storage/img/sanitario-rural.png') }}" class="h-auto" alt="img servicios">
                         <h3>Diágnostico Sanitario Rural</h3>
                     </a>
                 </div>
@@ -136,41 +136,41 @@
         <!-- Imagen limpieza -->
         <section class="px-2 lg:px-32 py-8 flex" style="background: linear-gradient(to bottom, #00C81F 50%, #FFF 50%); flex-direction: column; align-items: center;">
             <div class="w-full lg:w-4xl text-center pb-8 text-white font-bold">
-                <h2 class="text-2xl md:text-4xl">Aprende a separar correctamente tus residuos con nuestras guías visuales y fáciles de seguir</h2>
+                <h2 class="text-2xl md:text-3xl">Aprende a separar correctamente tus residuos con nuestras guías visuales y fáciles de seguir</h2>
             </div>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-8 text-[#0047DC] font-bold text-center">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-8 md:px-32 text-[#0047DC] font-bold text-center">
                 
-            <!-- Imagen 1 -->
-            <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos" title="Tips residuos">
-                <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span class="text-white text-lg font-semibold">Código de colores</span>
+                <!-- Imagen 1 -->
+                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                    <img src="{{ asset('storage/img/Tips-residuos.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Tips residuos" title="Tips residuos">
+                    <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-white text-lg font-semibold">Código de colores</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Imagen 2 -->
-            <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-1.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos orgánicos" title="Residuos orgánicos">
-                <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span class="text-white text-lg font-semibold">Residuos orgánicos</span>
+                <!-- Imagen 2 -->
+                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                    <img src="{{ asset('storage/img/Tips-residuos-1.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos orgánicos" title="Residuos orgánicos">
+                    <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-white text-lg font-semibold">Residuos orgánicos</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Imagen 3 -->
-            <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-2.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos reciclables" title="Residuos reciclables">
-                <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span class="text-white text-lg font-semibold">Residuos reciclables</span>
+                <!-- Imagen 3 -->
+                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                    <img src="{{ asset('storage/img/Tips-residuos-2.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos reciclables" title="Residuos reciclables">
+                    <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-white text-lg font-semibold">Residuos reciclables</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Imagen 4 -->
-            <div class="relative group overflow-hidden rounded-lg shadow-md">
-                <img src="{{ asset('storage/img/Tips-residuos-3.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos peligrosos" title="Residuos peligrosos">
-                <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span class="text-white text-lg font-semibold">Residuos peligrosos</span>
+                <!-- Imagen 4 -->
+                <div class="relative group overflow-hidden rounded-lg shadow-md">
+                    <img src="{{ asset('storage/img/Tips-residuos-3.webp') }}" class="w-full h-auto transition-transform duration-500 group-hover:scale-110" alt="Residuos peligrosos" title="Residuos peligrosos">
+                    <div class="absolute inset-0 bg-[#0047DC]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span class="text-white text-lg font-semibold">Residuos peligrosos</span>
+                    </div>
                 </div>
-            </div>
 
             </div>
         </section>
@@ -225,12 +225,12 @@
                 <h2 class="text-4xl">Portafolio de Servicios</h2>
                 <h2 class="text-xl">Aguas del Huila S.A E.S.P Llevamos más que agua</h2>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-16 px-2 md:px-32 pt-8 text-white font-bold text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8 px-2 md:px-32 pt-8 text-white font-bold text-center">
 
                 @foreach($servicios as $servicio)
                     <div class="flex flex-column justify-center">
-                        <a href="{{ route('servicios.article', [$servicio->slug, $servicio->id]) }}" target="_blank">
-                            <img src="{{ asset('storage/' . $servicio->icono) }}" class="w-50 h-auto mb-2" alt="{{ $servicio->titulo }}" title="{{ $servicio->titulo }}">
+                        <a href="{{ route('servicios.article', [$servicio->slug, $servicio->id]) }}" target="_blank" class="justify-items-center">
+                            <img src="{{ asset('storage/' . $servicio->icono) }}" class="h-auto mb-2" alt="{{ $servicio->titulo }}" title="{{ $servicio->titulo }}">
                             <h3 class="">{{ $servicio->nombre }}</h3>
                         </a>
                     </div>
@@ -304,7 +304,7 @@
         <!-- Swiper CSS -->
         <script>
             const swiper = new Swiper('.mySwiper', {
-                loop: true,
+                loop: false,
                 autoplay: {
                 delay: 5000,
                 disableOnInteraction: false,
