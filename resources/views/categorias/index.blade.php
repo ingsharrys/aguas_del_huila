@@ -3,13 +3,13 @@
         <div class="container w-full">
 
             <div class="flex w-full justify-between mb-4">
-                <h1 class="text-center content-center font-black">Listado de Categorias</h1>
+                <h1 class="text-center content-center font-black text-white">Listado de Categorias</h1>
                 
                 <a href="{{ route('categorias.create') }}" class="flex w-56 px-4 py-2 border-green-700 rounded-lg text-white bg-green-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Agregar Categoría</a>
             </div>
 
             <!-- Filtros -->
-            <form method="GET" action="{{ route('categorias.index') }}" class="flex flex-wrap gap-3 mb-4">
+            <form method="GET" action="{{ route('categorias.index') }}" class="flex flex-wrap gap-3 mb-4 text-white">
                 <!-- Filtros de nombre -->
                 <input 
                     type="text" 
@@ -38,7 +38,7 @@
                             <th class="px-4 py-2 border text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-white">
                         @forelse($categorias as $categoria)
                             <tr class="hover:bg-blue-50 hover:text-gray-900">
                                 <td class="px-4 py-2 border">{{ $categoria->id }}</td>

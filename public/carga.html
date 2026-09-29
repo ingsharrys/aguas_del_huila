@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Procesos (embed)</title>
+  <style>
+    html,body { margin:0; padding:0; height:100%; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 16px; }
+    #procFrame { width:100%; min-height: 85vh; border:0; }
+    .hint { font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial; color:#555; margin:12px 0 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hint">Vista embebida desde <strong>procesos.aguasdelhuila.gov.co</strong></div>
+
+    <iframe
+      id="procFrame"
+      src="https://procesos.aguasdelhuila.gov.co/embed/procesos"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allow="clipboard-read; clipboard-write">
+    </iframe>
+  </div>
+
+  <script>
+    // Ajuste de altura automático (si tu vista embed envía postMessage)
+    window.addEventListener('message', function (ev) {
+      if (ev && ev.data && ev.data.type === 'aguas:height') {
+        var frame = document.getElementById('procFrame');
+        frame.style.height = (ev.data.px || 700) + 'px';
+      }
+    }, false);
+  </script>
+</body>
+</html>

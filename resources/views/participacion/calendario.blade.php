@@ -18,6 +18,25 @@
 
         <section class="px-2 lg:px-32 py-8">
 
+            <div class="max-w-6xl mx-auto py-10 px-4">
+
+                <div class="mb-6">
+                    <a href="{{ asset('storage/posts/CALENDARIO-AMBIENTAL-2026.pdf') }}"
+                    download
+                    class="flex w-48 px-4 py-2 border-green-700 rounded-lg text-white bg-[#00C81F] hover:bg-green-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Descargar</a>
+                </div>
+
+                <div class="border rounded-lg shadow-lg overflow-hidden">
+                    <iframe src="{{ asset('storage/posts/CALENDARIO-AMBIENTAL-2026.pdf') }}" width="100%" height="800px"></iframe>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- 
+        <section class="px-2 lg:px-32 py-8">
+
             <style type="text/css">
                 .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
             </style>
@@ -26,6 +45,7 @@
             </div>
 
         </section>
+         -->
 
         @include('partials.footer')
 

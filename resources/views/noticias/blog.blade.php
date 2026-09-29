@@ -107,7 +107,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="border-collapse">
-                        <tbody>
+                        <tbody class="text-white">
                             <tr class="font-bold">
                                 <td   rowspan="2">
                                     MUNICIPIOS INTEVENIDOS</td>

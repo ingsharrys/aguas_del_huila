@@ -17,13 +17,6 @@
         </div>
 
         <section class="px-2 lg:px-32 py-8">
-
-            <style type="text/css">
-                .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-            </style>
-            <div class="embed-container">
-                <iframe frameborder="0" height="800px" src="https://giscaceres.maps.arcgis.com/apps/MapSeries/index.html?appid=13b90794ebe744ddbcbac7fff610b1e1" width="100%"></iframe>
-            </div>
             <br />
             <br />
             <style type="text/css">
@@ -31,6 +24,13 @@
             </style>
             <div class="embed-container">
                 <iframe frameborder="0" height="500" marginheight="0" marginwidth="0" scrolling="no" src="//giscaceres.maps.arcgis.com/apps/Embed/index.html?webmap=7f508b795f6f4612805cec5e6c1c2cea&amp;extent=-76.6244,1.5528,-74.4130,3.8432&amp;home=true&amp;zoom=true&amp;scale=true&amp;disable_scroll=false&amp;theme=light" title="Aguas del Huila" width="500"></iframe>
+            </div>
+
+            <style type="text/css">
+                .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+            </style>
+            <div class="embed-container">
+                <iframe frameborder="0" height="800px" src="https://giscaceres.maps.arcgis.com/apps/MapSeries/index.html?appid=13b90794ebe744ddbcbac7fff610b1e1" width="100%"></iframe>
             </div>
 
 

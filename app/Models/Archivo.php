@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+
 
 class Archivo extends Model
 {
@@ -15,18 +15,21 @@ class Archivo extends Model
         'slug',
         'archivo',
         'post_id',
+        'comentarios',
+        'inicio',
+        'fin',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($archivo) {
-            $archivo->slug = Str::slug($archivo->nombre);
-        });
-    }
 
     // Relaciones
     public function post()
     {
         return $this->belongsTo(Post::class);
     }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
+    }
+
 }

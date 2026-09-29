@@ -17,22 +17,33 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-        $q = $request->q;
+        $q = trim($request->q);
+        $limit = 20;
 
-        // Buscar en noticias
-        $noticias = Noticia::where('titulo', 'like', "%$q%")->get();
-
-        // Buscar en servicios
-        $servicios = Servicio::where('nombre', 'like', "%$q%")->get();
-
-        // Buscar en paginas (posts)
-        $paginas = Post::where('nombre', 'like', "%$q%")->get();
-
-        // Buscar en archvivos
-        $archivos = Archivo::where('nombre', 'like', "%$q%")->get();
-
-        // Buscar en secciones
-        $secciones = Section::where('titulo', 'like', "%$q%")->orWhere('etiquetas', 'like', "%$q%")->get();
+        $noticias = Noticia::where('titulo', 'like', "%$q%")
+            ->paginate(10, ['*'], 'noticias_page')
+            ->appends(['q' => $q]);
+        
+        $servicios = Servicio::where('nombre', 'like', "$q%")
+            ->paginate(10, ['*'], 'servicios_page')
+            ->appends(['q' => $q]);
+        
+        $paginas = Post::where('nombre', 'like', "%$q%")
+            ->paginate(10, ['*'], 'paginas_page')
+            ->appends(['q' => $q]);
+        
+        $archivos = Archivo::select('archivos.id','archivos.nombre','archivos.slug','posts.slug as post_slug')
+            ->join('posts', 'archivos.post_id', '=', 'posts.id')
+            ->where('archivos.nombre', 'like', "%$q%")
+            ->paginate(10, ['*'], 'archivos_page')
+            ->appends(['q' => $q]);
+        
+        $secciones = Section::where(function($query) use ($q) {
+                $query->where('titulo', 'like', "$q%")
+                      ->orWhere('etiquetas', 'like', "$q%");
+            })
+            ->paginate(10, ['*'], 'secciones_page')
+            ->appends(['q' => $q]);
 
         return view('search.results', compact('q', 'noticias', 'servicios', 'paginas', 'archivos', 'secciones'));
     }

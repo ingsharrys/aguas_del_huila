@@ -35,8 +35,38 @@ class Post extends Model
         return $this->belongsTo(Post::class, 'parent_id');
     }
 
+    public function obtenerDescendientesIds()
+    {
+        $ids = collect();
+
+        foreach ($this->children as $child) {
+
+            $ids->push($child->id);
+
+            $ids = $ids->merge(
+                $child->obtenerDescendientesIds()
+            );
+        }
+
+        return $ids;
+    }
+
     public function children()
     {
         return $this->hasMany(Post::class, 'parent_id');
     }
+    
+    public function getFullPathAttribute()
+    {
+        $path = [$this->slug];
+        $parent = $this->parent;
+    
+        while ($parent) {
+            array_unshift($path, $parent->slug);
+            $parent = $parent->parent;
+        }
+    
+        return implode('/', $path);
+    }
+
 }

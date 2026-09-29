@@ -3,21 +3,40 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ViewStats
 {
     public static function stats($route)
     {
-        $today = now()->toDateString();
-        $month = now()->month;
+        return Cache::remember(
+            'view_stats_' . md5($route),
+            now()->addMinutes(10),
 
-        return DB::table('views')
-            ->selectRaw('
-                COUNT(*) as total,
-                SUM(CASE WHEN MONTH(date) = ? THEN 1 ELSE 0 END) as monthly,
-                SUM(CASE WHEN date = ? THEN 1 ELSE 0 END) as daily
-            ', [$month, $today])
-            ->where('route', $route)
-            ->first();
+            function () use ($route) {
+
+                $today = now()->toDateString();
+
+                $startMonth = now()->startOfMonth()->toDateString();
+                $endMonth = now()->endOfMonth()->toDateString();
+
+                return (object) [
+
+                    'total' => DB::table('views')
+                        ->where('route', $route)
+                        ->count(),
+
+                    'monthly' => DB::table('views')
+                        ->where('route', $route)
+                        ->whereBetween('date', [$startMonth, $endMonth])
+                        ->count(),
+
+                    'daily' => DB::table('views')
+                        ->where('route', $route)
+                        ->where('date', $today)
+                        ->count(),
+                ];
+            }
+        );
     }
 }

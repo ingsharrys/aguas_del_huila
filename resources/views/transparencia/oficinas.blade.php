@@ -27,7 +27,7 @@
                 <!-- Neiva -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/eV3v74u3iecrHMsM9" target="_blank">Neiva (Sede Principal)</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/eV3v74u3iecrHMsM9" >Neiva (Sede Principal)</a></h3>
                         <img src="{{ asset('storage/img/sedes/sede-neiva.jpg') }}" alt="Neiva" title="Neiva" class="justify-self-center my-2">
                         <p class="text-black">
                             DIRECCION: Calle 21 No. 1C - 17
@@ -40,7 +40,7 @@
                 <!-- Tarqui -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/E1aJkxNPWYLpJUoP9" target="_blank">Tarqui</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/E1aJkxNPWYLpJUoP9" >Tarqui</a></h3>
                         <img src="{{ asset('storage/img/sedes/sede-tarqui.jpg') }}" alt="Tarqui" title="Tarqui" class="justify-self-center my-2">
                         <p class="text-black">
                             DIRECCION: CALLE 8 No. 4 - 63
@@ -53,7 +53,7 @@
                 <!-- Nátaga -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/g9GwezqmSeeaEE4V8" target="_blank">Nátaga</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/g9GwezqmSeeaEE4V8" >Nátaga</a></h3>
                         <img src="{{ asset('storage/img/sedes/sede-nataga.jpg') }}" alt="Nátaga" title="Nátaga" class="justify-self-center my-2">
                         <p class="text-black">
                             DIRECCION: CARRERA 7 No. 1 - 47 
@@ -66,7 +66,7 @@
                 <!-- Paicol -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/VYksEBy9UUaJh89U6" target="_blank">Paicol</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/VYksEBy9UUaJh89U6" >Paicol</a></h3>
                         <img src="{{ asset('storage/img/sedes/sede-paicol.jpg') }}" alt="Paicol" title="Paicol" class="justify-self-center my-2">
                         <p class="text-black">
                             DIRECCION: Calle 3 # 6-56
@@ -77,7 +77,7 @@
                 <!-- Santa María -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/tST6HNQKSS7KywPF6" target="_blank">Santa María</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://maps.app.goo.gl/tST6HNQKSS7KywPF6" >Santa María</a></h3>
                         <img src="{{ asset('storage/img/sedes/sede-santa-maria.jpg') }}" alt="Santa María" title="Santa María" class="justify-self-center my-2">
                         <p class="text-black">
                             DIRECCION: CALLE 8 No. 3 - 55

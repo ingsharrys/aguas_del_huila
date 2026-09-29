@@ -20,7 +20,7 @@
 
             <iframe id="blockrandom"
                 name="iframe"
-                src="https://aguasdelhuila.gov.co/carga.html"
+                src="https://aguasdelhuila.gov.co/public/carga.html"
                 width="100%"
                 height="1800"
                 scrolling="auto"

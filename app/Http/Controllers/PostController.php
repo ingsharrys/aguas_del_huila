@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Archivo;
+use App\Models\Comentario;
+use App\Models\DepartamentoCol;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -138,21 +141,254 @@ class PostController extends Controller
     }
 
     // Vista publica individual de los posts
-    public function file($slug)
+    public function file(Request $request, $path)
     {
-        // Buscar el post padre
+        // separar slugs
+        $segments = explode('/', $path);
+    
+        // último slug es el post actual
+        $slug = end($segments);
+    
         $post = Post::where('slug', $slug)->firstOrFail();
-
-        // Obtener los posts hijos
-        $hijos = Post::where('parent_id', $post->id)
+    
+        // hijos
+        $hijos = $post->children()
             ->orderBy('created_at', 'desc')
             ->get();
-
-        // Obtener archivos asociados
+    
         $archivos = Archivo::where('post_id', $post->id)
-            ->orderBy('created_at', 'desc')
+                    ->orderByDesc('created_at')
+                    ->paginate(15);
+
+        // Filtrar archivos si es el post de sistema de normas
+        $archivosNormas = collect();
+
+        if ($post->slug == 'sistema-de-normas') {
+
+            // IDs de los hijos (Acuerdos, Resoluciones, etc.)
+            $post->load('children.children.children');
+
+            $idsPosts = collect([$post->id])
+                ->merge($post->obtenerDescendientesIds())
+                ->unique();
+
+            $queryNormas = Archivo::whereIn(
+                'post_id',
+                $idsPosts
+            );
+
+            // Si escogió un tipo
+            if ($request->filled('tipo')) {
+
+                $tipo = Post::with('children.children.children')
+                    ->findOrFail($request->tipo);
+
+                $idsTipo = collect([$tipo->id])
+                    ->merge($tipo->obtenerDescendientesIds());
+
+                $queryNormas->whereIn('post_id', $idsTipo->unique());
+
+            } else {
+
+                // Mostrar todos los tipos
+                $queryNormas->whereIn('post_id', $idsPosts);
+
+            }
+
+            // Buscar por nombre
+            if ($request->filled('nombre')) {
+
+                $queryNormas->where(
+                    'nombre',
+                    'like',
+                    '%' . $request->nombre . '%'
+                );
+
+            }
+
+            $archivosNormas = $queryNormas
+                ->latest()
+                ->paginate(15)
+                ->withQueryString();
+        }
+
+        if ($request->ajax()) {
+
+            $lista = $post->slug == 'sistema-de-normas'
+                ? $archivosNormas
+                : $archivos;
+
+            return view('partials.archivos', [
+                'archivos' => $lista
+            ]);
+        }
+
+        // Archivos disponibles para comentarios
+        $comentariosAbiertos = collect();
+        $comentariosCerrados = collect();
+
+        if ($post->slug == 'participacion-en-formulacion-de-politicas-publicas') {
+
+            $post->load('children.children.children');
+
+            $idsPosts = collect([$post->id])
+                ->merge($post->obtenerDescendientesIds())
+                ->unique();
+
+            $hoy = now()->toDateString();
+
+            $comentariosAbiertos = Archivo::whereIn('post_id', $idsPosts)
+                ->where('comentarios', 1)
+                ->whereDate('inicio', '<=', $hoy)
+                ->where(function ($query) use ($hoy) {
+                    $query->whereNull('fin')
+                        ->orWhereDate('fin', '>=', $hoy);
+                })
+                ->orderBy('fin')
+                ->get();
+
+            $comentariosCerrados = Archivo::whereIn('post_id', $idsPosts)
+                ->where('comentarios',1)
+                ->whereDate('fin','<',$hoy)
+                ->orderByDesc('fin')
+                ->get();
+
+        }
+    
+        // breadcrumb (padres)
+        $breadcrumbs = [];
+        $parent = $post;
+    
+        while ($parent) {
+            array_unshift($breadcrumbs, $parent);
+            $parent = $parent->parent;
+        }
+
+        $tiposNormas = collect();
+
+        if ($post->slug == 'sistema-de-normas') {
+
+            $tiposNormas = $post->children()
+                ->orderBy('nombre')
+                ->get();
+
+        }
+    
+        return view('posts.file', compact(
+            'post',
+            'hijos',
+            'archivos',
+            'archivosNormas',
+            'breadcrumbs',
+            'tiposNormas',
+            'comentariosAbiertos',
+            'comentariosCerrados'
+        ));
+    }
+    
+    // Vista para mostrar los archivos
+    public function document($postSlug, $archivoSlug)
+    {
+        $post = Post::where('slug', $postSlug)->firstOrFail();
+
+        $breadcrumbs = [];
+
+        $parent = $post;
+
+        while ($parent) {
+
+            array_unshift($breadcrumbs, $parent);
+
+            $parent = $parent->parent;
+        }
+
+        $archivo = Archivo::where('slug', $archivoSlug)
+            ->where('post_id', $post->id)
+            ->firstOrFail();
+
+        $comentarios = Comentario::with('departamento')
+            ->where('archivo_id', $archivo->id)
+            ->where('aprobado', 1)
+            ->latest()
+            ->paginate(10);
+
+        $totalComentarios = Comentario::where('archivo_id',$archivo->id)
+            ->where('aprobado',1)
+            ->count();
+
+        $puedeComentar = false;
+
+        if(
+            $archivo->comentarios &&
+            Carbon::now()->between(
+                Carbon::parse($archivo->inicio),
+                Carbon::parse($archivo->fin)
+            )
+        ){
+            $puedeComentar = true;
+        }
+
+        $departamentos = DepartamentoCol::where('estado', 1)
+            ->orderBy('nombre')
             ->get();
 
-        return view('posts.file', compact('post', 'hijos', 'archivos'));
+        return view(
+            'posts.document',
+            compact(
+                'post',
+                'archivo',
+                'breadcrumbs',
+                'comentarios',
+                'totalComentarios',
+                'puedeComentar',
+                'departamentos'
+            )
+        );
     }
+
+    public function guardarComentario(Request $request, Archivo $archivo)
+    {
+
+        $request->validate([
+
+            'identificacion'=>'required|max:20',
+
+            'nombre'=>'required|string|max:3000',
+
+            'departamento_id'=>'required|exists:departamentos_col,id',
+
+            'comentario'=>'required|string|max:3000',
+
+            'acepta_terminos'=>'accepted'
+
+        ]);
+
+        Comentario::create([
+
+            'archivo_id'=>$archivo->id,
+
+            'nombre'=>$request->nombre,
+
+            'identificacion'=>$request->identificacion,
+
+            'departamento_id'=>$request->departamento_id,
+
+            'comentario'=>$request->comentario,
+
+            'acepta_terminos'=>1,
+
+            // pendiente de aprobación
+
+            'aprobado'=>0
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Su comentario fue enviado correctamente y será publicado una vez sea revisado.'
+        );
+
+    }
+
+
 }

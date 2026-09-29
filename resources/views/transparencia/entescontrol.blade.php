@@ -32,7 +32,7 @@
                 <!-- Contraloría General de la Nación -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.contraloria.gov.co/" target="_blank">Contraloría General de la Nación</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.contraloria.gov.co/" >Contraloría General de la Nación</a></h3>
                         <img src="{{ asset('storage/img/logo/logo-contraloria.png') }}" alt="Contraloría General de la Nación" title="Contraloría General de la Nación" class="justify-self-center my-2">
                         <p class="text-black">
                             La Contraloría General de la República (CGR) es el máximo órgano de control fiscal del Estado. Establece que el control financiero, de gestión y de resultados sobre las entidades que manejen fondos o bienes de la nación de acuerdo con lo especificado en el artículo 267 de la Constitución Política de Colombia de 1991.
@@ -60,7 +60,7 @@
                 <!-- Contraloría Departamental del Huila -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.contraloriahuila.gov.co/" target="_blank">Contraloría Departamental del Huila</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.contraloriahuila.gov.co/" >Contraloría Departamental del Huila</a></h3>
                         <img src="{{ asset('storage/img/logo/logo-contraloria-huila.png') }}" alt="Contraloría Departamental del Huila" title="Contraloría Departamental del Huila" class="justify-self-center my-2">
                         <p class="text-black">
                             La vigilancia de la gestión fiscal del Estado se fundamenta en la eficiencia, la economía, le eficacia, la equidad y la valoración de los costos ambientales, de tal manera que permita determinar en la administración, en un período determinado, que la asignación de recursos sea la más conveniente para maximizar sus resultados, que en igualdad de condiciones de calidad los bienes y servicios se obtengan al menor costo; que sus resultados se logren de manera oportuna y guarden relación con sus objetivos y metas. Así mismo, que permita identificar los receptores de la acción, económica y analizar la distribución de costos y beneficios entre sectores económicos y sociales y entre entidades territoriales y cuantificar el impacto por el uso o deterioro de los recursos naturales y el medio ambiente y evaluar la gestión de protección, conservación, uso y explotación de los mismos.
@@ -74,7 +74,7 @@
                 <!--  Procuraduría General de la Nación -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.procuraduria.gov.co/Pages/Inicio.aspx" target="_blank">Procuraduría General de la Nación</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.procuraduria.gov.co/Pages/Inicio.aspx" >Procuraduría General de la Nación</a></h3>
                         <img src="{{ asset('storage/img/logo/logo-procuraduria.png') }}" alt=" Procuraduría General de la Nación" title=" Procuraduría General de la Nación" class="justify-self-center my-2">
                         <p class="text-black">
                             Ejerce el control disciplinario del servidor público, adelantando las investigaciones y sancionando a los funcionarios que incurran en faltas disciplinarias en el desempeño de sus funciones; de igual manera adelanta las investigaciones cuando se presenten irregularidades en el manejo del patrimonio público, de conformidad con lo establecido en el Código Único Disciplinario ó Ley 734 de 2002.
@@ -88,7 +88,7 @@
                 <!--  Fiscalía General de la Nación -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.fiscalia.gov.co/colombia/" target="_blank">Fiscalía General de la Nación</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.fiscalia.gov.co/colombia/" >Fiscalía General de la Nación</a></h3>
                         <img src="{{ asset('storage/img/logo/logo-fiscalia.png') }}" alt=" Fiscalía General de la Nación" title=" Fiscalía General de la Nación" class="justify-self-center my-2">
                         <p class="text-black">
                             Es una entidad de la rama judicial del poder público con plena autonomía administrativa y presupuestal, cuya función está orientada a brindar a los ciudadanos una cumplida y eficaz administración de justicia.
@@ -102,10 +102,81 @@
                     </div>
                 </div>
                 
+                <!-- CAM -->
+                <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
+                    <div>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.cam.gov.co/" >Corporacion Autonoma del Alto Magdalena - CAM  </a></h3>
+                        <img src="{{ asset('storage/img/logo/cam-logo-2026.png') }}" alt="Corporacion Autonoma del Alto Magdalena - CAM " title="Corporacion Autonoma del Alto Magdalena - CAM " class="justify-self-center my-2">
+                        <p class="text-black"><span class="text-[#00C81F]">Dirección: </span>Cra. 1 #60-79</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Teléfono: </span>(608) 8664454</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Correo: </span>radicacion@cam.gov.co</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Sitio Web: </span>https://www.cam.gov.co/</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Informar el tipo de control: </span>Seguimiento  de gestión </p>
+                        <p class="text-black"><span class="text-[#00C81F]">Horarios de Atención: </span>Lunes a Jueves: 07:00 a.m. a 11:30 m. y 01:00 p.m. a 4:30 p.m. Viernes: 07:00 a.m. a 12:00 m. y 01:00 p.m. a 04:00 pm</p>
+                    </div>
+                </div>
+                
+                <!-- CRA -->
+                <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
+                    <div>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.cra.gov.co/" >Comisión de Regulacion de Agua y Saneamiento Básico - CRA</a></h3>
+                        <img src="{{ asset('storage/img/logo/logo-cra-2026.png') }}" alt="Comisión de Regulacion de Agua y Saneamiento Básico - CRA" title="Comisión de Regulacion de Agua y Saneamiento Básico - CRA" class="justify-self-center my-2">
+                        <p class="text-black"><span class="text-[#00C81F]">Dirección: </span>Carrera 12 N° 97-80, Piso 2</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Teléfono: </span>01 8000 517565</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Correo: </span>correo@cra.gov.co</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Sitio Web: </span>https://www.cra.gov.co/</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Informar el tipo de control: </span>Regulatorio</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Horarios de Atención: </span>lunes a viernes de 8:00 am. a 4:00 pm.</p>
+                    </div>
+                </div>
+                
+                <!-- Departamento Administrativo de la Funcion Publica -->
+                <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
+                    <div>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.funcionpublica.gov.co/" >Departamento Administrativo de la Funcion Publica</a></h3>
+                        <img src="{{ asset('storage/img/logo/logo-funcion-publica.png') }}" alt="Departamento Administrativo de la Funcion Publica " title="Departamento Administrativo de la Funcion Publica " class="justify-self-center my-2">
+                        <p class="text-black"><span class="text-[#00C81F]">Dirección: </span>Carrera 6 # 12-62 Bogotá D.C.2</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Teléfono: </span>601 7395656 </p>
+                        <p class="text-black"><span class="text-[#00C81F]">Correo: </span>eva@funcionpublica.gov.co</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Sitio Web: </span>https://www.funcionpublica.gov.co/</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Informar el tipo de control: </span>Administrativo</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Horarios de Atención: </span>lunes a viernes en horario de 8:00 a.m. a 4:00 p.m</p>
+                    </div>
+                </div>
+                
+                <!-- Funcion Pública -->
+                <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
+                    <div>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.funcionpublica.gov.co/" >Funcion Pública</a></h3>
+                        <img src="{{ asset('storage/img/logo/logo-funcion-publica.png') }}" alt="Funcion Pública" title="Funcion Pública" class="justify-self-center my-2">
+                        <p class="text-black"><span class="text-[#00C81F]">Dirección: </span>Carrera 6 No. 12-62, Bogotá D. C., Colombia</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Teléfono: </span>(+57) 601 5956600</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Correo: </span>eva@funcionpublica.gov.co</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Sitio Web: </span>https://www.funcionpublica.gov.co/</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Informar el tipo de control: </span>preventivo, orientador y evaluador</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Horarios de Atención: </span>lunes a viernes en horario de 8:00 a.m. a 4:00 p.m</p>
+                    </div>
+                </div>
+                
+                <!-- Superintendencia de Servicios Públicos Domiciliarios -->
+                <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
+                    <div>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.superservicios.gov.co/" >Superintendencia de Servicios Públicos Domiciliarios  </a></h3>
+                        <img src="{{ asset('storage/img/logo/logo-superservicios.png') }}" alt="Superintendencia de Servicios Públicos Domiciliarios " title="Superintendencia de Servicios Públicos Domiciliarios " class="justify-self-center my-2">
+                        <p class="text-black"><span class="text-[#00C81F]">Dirección: </span>Carrera 18 No. 84-35</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Teléfono: </span>601-691-3005</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Correo: </span>sspd@superservicios.gov.co</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Sitio Web: </span>https://www.superservicios.gov.co/</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Informar el tipo de control: </span>Regulatorio</p>
+                        <p class="text-black"><span class="text-[#00C81F]">Horarios de Atención: </span>Lunes a viernes de 7:00 a. m. a 4:00 p. m.</p>
+                    </div>
+                </div>
+
+                      
                 <!-- Veedurías Ciudadanas -->
                 <div class="w-full h-auto rounded-lg shadow-md bg-white border-t-8 border-[#0047DC] justify-center content-start hover:bg-gray-100 px-4 py-2">
                     <div>
-                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.huila.gov.co/" target="_blank">Veedurías Ciudadanas</a></h3>
+                        <h3 class="text-center text-[#0047DC] text-xl hover:text-[#00C81F]"><a href="https://www.huila.gov.co/" >Veedurías Ciudadanas</a></h3>
                         <img src="{{ asset('storage/img/logo/logo-gobernacion-huila.png') }}" alt="Veedurías Ciudadanas" title="Veedurías Ciudadanas" class="justify-self-center my-2">
                         <p class="text-black">
                             <span class="text-[#00C81F]">Ley 850 de 2003: </span>

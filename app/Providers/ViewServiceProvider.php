@@ -30,14 +30,40 @@ class ViewServiceProvider extends ServiceProvider
             ]);
         });
 
-        // Composer global: se ejecuta en TODAS las vistas
-        View::composer('*', function ($view) {
+        // Composer global: se ejecuta en TODAS las vistas publicas
+        View::composer([
+            'home',
+            'pagos',
+            'nacederos',
+            'directoriofuncionarios',
+            'denuncias',
+            'chat',
+            'foro',
+            'pqr',
+            'calendario',
+            'convocatoria',
+            'participacion',
+            'oficinas',
+            'entescontrol',
+            'transparencia',
+            'preguntasfrecuentes',
+            'glosario',
+            'directorio',
+            'induccion',
+            'gestioncalidad',
+            'nuestrogerente',
+            'funcionesgenerales',
+            'historia',
+            'posts.*',
+            'noticias.*'
+        ], function ($view) {
 
-            $route = request()->path(); 
+            $route = request()->path();
 
-            // Si la ruta no tiene nombre, no se muestra contador
             if ($route) {
+
                 $stats = ViewStats::stats($route);
+
                 $view->with('stats', $stats);
             }
         });

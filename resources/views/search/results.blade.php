@@ -34,6 +34,11 @@
                             {{ $n->titulo }}
                         </a>
                     @endforeach
+                    
+                    <div class="mt-4">
+                        {{ $noticias->links() }}
+                    </div>
+
                 </div>
                 @endif
 
@@ -63,10 +68,14 @@
                 <div class="w-full">
                     <h2 class="text-xl font-semibold text-[#0047DC] my-4">Archivos</h2>
                     @foreach($archivos as $a)
-                        <a href="{{ asset('storage/' . $a->archivo) }}" target="_blank" class="block py-2 hover:text-[#00C81F]">
+                        <a href="{{ route('posts.document', [$a->post_slug , $a->slug]) }}" target="_blank" class="block py-2 hover:text-[#00C81F]">
                             {{ $a->nombre }}
                         </a>
                     @endforeach
+                    
+                    <div class="mt-4">
+                        {{ $archivos->links() }}
+                    </div>
                 </div>
                 @endif
 

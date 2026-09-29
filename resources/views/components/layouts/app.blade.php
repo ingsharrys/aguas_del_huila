@@ -20,7 +20,7 @@
         color: black !important;
     }
 </style>
-    <flux:main>
+    <flux:main class="bg-zinc-800">
         {{ $slot }}
         <!-- sistema de alerta -->
         @vite(['resources/js/app.js'])

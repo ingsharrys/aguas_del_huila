@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Crear Post')">
     <div class="w-full">
         <div class="flex w-full justify-between mb-4">
-            <h1 class="text-center content-center font-black">Nuevo Post</h1>
+            <h1 class="text-center content-center font-black text-white">Nuevo Post</h1>
             
             <a href="{{ route('posts.index') }}" class="flex w-48 px-4 py-2 border-red-700 rounded-lg text-white bg-red-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-arrow-left-icon lucide-square-arrow-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg> Volver</a>
         </div>
@@ -78,63 +78,112 @@
     <!-- 🧠 Script para editor de texto -->
     <script src="https://cdn.tiny.cloud/1/vei68lbtpicw0h1neof21mul0wjhn4c8ls4wgi2icevlq716/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     <script>
-        tinymce.init({
-            selector: 'textarea[name=contenido]',
-            plugins: 'lists link image table code fullscreen preview media',
-            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist link ',
-            menubar: false,
-            height: 400,
-            branding: false,
-            content_style: 'body { font-family: Inter, sans-serif; font-size: 14px; }',
+tinymce.init({
+    selector: 'textarea[name=contenido]',
 
-            // ⚙️ Configuración de subida de imágenes
-            images_upload_url: "{{ route('upload.image') }}",
-            automatic_uploads: true,
-            file_picker_types: 'image',
+    height: 600,
 
-            images_upload_credentials: true, // Enviar cookies CSRF
+    branding: false,
 
-            setup: function (editor) {
-                editor.on('change', function () {
-                    editor.save();
-                });
-            },
+    menubar: 'file edit view insert format tools table help',
 
-            // ⚙️ Agrega CSRF token al request (Laravel lo necesita)
-            images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
-                let xhr = new XMLHttpRequest();
-                xhr.open('POST', "{{ route('upload.image') }}");
-                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+    plugins: [
+        'advlist',
+        'autolink',
+        'lists',
+        'link',
+        'image',
+        'charmap',
+        'preview',
+        'anchor',
+        'searchreplace',
+        'visualblocks',
+        'code',
+        'fullscreen',
+        'insertdatetime',
+        'media',
+        'table',
+        'wordcount',
+        'emoticons',
+        'codesample',
+        'hr',
+        'pagebreak',
+        'quickbars'
+    ],
 
-                xhr.upload.onprogress = (e) => {
-                    progress(e.loaded / e.total * 100);
-                };
+    toolbar:
+        'undo redo | ' +
+        'blocks fontfamily fontsize | ' +
+        'bold italic underline strikethrough | ' +
+        'forecolor backcolor | ' +
+        'alignleft aligncenter alignright alignjustify | ' +
+        'bullist numlist outdent indent | ' +
+        'blockquote hr | ' +
+        'link image media table | ' +
+        'codesample code | ' +
+        'preview fullscreen',
 
-                xhr.onload = () => {
-                    if (xhr.status < 200 || xhr.status >= 300) {
-                        reject('Error HTTP: ' + xhr.status);
-                        return;
-                    }
+    content_style:
+        'body{font-family:Inter,sans-serif;font-size:15px;}',
 
-                    const json = JSON.parse(xhr.responseText);
+    relative_urls: false,
+    remove_script_host: false,
+    document_base_url: "{{ url('/') }}/",
 
-                    if (!json || typeof json.location !== 'string') {
-                        reject('Respuesta JSON inválida: ' + xhr.responseText);
-                        return;
-                    }
+    images_upload_url: "{{ route('upload.image') }}",
+    automatic_uploads: true,
+    file_picker_types: 'image',
 
-                    resolve(json.location);
-                };
+    images_upload_credentials: true,
 
-                xhr.onerror = () => {
-                    reject('Error de conexión al subir la imagen.');
-                };
+    setup: function(editor) {
 
-                const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
-                xhr.send(formData);
-            }),
+        editor.on('change', function () {
+            editor.save();
         });
-        </script>
+
+    },
+
+    images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "{{ route('upload.image') }}");
+
+        xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        xhr.upload.onprogress = (e) => {
+            progress(e.loaded / e.total * 100);
+        };
+
+        xhr.onload = () => {
+
+            if (xhr.status < 200 || xhr.status >= 300) {
+                reject('HTTP Error: ' + xhr.status);
+                return;
+            }
+
+            const json = JSON.parse(xhr.responseText);
+
+            if (!json.location) {
+                reject('Respuesta inválida');
+                return;
+            }
+
+            resolve(json.location);
+
+        };
+
+        xhr.onerror = () => reject('Error al subir la imagen');
+
+        const formData = new FormData();
+
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        xhr.send(formData);
+
+    })
+});
+</script>
 
 </x-layouts.app>

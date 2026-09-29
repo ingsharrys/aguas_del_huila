@@ -48,14 +48,19 @@
 
                 </div>
 
+                <!-- Organigrama -->
                 <div class="w-full mx-auto">
-                    <h3 class="text-2xl font-bold text-[#0047DC] mb-4">¿Quiénes Somos?</h3>
-                    <h3 class="text-2xl font-bold text-[#0047DC] mb-4">NUESTRA MISIÓN</h3>
-                    <p class="text-gray-900 mb-4">AGUAS DEL HUILA S.A E.S.P., es una empresa prestadora de servicios integrales con proyección nacional que genera bienestar social y responsabilidad sociombiental.</p>
-                    <h3 class="text-2xl font-bold text-[#0047DC] mb-4">NUESTRA VISIÓN</h3>
-                    <p class="text-gray-900 mb-4">En el 2031, Aguas del Huila será el oprador especilizado surcolombiano de servicios públicos domiciliarios y servicios integrales. "Llevamos más que agua"</p>
                     <h3 class="text-2xl font-bold text-[#0047DC] mb-4">Organigrama</h3>
-                    <img src="{{ asset('storage/img/organigramafinal.jpg') }}" alt="Organigrama" title="Organigrama" class="w-full h-auto object-cover rounded-lg">
+                    
+                    <a href="{{ route('organigrama') }}" target="_blank" class="text-[#0047DC] hover:underline mb-2 inline-block cursor-pointer">
+                        <img 
+                            src="{{ asset('storage/img/organigrama_2026.jpg') }}" 
+                            alt="Organigrama"
+                            title="Organigrama"
+                            class="w-full h-auto object-cover rounded-lg"
+                        >
+                    </a>
+
                 </div>
             </div>
 

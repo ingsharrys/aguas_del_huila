@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Editar Categoría')">
     <div class="w-full">
         <div class="flex w-full justify-between mb-4">
-            <h1 class="text-center content-center font-black">Editar Categoría</h1>
+            <h1 class="text-center content-center font-black text-white">Editar Categoría</h1>
             
             <a href="{{ route('categorias.index') }}" class="flex w-48 px-4 py-2 border-red-700 rounded-lg text-white bg-red-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-arrow-left-icon lucide-square-arrow-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg> Volver</a>
         </div>

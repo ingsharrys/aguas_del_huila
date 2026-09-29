@@ -30,10 +30,10 @@
         @include('partials.navbar')
 
         <!-- banner inicial -->
-        <div class="w-full h-[200px] sm:h-[150px] md:h-[200px] lg:h-[300px] overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
+        <div class="w-full h-96 overflow-hidden shadow-lg -top-8 bg-center bg-no-repeat bg-cover relative" style="background-image: url('{{ asset('storage/img/banner_seccion.webp') }}');">
             <div class="absolute inset-0 bg-gradient-to-l from-slate-50/5 to-[#0047DC]/80 flex flex-col justify-center items-center text-white text-center px-16 md:px-32">
-                <h2 class="text-3xl lg:text-5xl font-bold mb-2">{{ $noticia->titulo }}</h2>
-                <p class="text-lg">Inicio / Noticias </span class="font-bold">/ Blog</span></p>
+                <h2 class="text-2xl lg:text-5xl font-bold mb-2">{{ $noticia->titulo }}</h2>
+                <p class="text-lg">Inicio / Noticias /</span class="font-bold"> {{ $noticia->titulo }}</span></p>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                 <!-- noticias relacionadas -->
                 <div class="w-full mx-auto">
                     <h3 class="text-2xl font-bold text-[#0047DC] mb-4">Noticias relacionadas</h3>
-                    <div class="grid grid-cols-3 md:grid-cols-1 gap-6">
+                    <div class="grid grid-cols-1 gap-6">
                         @foreach($relacionadas as $relacion)
                             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
                                 <!-- Imagen de portada -->

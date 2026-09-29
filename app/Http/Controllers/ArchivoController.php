@@ -7,6 +7,8 @@ use App\Models\Archivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ArchivoImportService;
+use ZipArchive;
 
 class ArchivoController extends Controller
 {
@@ -49,9 +51,12 @@ class ArchivoController extends Controller
         $request->validate([
             'nombre' => 'required|string',
             'post_id' => 'required|int',
-            'archivo' => 'required|file|max:20480', // máx 20MB
+            'archivo' => 'required|file|max:40960', // máx 40MB
+            'comentarios' => 'nullable|boolean',
+            'inicio' => 'required_if:comentarios,1|nullable|date',
+            'fin' => 'nullable|date|after_or_equal:inicio',
         ], [
-                'archivo.max' => 'El documento no debe superar los 20 MB.',
+                'archivo.max' => 'El documento no debe superar los 40 MB.',
             ]);
 
         $slug = Str::slug($request->nombre);
@@ -76,6 +81,13 @@ class ArchivoController extends Controller
             'slug' => $slug,
             'archivo' => $ruta,
             'post_id' => $request->post_id,
+            'comentarios' => $request->boolean('comentarios'),
+            'inicio' => $request->boolean('comentarios')
+                ? $request->inicio
+                : null,
+            'fin' => $request->boolean('comentarios')
+                ? $request->fin
+                : null,
         ]);
 
         // Redirigimos con mensaje de éxito
@@ -97,5 +109,35 @@ class ArchivoController extends Controller
         // Redirigimos con mensaje de éxito
         session()->flash('success', 'Archivo eliminado correctamente');
         return redirect()->route('archivos.index');
+    }
+
+    /**
+     * Mostrar formulario.
+     */
+    public function importarForm()
+    {
+        return view('archivos.importar');
+    }
+
+    /**
+     * Procesar importación.
+     */
+    public function importar(Request $request, ArchivoImportService $importador)
+    {
+        $request->validate([
+            'zip' => [
+                'required',
+                'file',
+                'mimes:zip',
+                'max:204800' //200 MB
+            ]
+        ]);
+
+        $resultado = $importador->importar(
+            $request->file('zip')
+        );
+
+        return back()->with($resultado);
+
     }
 }
