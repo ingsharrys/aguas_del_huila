@@ -107,7 +107,23 @@
                     </div>
                 @endif
 
+                @if($errors->any())
+                    <div
+                        id="errores-formulario"
+                        class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800"
+                        role="alert"
+                    >
+                        <p class="font-semibold mb-2">No se pudo radicar la solicitud. Revise lo siguiente:</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            @foreach($errors->all() as $mensaje)
+                                <li>{{ $mensaje }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('pqr.store') }}"
+                      id="form-pqrsdf"
                       method="POST"
                       class="space-y-6">
 
@@ -128,8 +144,8 @@
                                 required
                             >
                                 <option value="">Seleccione una opción</option>
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
+                                <option value="1" @selected(old('discapacidad') == '1')>Sí</option>
+                                <option value="0" @selected(old('discapacidad') == '0')>No</option>
                             </select>
                         </div>
                     
@@ -147,11 +163,11 @@
                                 required
                             >
                                 <option value="">Seleccione una opción</option>
-                                <option value="visual">Visual</option>
-                                <option value="auditiva">Auditiva</option>
-                                <option value="fisica_motora">Física o motora</option>
-                                <option value="cognitiva">Cognitiva</option>
-                                <option value="otra">Otra</option>
+                                <option value="visual" @selected(old('tipo_discapacidad') == 'visual')>Visual</option>
+                                <option value="auditiva" @selected(old('tipo_discapacidad') == 'auditiva')>Auditiva</option>
+                                <option value="fisica_motora" @selected(old('tipo_discapacidad') == 'fisica_motora')>Física o motora</option>
+                                <option value="cognitiva" @selected(old('tipo_discapacidad') == 'cognitiva')>Cognitiva</option>
+                                <option value="otra" @selected(old('tipo_discapacidad') == 'otra')>Otra</option>
                             </select>
                         </div>
                     
@@ -164,6 +180,7 @@
                                 type="text"
                                 id="otra_discapacidad"
                                 name="otra_discapacidad"
+                                    value="{{ old('otra_discapacidad') }}"
                                 disabled
                                 class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                 placeholder="Ingrese el tipo de discapacidad"
@@ -177,9 +194,9 @@
                             </label>
 
                             <div class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900">
-                                <input type="radio" id="identificado" name="identificado_anonimo" value="identificado" checked onchange="toggleFormulario()"/>
+                                <input type="radio" id="identificado" name="identificado_anonimo" value="identificado" @checked(old('identificado_anonimo', 'identificado') === 'identificado') onchange="toggleFormulario()"/>
                                 <label for="identificado">Identificado</label>
-                                <input type="radio" id="anonimo" name="identificado_anonimo" value="anonimo" onchange="toggleFormulario()"/>
+                                <input type="radio" id="anonimo" name="identificado_anonimo" value="anonimo" @checked(old('identificado_anonimo') === 'anonimo') onchange="toggleFormulario()"/>
                                 <label for="anonimo">Anónimo</label>
                             </div>
                             
@@ -204,10 +221,10 @@
                                     class="campo-identificado block w-full text-sm text-black border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4"
                                 >
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Persona Natural">Persona Natural</option>
-                                    <option value="Persona Jurídica">Persona Jurídica</option>
-                                    <option value="Niños, Niñas y Adolescentes">Niños, Niñas y Adolescentes</option>
-                                    <option value="Apoderado">Apoderado</option>
+                                    <option value="Persona Natural" @selected(old('tipo_solicitante') == 'Persona Natural')>Persona Natural</option>
+                                    <option value="Persona Jurídica" @selected(old('tipo_solicitante') == 'Persona Jurídica')>Persona Jurídica</option>
+                                    <option value="Niños, Niñas y Adolescentes" @selected(old('tipo_solicitante') == 'Niños, Niñas y Adolescentes')>Niños, Niñas y Adolescentes</option>
+                                    <option value="Apoderado" @selected(old('tipo_solicitante') == 'Apoderado')>Apoderado</option>
                                 </select>
                             </div>
 
@@ -222,20 +239,20 @@
                                     class="campo-identificado block w-full text-sm text-black border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4"
                                 >
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Adulto sin identificación">Adulto sin identificación</option>
-                                    <option value="Carné diplomatico">Carné diplomatico</option>
-                                    <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
-                                    <option value="Cédula de extrangería">Cédula de extrangería</option>
-                                    <option value="NUI">Número único de identificación</option>
-                                    <option value="Pasaporte">Pasaporte</option>
-                                    <option value="Tarjeta de identidad">Tarjeta de identidad</option>
-                                    <option value="Tarjeta profesional">Tarjeta profesional</option>
-                                    <option value="Número de identificación tributaría">Número de identificación tributaría</option>
+                                    <option value="Adulto sin identificación" @selected(old('tipo_identificacion') == 'Adulto sin identificación')>Adulto sin identificación</option>
+                                    <option value="Carné diplomatico" @selected(old('tipo_identificacion') == 'Carné diplomatico')>Carné diplomatico</option>
+                                    <option value="Cédula de ciudadanía" @selected(old('tipo_identificacion') == 'Cédula de ciudadanía')>Cédula de ciudadanía</option>
+                                    <option value="Cédula de extrangería" @selected(old('tipo_identificacion') == 'Cédula de extrangería')>Cédula de extrangería</option>
+                                    <option value="NUI" @selected(old('tipo_identificacion') == 'NUI')>Número único de identificación</option>
+                                    <option value="Pasaporte" @selected(old('tipo_identificacion') == 'Pasaporte')>Pasaporte</option>
+                                    <option value="Tarjeta de identidad" @selected(old('tipo_identificacion') == 'Tarjeta de identidad')>Tarjeta de identidad</option>
+                                    <option value="Tarjeta profesional" @selected(old('tipo_identificacion') == 'Tarjeta profesional')>Tarjeta profesional</option>
+                                    <option value="Número de identificación tributaría" @selected(old('tipo_identificacion') == 'Número de identificación tributaría')>Número de identificación tributaría</option>
                                 </select>
                             </div>
 
                             <!-- numero de identificación / nit -->
-                            <div id="numero_identificacion">
+                            <div id="numero_identificacion_container">
                                 <label for="numero_identificacion" class="block text-sm font-semibold text-gray-800 mb-2">
                                     Número de identificación / NIT <span class="font-bold text-red-800">*</span>
                                 </label>
@@ -243,13 +260,14 @@
                                     type="number"
                                     id="numero_identificacion"
                                     name="numero_identificacion"
+                                    value="{{ old('numero_identificacion') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el número de identificación / NIT"
                                 >
                             </div>
 
                             <!-- razon social -->
-                            <div id="razon_social">
+                            <div id="razon_social_container">
                                 <label for="razon_social" class="block text-sm font-semibold text-gray-800 mb-2">
                                     Razón Social <span class="font-bold text-red-800">*</span>
                                 </label>
@@ -257,13 +275,14 @@
                                     type="text"
                                     id="razon_social"
                                     name="razon_social"
+                                    value="{{ old('razon_social') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese la razón social"
                                 >
                             </div>
 
                             <!-- nombre usuario -->
-                            <div id="nombre_usuario">
+                            <div id="nombre_usuario_container">
                                 <label for="nombre_usuario" class="block text-sm font-semibold text-gray-800 mb-2">
                                     Nombre Usuario <span class="font-bold text-red-800">*</span>
                                 </label>
@@ -271,13 +290,14 @@
                                     type="text"
                                     id="nombre_usuario"
                                     name="nombre_usuario"
+                                    value="{{ old('nombre_usuario') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el nombre del usuario"
                                 >
                             </div>
 
                             <!-- apellido usuario -->
-                            <div id="apellido_usuario">
+                            <div id="apellido_usuario_container">
                                 <label for="apellido_usuario" class="block text-sm font-semibold text-gray-800 mb-2">
                                     Apellido Usuario <span class="font-bold text-red-800">*</span>
                                 </label>
@@ -285,22 +305,9 @@
                                     type="text"
                                     id="apellido_usuario"
                                     name="apellido_usuario"
+                                    value="{{ old('apellido_usuario') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el apellido del usuario"
-                                >
-                            </div>
-                            
-                            <!-- correo electronico -->
-                            <div id="correo_principal_container">
-                                <label for="correo_electronico" class="block text-sm font-semibold text-gray-800 mb-2">
-                                    Correo Electrónico <span class="font-bold text-red-800">*</span>
-                                </label>
-                                <input
-                                    type="email"
-                                    id="correo_electronico"
-                                    name="correo_electronico"
-                                    class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
-                                    placeholder="Ingrese el correo electrónico"
                                 >
                             </div>
                             
@@ -316,8 +323,8 @@
                                     class="campo-identificado block w-full text-sm text-black border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 px-2 py-4"
                                 >
                                     <option value="">Seleccione un país</option>
-                                    <option value="Colombia">Colombia</option>
-                                    <option value="Otro">Otro</option>
+                                    <option value="Colombia" @selected(old('pais') == 'Colombia')>Colombia</option>
+                                    <option value="Otro" @selected(old('pais') == 'Otro')>Otro</option>
                                 </select>
                             </div>
 
@@ -331,6 +338,7 @@
                                     type="text"
                                     id="otro_pais"
                                     name="otro_pais"
+                                    value="{{ old('otro_pais') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el nombre del país"
                                 >
@@ -352,7 +360,7 @@
 
                                     @foreach($departamentos as $departamento)
 
-                                        <option value="{{ $departamento->id }}">
+                                        <option value="{{ $departamento->id }}" @selected(old('departamento_id') == $departamento->id)>
 
                                             {{ $departamento->nombre }}
 
@@ -388,6 +396,7 @@
                                     type="text"
                                     id="direccion"
                                     name="direccion"
+                                    value="{{ old('direccion') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese la dirección"
                                 >
@@ -396,13 +405,14 @@
                             <!-- telefono fijo -->
                             <div>
                                 <label for="fijo" class="block text-sm font-semibold text-gray-800 mb-2">
-                                    Teléfono Fijo <span class="font-bold text-red-800">*</span>
+                                    Teléfono Fijo <span class="text-gray-500 font-normal">(opcional)</span>
                                 </label>
 
                                 <input
                                     type="number"
                                     id="fijo"
                                     name="fijo"
+                                    value="{{ old('fijo') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el teléfono fijo"
                                 >
@@ -418,6 +428,7 @@
                                     type="number"
                                     id="movil"
                                     name="movil"
+                                    value="{{ old('movil') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el teléfono móvil"
                                 >
@@ -446,40 +457,40 @@
                                 >
                                     <option value="">Seleccione una opción</option>
                                     <optgroup label="Notificaciones">
-                                        <option value="Fallos">Fallos</option>
-                                        <option value="Avisos">Avisos</option>
-                                        <option value="Sentencias">Sentencias</option>
-                                        <option value="PDA">PDA</option>
-                                        <option value="Edictos">Edictos</option>
+                                        <option value="Fallos" @selected(old('tipo_pqrsf') == 'Fallos')>Fallos</option>
+                                        <option value="Avisos" @selected(old('tipo_pqrsf') == 'Avisos')>Avisos</option>
+                                        <option value="Sentencias" @selected(old('tipo_pqrsf') == 'Sentencias')>Sentencias</option>
+                                        <option value="PDA" @selected(old('tipo_pqrsf') == 'PDA')>PDA</option>
+                                        <option value="Edictos" @selected(old('tipo_pqrsf') == 'Edictos')>Edictos</option>
                                     </optgroup>
 
                                     <optgroup label="Peticiones">
-                                        <option value="Solicitud disponibilidad de servicios">Solicitud disponibilidad de servicios</option>
-                                        <option value="Denuncia">Denuncia</option>
-                                        <option value="Solicitud de permiso laboral">Solicitud de permiso laboral</option>
-                                        <option value="Derechos de petición">Derechos de petición</option>
-                                        <option value="Memorandos">Memorandos</option>
-                                        <option value="Cobros">Cobros</option>
-                                        <option value="Solicitud de certificado">Solicitud de certificado</option>
-                                        <option value="Acciones populares">Acciones populares</option>
-                                        <option value="Acciones de tutelas">Acciones de tutelas</option>
-                                        <option value="Solicitud certificado laboral">Solicitud certificado laboral</option>
-                                        <option value="Solicitud visita técnica">Solicitud visita técnica</option>
+                                        <option value="Solicitud disponibilidad de servicios" @selected(old('tipo_pqrsf') == 'Solicitud disponibilidad de servicios')>Solicitud disponibilidad de servicios</option>
+                                        <option value="Denuncia" @selected(old('tipo_pqrsf') == 'Denuncia')>Denuncia</option>
+                                        <option value="Solicitud de permiso laboral" @selected(old('tipo_pqrsf') == 'Solicitud de permiso laboral')>Solicitud de permiso laboral</option>
+                                        <option value="Derechos de petición" @selected(old('tipo_pqrsf') == 'Derechos de petición')>Derechos de petición</option>
+                                        <option value="Memorandos" @selected(old('tipo_pqrsf') == 'Memorandos')>Memorandos</option>
+                                        <option value="Cobros" @selected(old('tipo_pqrsf') == 'Cobros')>Cobros</option>
+                                        <option value="Solicitud de certificado" @selected(old('tipo_pqrsf') == 'Solicitud de certificado')>Solicitud de certificado</option>
+                                        <option value="Acciones populares" @selected(old('tipo_pqrsf') == 'Acciones populares')>Acciones populares</option>
+                                        <option value="Acciones de tutelas" @selected(old('tipo_pqrsf') == 'Acciones de tutelas')>Acciones de tutelas</option>
+                                        <option value="Solicitud certificado laboral" @selected(old('tipo_pqrsf') == 'Solicitud certificado laboral')>Solicitud certificado laboral</option>
+                                        <option value="Solicitud visita técnica" @selected(old('tipo_pqrsf') == 'Solicitud visita técnica')>Solicitud visita técnica</option>
                                     </optgroup>
 
                                     <optgroup label="Quejas">
-                                        <option value="Prestación de servicios">Prestación de servicios</option>
-                                        <option value="Daños causados por obras">Daños causados por obras</option>
+                                        <option value="Prestación de servicios" @selected(old('tipo_pqrsf') == 'Prestación de servicios')>Prestación de servicios</option>
+                                        <option value="Daños causados por obras" @selected(old('tipo_pqrsf') == 'Daños causados por obras')>Daños causados por obras</option>
                                     </optgroup>
 
                                     <optgroup label="Reclamos">
-                                        <option value="Facturación">Facturación</option>
-                                        <option value="Solicitud de información">Solicitud de información</option>
+                                        <option value="Facturación" @selected(old('tipo_pqrsf') == 'Facturación')>Facturación</option>
+                                        <option value="Solicitud de información" @selected(old('tipo_pqrsf') == 'Solicitud de información')>Solicitud de información</option>
                                     </optgroup>
 
                                     <optgroup label="Sugerencias">
-                                        <option value="Citaciones - Invitaciones">Citaciones - Invitaciones</option>
-                                        <option value="Propuesta">Propuesta</option>
+                                        <option value="Citaciones - Invitaciones" @selected(old('tipo_pqrsf') == 'Citaciones - Invitaciones')>Citaciones - Invitaciones</option>
+                                        <option value="Propuesta" @selected(old('tipo_pqrsf') == 'Propuesta')>Propuesta</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -497,38 +508,59 @@
                                     required
                                 >
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Correo Electrónico">Correo electrónico</option>
-                                    <option value="Físico / Mensajería">Físico / Mensajería</option>
+                                    <option value="Correo Electrónico" @selected(old('tipo_respuesta') === 'Correo Electrónico')>Correo electrónico</option>
+                                    <option value="Correo Certificado" @selected(old('tipo_respuesta') === 'Correo Certificado')>Correo certificado (físico)</option>
+                                    <option value="WhatsApp" @selected(old('tipo_respuesta') === 'WhatsApp')>WhatsApp</option>
                                 </select>
                             </div>
 
-                            <!-- correo electronico -->
-                            <div id="correo_mensajeria_container" class="hidden">
+                            <!-- correo electronico (único campo de correo del formulario) -->
+                            <div id="correo_container" class="hidden">
                                 <label for="correo_electronico" class="block text-sm font-semibold text-gray-800 mb-2">
                                     Correo Electrónico <span class="font-bold text-red-800">*</span>
                                 </label>
                                 <input
                                     type="email"
-                                    id="correo_electronico_mensajeria"
+                                    id="correo_electronico"
                                     name="correo_electronico"
-                                    class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
+                                    value="{{ old('correo_electronico') }}"
+                                    maxlength="200"
+                                    class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el correo electrónico"
                                 >
                             </div>
 
-                            <!-- dirección mensajeria -->
+                            <!-- whatsapp (solo anónimo; el identificado usa su teléfono móvil) -->
+                            <div id="whatsapp_container" class="hidden">
+                                <label for="numero_whatsapp" class="block text-sm font-semibold text-gray-800 mb-2">
+                                    Número de WhatsApp <span class="font-bold text-red-800">*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="numero_whatsapp"
+                                    name="numero_whatsapp"
+                                    value="{{ old('numero_whatsapp') }}"
+                                    maxlength="30"
+                                    inputmode="tel"
+                                    class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
+                                    placeholder="EJ: 3001234567"
+                                >
+                            </div>
+
+                            <!-- dirección correo certificado -->
                             <div id="direccion_mensajeria_container" class="hidden">
                                 <label for="direccion_mensajeria" class="block text-sm font-semibold text-gray-800 mb-2">
-                                    Dirección de Mensajería <span class="font-bold text-red-800">*</span>
+                                    Dirección para el correo certificado <span class="font-bold text-red-800">*</span>
                                 </label>
 
                                 <input
                                     type="text"
                                     id="direccion_mensajeria"
                                     name="direccion_mensajeria"
-                                    class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
+                                    value="{{ old('direccion_mensajeria') }}"
+                                    maxlength="500"
+                                    class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="EJ: Calle 1 # 1-1, Barrio Centro, Neiva, Huila"
-                                    required
                                 >
                             </div>
 
@@ -542,6 +574,7 @@
                                     type="text"
                                     id="asunto"
                                     name="asunto"
+                                    value="{{ old('asunto') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el asunto"
                                     required
@@ -561,7 +594,7 @@
                                     placeholder="Ingrese la descripción"
                                     rows="4"
                                     required
-                                ></textarea>
+                                >{{ old('descripcion') }}</textarea>
                             </div>
 
                         </div>
@@ -575,6 +608,7 @@
                                 id="autoriza"
                                 name="autoriza"
                                 value="1"
+                                @checked(old('autoriza'))
                                 required
                                 class="mt-1 rounded border-gray-300 text-[#0047DC] focus:ring-[#0047DC]"
                             >
@@ -667,359 +701,159 @@
 
         @endif
 
-        <!-- Opciones de discapacidad -->
+        <!-- Lógica del formulario PQRSDF: campos visibles y obligatorios según identificado/anónimo y canal -->
         <script>
-            function toggleTipoDiscapacidad() {
-                const discapacidad = document.getElementById('discapacidad').value;
-                const container = document.getElementById('tipo_discapacidad_container');
-                const select = document.getElementById('tipo_discapacidad');
+            const CANAL_CORREO = 'Correo Electrónico';
+            const CANAL_CERTIFICADO = 'Correo Certificado';
+            const CANAL_WHATSAPP = 'WhatsApp';
 
-                if (discapacidad === '1') {
-                    container.classList.remove('hidden');
+            const OPCIONES_IDENTIFICACION_NATURAL = [
+                'Adulto sin identificación',
+                'Carné diplomatico',
+                'Cédula de ciudadanía',
+                'Cédula de extrangería',
+                'NUI',
+                'Pasaporte',
+                'Tarjeta de identidad',
+                'Tarjeta profesional',
+            ];
+            const OPCIONES_IDENTIFICACION_JURIDICA = ['Número de identificación tributaría'];
 
-                    select.disabled = false;
-                    select.required = true;
+            const municipioAnterior = @json(old('municipio_id'));
 
-                    toggleOtraDiscapacidad();
+            const el = (id) => document.getElementById(id);
 
+            // Muestra u oculta un contenedor y marca como obligatorios sus campos
+            function mostrar(contenedor, visible, campos = []) {
+                contenedor.classList.toggle('hidden', !visible);
+                campos.forEach(campo => {
+                    campo.required = visible;
+                    if (!visible) campo.value = '';
+                });
+            }
+
+            function actualizarTipoIdentificacion() {
+                const select = el('tipo_identificacion');
+                const esJuridica = el('tipo_solicitante').value === 'Persona Jurídica';
+                const opciones = esJuridica ? OPCIONES_IDENTIFICACION_JURIDICA : OPCIONES_IDENTIFICACION_NATURAL;
+                const valorActual = select.value;
+
+                select.innerHTML = '<option value="">Seleccione una opción</option>';
+                opciones.forEach(valor => select.add(new Option(valor === 'NUI' ? 'Número único de identificación' : valor, valor)));
+                if (opciones.includes(valorActual)) select.value = valorActual;
+            }
+
+            function toggleFormulario() {
+                const esIdentificado = el('identificado').checked;
+                const canal = el('tipo_respuesta').value;
+                const bloque = el('datos-identificado');
+
+                // Datos personales: solo para identificado
+                bloque.classList.toggle('hidden', !esIdentificado);
+                if (!esIdentificado) {
+                    bloque.querySelectorAll('input, select, textarea').forEach(campo => {
+                        campo.required = false;
+                        campo.value = '';
+                    });
                 } else {
-                    container.classList.add('hidden');
+                    ['tipo_solicitante', 'tipo_identificacion', 'numero_identificacion', 'pais', 'direccion', 'movil']
+                        .forEach(id => el(id).required = true);
 
-                    select.disabled = true;
-                    select.required = false;
-                    select.value = '';
+                    const esJuridica = el('tipo_solicitante').value === 'Persona Jurídica';
+                    mostrar(el('razon_social_container'), esJuridica, [el('razon_social')]);
+                    mostrar(el('nombre_usuario_container'), !esJuridica, [el('nombre_usuario')]);
+                    mostrar(el('apellido_usuario_container'), !esJuridica, [el('apellido_usuario')]);
 
-                    // Ocultar y limpiar "Otra discapacidad"
-                    toggleOtraDiscapacidad();
+                    const esOtroPais = el('pais').value === 'Otro';
+                    mostrar(el('contenedor_otro_pais'), esOtroPais, [el('otro_pais')]);
+                    mostrar(el('contenedor_departamento'), !esOtroPais, [el('departamento')]);
+                    mostrar(el('contenedor_municipio'), !esOtroPais, [el('municipio')]);
                 }
+
+                // Correo: siempre si es identificado; si es anónimo, solo cuando elige respuesta por correo
+                mostrar(el('correo_container'), esIdentificado || canal === CANAL_CORREO, [el('correo_electronico')]);
+
+                // WhatsApp: el anónimo debe dar el número (el identificado usa su teléfono móvil)
+                mostrar(el('whatsapp_container'), !esIdentificado && canal === CANAL_WHATSAPP, [el('numero_whatsapp')]);
+
+                // Correo certificado: dirección de envío
+                mostrar(el('direccion_mensajeria_container'), canal === CANAL_CERTIFICADO, [el('direccion_mensajeria')]);
+            }
+
+            function toggleTipoDiscapacidad() {
+                const tieneDiscapacidad = el('discapacidad').value === '1';
+                const select = el('tipo_discapacidad');
+
+                el('tipo_discapacidad_container').classList.toggle('hidden', !tieneDiscapacidad);
+                select.disabled = !tieneDiscapacidad;
+                select.required = tieneDiscapacidad;
+                if (!tieneDiscapacidad) select.value = '';
+
+                toggleOtraDiscapacidad();
             }
 
             function toggleOtraDiscapacidad() {
-                const tipo = document.getElementById('tipo_discapacidad').value;
-                const container = document.getElementById('otra_discapacidad_container');
-                const input = document.getElementById('otra_discapacidad');
+                const esOtra = el('tipo_discapacidad').value === 'otra';
+                const input = el('otra_discapacidad');
 
-                if (tipo === 'otra') {
-                    container.classList.remove('hidden');
-
-                    input.disabled = false;
-                    input.required = true;
-
-                } else {
-                    container.classList.add('hidden');
-
-                    input.disabled = true;
-                    input.required = false;
-                    input.value = '';
-                }
-            }
-        </script>
-
-        <!-- Opciones de Anonimo -->
-        <script>
-            function toggleFormulario() {
-                const esIdentificado = document.getElementById('identificado').checked;
-                const tipoRespuesta = document.getElementById('tipo_respuesta').value;
-
-                // Elementos
-                const containerCorreoPrincipal = document.getElementById('correo_principal_container');
-                const inputCorreoPrincipal = document.getElementById('correo_electronico');
-
-                const containerCorreoMensajeria = document.getElementById('correo_mensajeria_container');
-                const inputCorreoMensajeria = document.getElementById('correo_electronico_mensajeria');
-
-                const containerDireccion = document.getElementById('direccion_mensajeria_container');
-                const inputDireccion = document.getElementById('direccion_mensajeria');
-
-                // 1. Manejo de Identificado vs Anónimo
-                if (esIdentificado) {
-                    containerCorreoPrincipal.classList.remove('hidden');
-                    inputCorreoPrincipal.required = true;
-                } else {
-                    containerCorreoPrincipal.classList.add('hidden');
-                    inputCorreoPrincipal.required = false;
-                    inputCorreoPrincipal.value = ''; // Limpia el valor si cambia a anónimo
-                }
-
-                // 2. Manejo del Canal de Respuesta
-                if (tipoRespuesta === 'Físico / Mensajería') {
-                    // Mostrar dirección
-                    containerDireccion.classList.remove('hidden');
-                    inputDireccion.required = true;
-
-                    // Ocultar correo secundario
-                    containerCorreoMensajeria.classList.add('hidden');
-                    inputCorreoMensajeria.required = false;
-
-                } else if (tipoRespuesta === 'Correo Electrónico') {
-                    // Ocultar dirección
-                    containerDireccion.classList.add('hidden');
-                    inputDireccion.required = false;
-
-                    // Mostrar correo secundario SOLO si el usuario es ANÓNIMO
-                    if (!esIdentificado) {
-                        containerCorreoMensajeria.classList.remove('hidden');
-                        inputCorreoMensajeria.required = true;
-                    } else {
-                        // Si es IDENTIFICADO y eligió 'Correo Electrónico', se usa el correo principal
-                        containerCorreoMensajeria.classList.add('hidden');
-                        inputCorreoMensajeria.required = false;
-                    }
-
-                } else {
-                    // Sin selección de canal
-                    containerDireccion.classList.add('hidden');
-                    inputDireccion.required = false;
-
-                    containerCorreoMensajeria.classList.add('hidden');
-                    inputCorreoMensajeria.required = false;
-                }
+                el('otra_discapacidad_container').classList.toggle('hidden', !esOtra);
+                input.disabled = !esOtra;
+                input.required = esOtra;
+                if (!esOtra) input.value = '';
             }
 
-            // Ejecutar al cargar la página por si hay valores guardados
-            document.addEventListener('DOMContentLoaded', toggleFormulario);
-        </script>
+            function cargarMunicipios(departamentoId, seleccionar = null) {
+                const municipio = el('municipio');
 
-        <!-- Opciones de identificación -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-
-                const radioIdentificado = document.getElementById('identificado');
-                const radioAnonimo = document.getElementById('anonimo');
-
-                const bloque = document.getElementById('datos-identificado');
-
-                const campos = bloque.querySelectorAll(
-                    'input, select, textarea'
-                );
-
-                function actualizarFormulario() {
-
-                    if (radioIdentificado.checked) {
-
-                        bloque.classList.remove('hidden');
-
-                        campos.forEach(campo => {
-                            campo.required = true;
-                        });
-
-                    } else {
-
-                        bloque.classList.add('hidden');
-
-                        campos.forEach(campo => {
-                            campo.required = false;
-                            campo.value = '';
-                        });
-
-                    }
-
+                if (!departamentoId) {
+                    municipio.innerHTML = '<option value="">Seleccione un municipio</option>';
+                    return;
                 }
 
-                radioIdentificado.addEventListener('change', actualizarFormulario);
-                radioAnonimo.addEventListener('change', actualizarFormulario);
+                municipio.innerHTML = '<option value="">Cargando municipios...</option>';
 
-                actualizarFormulario();
+                fetch(`/municipios/${departamentoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        municipio.innerHTML = '<option value="">Seleccione un municipio</option>';
+                        data.forEach(item => municipio.add(new Option(item.nombre, item.id)));
+                        if (seleccionar) municipio.value = seleccionar;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        municipio.innerHTML = '<option value="">Error al cargar municipios</option>';
+                    });
+            }
 
-            });
-            </script>
-
-            <!-- Opciones de persona -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-
-                const tipoSolicitante = document.getElementById('tipo_solicitante');
-                const tipoIdentificacion = document.getElementById('tipo_identificacion');
-
-                const razonSocial = document.getElementById('razon_social');
-                const nombreUsuario = document.getElementById('nombre_usuario');
-                const apellidoUsuario = document.getElementById('apellido_usuario');
-
-                function actualizarTipoSolicitante() {
-
-                    const esJuridica = tipoSolicitante.value === 'persona_juridica';
-
-                    // Limpiar opciones
-                    tipoIdentificacion.innerHTML = '';
-
-                    if (esJuridica) {
-
-                        tipoIdentificacion.innerHTML = `
-                            <option value="">Seleccione una opción</option>
-                            <option value="numero_identificacion_tributaria">
-                                Número de identificación tributaria (NIT)
-                            </option>
-                        `;
-
-                        razonSocial.classList.remove('hidden');
-                        nombreUsuario.classList.add('hidden');
-                        apellidoUsuario.classList.add('hidden');
-
-                        razonSocial.querySelector('input').required = true;
-                        nombreUsuario.querySelector('input').required = false;
-                        apellidoUsuario.querySelector('input').required = false;
-
-                        nombreUsuario.querySelector('input').value = '';
-                        apellidoUsuario.querySelector('input').value = '';
-
-                    } else {
-
-                        tipoIdentificacion.innerHTML = `
-                            <option value="">Seleccione una opción</option>
-                            <option value="adulto">Adulto sin identificación</option>
-                            <option value="carne">Carné diplomático</option>
-                            <option value="cedula">Cédula de ciudadanía</option>
-                            <option value="extrangeria">Cédula de extranjería</option>
-                            <option value="nui">Número único de identificación</option>
-                            <option value="pasaporte">Pasaporte</option>
-                            <option value="tarjeta_identidad">Tarjeta de identidad</option>
-                            <option value="tarjeta_profesional">Tarjeta profesional</option>
-                        `;
-
-                        razonSocial.classList.add('hidden');
-                        nombreUsuario.classList.remove('hidden');
-                        apellidoUsuario.classList.remove('hidden');
-
-                        razonSocial.querySelector('input').required = false;
-                        nombreUsuario.querySelector('input').required = true;
-                        apellidoUsuario.querySelector('input').required = true;
-
-                        razonSocial.querySelector('input').value = '';
-                    }
-
-                    tipoIdentificacion.selectedIndex = 0;
-                }
-
-                tipoSolicitante.addEventListener('change', actualizarTipoSolicitante);
-
-                actualizarTipoSolicitante();
-
-            });
-            </script>
-
-            <!-- Opciones de pais -->
-            <script>
-                const pais = document.getElementById('pais');
-
-                const contenedorOtroPais = document.getElementById('contenedor_otro_pais');
-                const contenedorDepartamento = document.getElementById('contenedor_departamento');
-                const contenedorMunicipio = document.getElementById('contenedor_municipio');
-
-                const otroPais = document.getElementById('otro_pais');
-                const departamento = document.getElementById('departamento');
-                const municipio = document.getElementById('municipio');
-
-                function actualizarPais() {
-
-                    if (pais.value === 'otro') {
-
-                        contenedorOtroPais.classList.remove('hidden');
-
-                        contenedorDepartamento.classList.add('hidden');
-                        contenedorMunicipio.classList.add('hidden');
-
-                        otroPais.required = true;
-                        departamento.required = false;
-                        municipio.required = false;
-
-                        departamento.value = '';
-                        municipio.value = '';
-
-                    } else {
-
-                        contenedorOtroPais.classList.add('hidden');
-
-                        contenedorDepartamento.classList.remove('hidden');
-                        contenedorMunicipio.classList.remove('hidden');
-
-                        otroPais.required = false;
-                        departamento.required = true;
-                        municipio.required = true;
-
-                        otroPais.value = '';
-                    }
-                }
-
-                pais.addEventListener('change', actualizarPais);
-
-                // Ejecutar al cargar la página
-                actualizarPais();
-
-                departamento.addEventListener('change', function () {
-
-                    municipio.innerHTML =
-                        '<option value="">Cargando municipios...</option>';
-
-                    if (!this.value) {
-
-                        municipio.innerHTML =
-                            '<option value="">Seleccione un municipio</option>';
-
-                        return;
-                    }
-
-                    fetch(`/municipios/${this.value}`)
-
-                        .then(response => response.json())
-
-                        .then(data => {
-
-                            municipio.innerHTML =
-                                '<option value="">Seleccione un municipio</option>';
-
-                            data.forEach(item => {
-
-                                municipio.innerHTML += `
-                                    <option value="${item.id}">
-                                        ${item.nombre}
-                                    </option>
-                                `;
-
-                            });
-
-                        })
-
-                        .catch(error => {
-
-                            console.error(error);
-
-                            municipio.innerHTML =
-                                '<option value="">Error al cargar municipios</option>';
-
-                        });
-
+            document.addEventListener('DOMContentLoaded', () => {
+                el('tipo_solicitante').addEventListener('change', () => {
+                    actualizarTipoIdentificacion();
+                    toggleFormulario();
                 });
-            </script>
+                el('pais').addEventListener('change', toggleFormulario);
+                el('departamento').addEventListener('change', function () {
+                    cargarMunicipios(this.value);
+                });
 
-            <!-- Opciones de tipo de respuesta -->
-            <script>
-                function toggleTipoRespuesta() {
-                    const tipoRespuesta = document.getElementById('tipo_respuesta').value;
-                    const direccionMensajeria = document.getElementById('direccion_mensajeria');
-                    const container = document.getElementById('direccion_mensajeria_container');
-                    const correoMensajeria = document.getElementById('correo_electronico_mensajeria');
-                    const containerCorreo = document.getElementById('correo_mensajeria_container');
-                
-                    if (tipoRespuesta === 'Físico / Mensajería') {
-                        container.classList.remove('hidden');
-                        direccionMensajeria.classList.remove('hidden');
-                        direccionMensajeria.required = true;
-                        // Correo oculto
-                        containerCorreo.classList.add('hidden');
-                        correoMensajeria.classList.add('hidden');
-                        correoMensajeria.required = false;
-                    } else {
-                        container.classList.add('hidden');
-                        direccionMensajeria.classList.add('hidden');
-                        direccionMensajeria.required = false;
-                        // correo activo
-                        containerCorreo.classList.remove('hidden');
-                        correoMensajeria.classList.remove('hidden');
-                        correoMensajeria.required = true;
+                // Evitar doble envío
+                el('form-pqrsdf').addEventListener('submit', function () {
+                    const boton = this.querySelector('button[type="submit"]');
+                    if (boton) {
+                        boton.disabled = true;
+                        boton.classList.add('opacity-60');
                     }
-                }
+                });
 
-            </script>
+                // Estado inicial (incluye valores devueltos si hubo errores de validación)
+                actualizarTipoIdentificacion();
+                toggleTipoDiscapacidad();
+                toggleFormulario();
+                cargarMunicipios(el('departamento').value, municipioAnterior);
+
+                const errores = el('errores-formulario');
+                if (errores) errores.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        </script>
 
             <!-- modal de busqueda -->
             <script>

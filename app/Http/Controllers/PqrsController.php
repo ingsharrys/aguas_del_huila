@@ -15,6 +15,17 @@ use Illuminate\Support\Facades\Mail;
 
 class PqrsController extends Controller
 {
+    // Canales por los que el ciudadano puede recibir la respuesta
+    public const CANAL_CORREO      = 'Correo Electrónico';
+    public const CANAL_CERTIFICADO = 'Correo Certificado';
+    public const CANAL_WHATSAPP    = 'WhatsApp';
+
+    public const CANALES = [
+        self::CANAL_CORREO,
+        self::CANAL_CERTIFICADO,
+        self::CANAL_WHATSAPP,
+    ];
+
     public function index()
     {
         $departamentos = DepartamentoCol::orderBy('id')->get();
@@ -54,38 +65,54 @@ class PqrsController extends Controller
                 
         }
 
+        $esIdentificado = $request->input('identificado_anonimo') === 'identificado';
+        $canal          = $request->input('tipo_respuesta');
+        $esJuridica     = $request->input('tipo_solicitante') === 'Persona Jurídica';
+        $esColombia     = $request->input('pais') === 'Colombia';
+
+        // Obligatorio solo si es identificado
+        $siIdentificado = $esIdentificado ? 'required' : 'nullable';
+
         $request->validate([
 
             'discapacidad'             => 'required|boolean',
-            'tipo_discapacidad'        => 'nullable|string|max:150',
-            'otra_discapacidad'        => 'nullable|string|max:255',
+            'tipo_discapacidad'        => 'required_if:discapacidad,1|nullable|string|max:150',
+            'otra_discapacidad'        => 'required_if:tipo_discapacidad,otra|nullable|string|max:255',
 
             'identificado_anonimo'     => 'required|in:identificado,anonimo',
 
-            'tipo_solicitante'         => 'nullable|string|max:100',
-            'tipo_identificacion'      => 'nullable|string|max:100',
-            'numero_identificacion'    => 'nullable|string|max:50',
+            'tipo_solicitante'         => [$siIdentificado, 'string', 'max:100'],
+            'tipo_identificacion'      => [$siIdentificado, 'string', 'max:100'],
+            'numero_identificacion'    => [$siIdentificado, 'string', 'max:50'],
 
-            'razon_social'             => 'nullable|string|max:255',
-            'nombre_usuario'           => 'nullable|string|max:150',
-            'apellido_usuario'         => 'nullable|string|max:150',
+            'razon_social'             => [$esIdentificado && $esJuridica ? 'required' : 'nullable', 'string', 'max:255'],
+            'nombre_usuario'           => [$esIdentificado && !$esJuridica ? 'required' : 'nullable', 'string', 'max:150'],
+            'apellido_usuario'         => [$esIdentificado && !$esJuridica ? 'required' : 'nullable', 'string', 'max:150'],
 
-            'correo_electronico'       => 'nullable|email|max:200',
+            // Correo: siempre si es identificado, o si el anónimo eligió respuesta por correo
+            'correo_electronico'       => [
+                $esIdentificado || $canal === self::CANAL_CORREO ? 'required' : 'nullable',
+                'email',
+                'max:200',
+            ],
 
-            'pais'                     => 'nullable|string|max:100',
-            'otro_pais'                => 'nullable|string|max:100',
+            'pais'                     => [$siIdentificado, 'in:Colombia,Otro'],
+            'otro_pais'                => [$esIdentificado && !$esColombia ? 'required' : 'nullable', 'string', 'max:100'],
 
-            'departamento_id'          => 'nullable|exists:departamentos_col,id',
-            'municipio_id'             => 'nullable|exists:municipios_col,id',
+            'departamento_id'          => [$esIdentificado && $esColombia ? 'required' : 'nullable', 'exists:departamentos_col,id'],
+            'municipio_id'             => [$esIdentificado && $esColombia ? 'required' : 'nullable', 'exists:municipios_col,id'],
 
-            'direccion'                => 'nullable|string|max:255',
+            'direccion'                => [$siIdentificado, 'string', 'max:255'],
 
             'fijo'                     => 'nullable|string|max:30',
-            'movil'                    => 'nullable|string|max:30',
-            
+            'movil'                    => [$siIdentificado, 'string', 'max:30'],
+
+            // WhatsApp del anónimo (el identificado usa su teléfono móvil)
+            'numero_whatsapp'          => [!$esIdentificado && $canal === self::CANAL_WHATSAPP ? 'required' : 'nullable', 'string', 'max:30'],
+
             'tipo_pqrsf'               => 'required|string|max:255',
-            'tipo_respuesta'           => 'required|string|max:255',
-            'direccion_mensajeria'     => 'nullable|string',
+            'tipo_respuesta'           => 'required|in:' . implode(',', self::CANALES),
+            'direccion_mensajeria'     => [$canal === self::CANAL_CERTIFICADO ? 'required' : 'nullable', 'string', 'max:500'],
 
             'asunto'                   => 'required|string|max:255',
 
@@ -93,7 +120,62 @@ class PqrsController extends Controller
 
             'autoriza'                 => 'accepted'
 
+        ], [
+            'required'                    => 'El campo :attribute es obligatorio.',
+            'required_if'                 => 'El campo :attribute es obligatorio.',
+            'email'                       => 'El :attribute no es válido.',
+            'in'                          => 'El valor de :attribute no es válido.',
+            'exists'                      => 'El valor de :attribute no es válido.',
+            'accepted'                    => 'Debe autorizar el tratamiento de datos personales.',
+        ], [
+            'discapacidad'                => 'condición de discapacidad',
+            'tipo_discapacidad'           => 'tipo de discapacidad',
+            'otra_discapacidad'           => 'otra discapacidad',
+            'identificado_anonimo'        => 'identificado o anónimo',
+            'tipo_solicitante'            => 'tipo de solicitante',
+            'tipo_identificacion'         => 'tipo de identificación',
+            'numero_identificacion'       => 'número de identificación',
+            'razon_social'                => 'razón social',
+            'nombre_usuario'              => 'nombre',
+            'apellido_usuario'            => 'apellido',
+            'correo_electronico'          => 'correo electrónico',
+            'pais'                        => 'país',
+            'otro_pais'                   => 'nombre del país',
+            'departamento_id'             => 'departamento',
+            'municipio_id'                => 'municipio',
+            'direccion'                   => 'dirección',
+            'movil'                       => 'teléfono móvil',
+            'numero_whatsapp'             => 'número de WhatsApp',
+            'tipo_pqrsf'                  => 'tipo de PQRSF',
+            'tipo_respuesta'              => 'canal de respuesta',
+            'direccion_mensajeria'        => 'dirección para el correo certificado',
+            'asunto'                      => 'asunto',
+            'descripcion'                 => 'descripción',
         ]);
+
+        // Si es anónimo no se guardan datos personales; solo el contacto del canal elegido
+        if (!$esIdentificado) {
+            $request->merge([
+                'tipo_solicitante'      => null,
+                'tipo_identificacion'   => null,
+                'numero_identificacion' => null,
+                'razon_social'          => null,
+                'nombre_usuario'        => null,
+                'apellido_usuario'      => null,
+                'pais'                  => null,
+                'otro_pais'             => null,
+                'departamento_id'       => null,
+                'municipio_id'          => null,
+                'direccion'             => null,
+                'fijo'                  => null,
+                'movil'                 => $canal === self::CANAL_WHATSAPP ? $request->numero_whatsapp : null,
+                'correo_electronico'    => $canal === self::CANAL_CORREO ? $request->correo_electronico : null,
+            ]);
+        }
+
+        if ($canal !== self::CANAL_CERTIFICADO) {
+            $request->merge(['direccion_mensajeria' => null]);
+        }
 
         DB::beginTransaction();
 

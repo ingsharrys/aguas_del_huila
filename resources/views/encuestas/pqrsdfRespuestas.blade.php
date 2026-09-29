@@ -214,7 +214,7 @@
 
                         </div>
 
-                    @elseif($pqrsdf->tipo_respuesta == 'Físico / Mensajería')
+                    @elseif(in_array($pqrsdf->tipo_respuesta, ['Físico / Mensajería', 'Correo Certificado']))
 
                         <div class="grid grid-cols-1 gap-5 border-b border-gray-200 px-6 py-5 md:grid-cols-3">
 

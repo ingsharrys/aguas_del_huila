@@ -37,10 +37,12 @@ class FortifyServiceProvider extends ServiceProvider
         // Personalizar la verificación de credenciales y estado
         Fortify::authenticateUsing(function (Request $request) {
 
-            $user = User::where(
-                'username',
-                $request->username
-            )->first();
+            $login = Str::lower(trim((string) $request->username));
+
+            // Buscar por nombre de usuario o, si incluye @, por correo
+            $user = User::whereRaw('LOWER(username) = ?', [$login])
+                ->when(str_contains($login, '@'), fn ($query) => $query->orWhereRaw('LOWER(email) = ?', [$login]))
+                ->first();
 
             // Usuario no encontrado
             if (!$user) {

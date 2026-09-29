@@ -71,11 +71,14 @@
 
                                 <tr>
                                     <td><strong>Medio de respuesta</strong></td>
-                                    @if($pqrs->tipo_respuesta == 'correo_electronico')
-                                        <td>Correo electrónico</td>
-                                    @else
-                                        <td>Físico / Mensajería</td>
-                                    @endif
+                                    <td>
+                                        {{ $pqrs->tipo_respuesta }}
+                                        @if($pqrs->tipo_respuesta == 'WhatsApp' && $pqrs->movil)
+                                            ({{ $pqrs->movil }})
+                                        @elseif(in_array($pqrs->tipo_respuesta, ['Correo Certificado', 'Físico / Mensajería']) && $pqrs->direccion_mensajeria)
+                                            ({{ $pqrs->direccion_mensajeria }})
+                                        @endif
+                                    </td>
                                 </tr>
 
                             </table>

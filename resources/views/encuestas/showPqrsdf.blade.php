@@ -587,6 +587,9 @@
 
                             <p class="font-semibold mt-1 text-black">
                                 {{ $pqrs->tipo_respuesta ?? 'No especificado' }}
+                                @if($pqrs->tipo_respuesta == 'WhatsApp')
+                                    <span class="block text-sm font-normal text-gray-700">WhatsApp: {{ $pqrs->movil ?? 'No especificado' }}</span>
+                                @endif
                             </p>
 
                         </div>
@@ -832,7 +835,7 @@
                             </div>
                             @endif
 
-                            @if($pqrs->tipo_respuesta == 'Físico / Mensajería')
+                            @if(in_array($pqrs->tipo_respuesta, ['Físico / Mensajería', 'Correo Certificado']))
                             <!-- Dirección -->
                             <div id="campoDireccion" class="mb-5" >
                                 <label for="direccion" class="mb-2 block text-sm font-medium text-gray-700" >Dirección <span class="text-red-500">*</span></label>
