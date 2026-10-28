@@ -147,13 +147,15 @@
                                         <a href="{{ route('usuarios.edit', $usuario->id) }}" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded transition" title="Editar">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
                                         </a>
-                                        <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="inline-block">
+                                        @if($usuario->estado !== 'Desactivado')
+                                        <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="inline-block eliminar-usuario">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-100 rounded transition cursor-pointer" title="Eliminar">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                            <button type="submit" class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-100 rounded transition cursor-pointer" title="Deshabilitar">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
                                             </button>
                                         </form>
+                                        @endif
                                     @else
                                         <a href="#" class="p-1.5 text-gray-400 cursor-not-allowed" title="No modificable">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
@@ -183,12 +185,12 @@
                 e.preventDefault();
                 Swal.fire({
                     title: '¿Estás seguro?',
-                    text: "Esta acción eliminará la usuario permanentemente",
+                    text: "El usuario quedará deshabilitado y no podrá iniciar sesión. Puede reactivarlo desde Editar.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, eliminar',
+                    confirmButtonText: 'Sí, deshabilitar',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {

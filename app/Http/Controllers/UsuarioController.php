@@ -222,13 +222,15 @@ class UsuarioController extends Controller
 
         if ($usuario->is(auth()->user())) {
             return redirect()->route('usuarios.index')
-                ->with('error', 'No puede eliminar su propio usuario.');
+                ->with('error', 'No puede deshabilitar su propio usuario.');
         }
 
-        $usuario->delete();
+        // Los usuarios no se eliminan: se deshabilitan para conservar su historial
+        // (noticias, PQRSDF asignadas, respuestas). Se pueden reactivar desde Editar.
+        $usuario->update(['estado' => 'Desactivado']);
 
         return redirect()->route('usuarios.index')
-            ->with('success', 'Usuario eliminado correctamente');
+            ->with('success', 'Usuario deshabilitado correctamente');
     }
 }
 

@@ -63,6 +63,8 @@ class SeguridadTest extends TestCase
             $t->dateTime('fecha_revision')->nullable();
             $t->timestamps();
         });
+        Schema::create('cuestionarios_cacsp', fn ($t) => [$t->id(), $t->integer('municipio_id')->nullable(), $t->string('ubicacion')->nullable(), $t->integer('estrato')->nullable(), $t->string('sector')->nullable(), $t->string('nombre')->nullable(), $t->integer('edad')->nullable(), $t->string('sexo')->nullable(), $t->string('direccion')->nullable(), $t->string('barrio')->nullable(), $t->string('telefono')->nullable(), $t->date('fecha_encuesta')->nullable(), $t->timestamps()]);
+        Schema::create('cuestionarios_cacsp_respuestas', fn ($t) => [$t->id(), $t->integer('cuestionario_id'), $t->string('pregunta_key'), $t->text('valor')->nullable(), $t->timestamps()]);
         Schema::create('pqrsdf_documentos', fn ($t) => [$t->id(), $t->integer('respuesta_id'), $t->string('nombre_original')->nullable(), $t->string('ruta'), $t->timestamps()]);
 
         foreach (['Administrador', 'Editor', 'Extranet', 'Control Interno'] as $rol) {
@@ -333,5 +335,62 @@ class SeguridadTest extends TestCase
             $this->post('/participa/pqr/buscar', ['pqrsdf_code' => 'X']);
         }
         $this->post('/participa/pqr/buscar', ['pqrsdf_code' => 'X'])->assertStatus(429);
+    }
+
+    // 6. Cuestionario CACSP
+    private function cacsp(array $respuestas, bool $autoriza = true): \Illuminate\Testing\TestResponse
+    {
+        DB::table('municipios_col')->insertOrIgnore(['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1]);
+
+        return $this->post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos', [
+            'respuestas' => array_merge([
+                'b_municipio' => 10, 'c_ubicacion' => '2', 'd_estrato' => '3', 'e_sector' => '1', 'P1_nombre' => 'Luz', 'P2_edad' => 30,
+                'P3_sexo' => '2', 'P4_direccion' => 'Vereda X', 'P5_barrio' => 'Rural',
+            ], $respuestas),
+        ] + ($autoriza ? ['autoriza' => 1] : []));
+    }
+
+    public function test_cacsp_ninguno_no_se_combina(): void
+    {
+        $this->cacsp(['P7' => ['4', '1']])->assertSessionHasErrors('respuestas.P7');
+        $this->assertSame(0, DB::table('cuestionarios_cacsp')->count());
+    }
+
+    public function test_cacsp_condicionales_obligatorias_y_ocultas(): void
+    {
+        // Con acueducto, P8 es obligatoria
+        $this->cacsp(['P7' => ['1']])->assertSessionHasErrors('respuestas.P8');
+
+        // Solo aseo: las preguntas de acueducto enviadas se ignoran
+        $this->cacsp(['P7' => ['3'], 'P24' => 'EcoAseo', 'P35_1' => 'SI', 'P8' => '5', 'P11' => '2'])->assertSessionHasNoErrors();
+        $claves = DB::table('cuestionarios_cacsp_respuestas')->pluck('pregunta_key')->all();
+        $this->assertEqualsCanonicalizing(['P7', 'P24', 'P35_1'], $claves);
+        $this->assertSame('RURAL', DB::table('cuestionarios_cacsp')->value('ubicacion'));
+        $this->assertSame('FEMENINO', DB::table('cuestionarios_cacsp')->value('sexo'));
+    }
+
+    public function test_cacsp_requiere_autorizacion_y_valores_validos(): void
+    {
+        $this->cacsp(['P7' => ['4']], false)->assertSessionHasErrors('autoriza');
+        $this->cacsp(['P7' => ['4'], 'd_estrato' => '9', 'P2_edad' => 15])->assertSessionHasErrors(['respuestas.d_estrato', 'respuestas.P2_edad']);
+        $this->cacsp(['P7' => ['4']])->assertSessionHasNoErrors();
+    }
+
+    // 7. Días hábiles y usuarios
+    public function test_dias_habiles_colombia(): void
+    {
+        $this->assertSame('2026-11-03', \App\Support\DiasHabiles::sumar(\Carbon\Carbon::parse('2026-10-30'), 1)->toDateString());
+        $this->assertSame('2026-11-20', \App\Support\DiasHabiles::sumar(\Carbon\Carbon::parse('2026-10-28'), 15)->toDateString());
+        $this->assertTrue(\App\Support\DiasHabiles::esFestivo(\Carbon\Carbon::parse('2026-04-03')));
+    }
+
+    public function test_usuario_se_deshabilita_no_se_borra(): void
+    {
+        $admin = $this->usuario('Administrador');
+        $otro = $this->usuario('Editor');
+
+        $this->actingAs($admin)->delete("/dashboard/usuarios/{$otro->id}")->assertRedirect();
+
+        $this->assertDatabaseHas('users', ['id' => $otro->id, 'estado' => 'Desactivado']);
     }
 }

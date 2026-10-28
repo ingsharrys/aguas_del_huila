@@ -12,6 +12,9 @@ new class extends Component {
      */
     public function deleteUser(Logout $logout): void
     {
+        // Los usuarios no se eliminan; un Administrador los deshabilita desde Usuarios
+        abort(403, 'La eliminación de cuentas está deshabilitada.');
+
         $this->validate([
             'password' => ['required', 'string', 'current_password'],
         ]);

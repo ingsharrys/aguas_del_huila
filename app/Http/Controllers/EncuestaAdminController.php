@@ -18,6 +18,7 @@ use App\Models\PqrsdfDocumento;
 use App\Models\PqrsdfArchivos;
 use App\Support\ArchivoSeguro;
 use App\Support\HtmlSeguro;
+use App\Support\DiasHabiles;
 use Illuminate\Support\Facades\Mail;
 use App\Services\CorreoService;
 use App\Mail\PqrsRespuestaMail;
@@ -192,7 +193,7 @@ class EncuestaAdminController extends Controller
         // 2. Si es Admin o Editor, continúa con la carga normal
         $hoy = Carbon::today();
 
-        $proximosDias = $hoy->copy()->addDays(3);
+        $proximosDias = DiasHabiles::sumar($hoy, 3);
 
         $total = EncuestaPqrsdf::count();
 
@@ -458,7 +459,7 @@ class EncuestaAdminController extends Controller
                 $query->whereIn('estado', ['Radicada', 'Asignada'])
                     ->whereNotNull('fecha_limite_respuesta')
                     ->whereDate('fecha_limite_respuesta', '>=', now()->toDateString())
-                    ->whereDate('fecha_limite_respuesta', '<=', now()->addDays(7)->toDateString());
+                    ->whereDate('fecha_limite_respuesta', '<=', DiasHabiles::sumar(today(), 7)->toDateString());
             } elseif ($request->vencimiento === 'vencidas') {
                 // Opcional: También es muy útil filtrar las que ya se vencieron
                 $query->whereIn('estado', ['Radicada', 'Asignada'])
@@ -476,7 +477,7 @@ class EncuestaAdminController extends Controller
 
         $hoy = Carbon::today();
 
-        $proximosDias = $hoy->copy()->addDays(3);
+        $proximosDias = DiasHabiles::sumar($hoy, 3);
 
 
         /*
@@ -622,7 +623,7 @@ class EncuestaAdminController extends Controller
                         CASE
                             WHEN estado = 'Asignada'
                             AND fecha_limite_respuesta >= CURDATE()
-                            AND fecha_limite_respuesta <= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+                            AND fecha_limite_respuesta <= '" . DiasHabiles::sumar(today(), 3)->toDateString() . "'
                             THEN 1
                             ELSE 0
                         END
@@ -780,7 +781,8 @@ class EncuestaAdminController extends Controller
         }
 
         $dias = (int) $request->dias;
-        $fechaLimite = now()->addDays($dias)->toDateString();
+        // Plazo en días hábiles (sin fines de semana ni festivos de Colombia)
+        $fechaLimite = DiasHabiles::sumar(today(), (int) $dias)->toDateString();
         $asignadoPorId = auth()->id(); // ID del usuario autenticado que realiza la asignación/reasignación
 
         DB::transaction(function () use ($pqrs, $usuario, $dias, $fechaLimite, $asignadoPorId, $request) {

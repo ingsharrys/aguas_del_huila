@@ -20,10 +20,13 @@ class EnviarAlertasVencimientoPqrsdf extends Command
 
     public function handle(): int
     {
-        $fechaObjetivo = Carbon::today()->addDays(2)->toDateString();
+        // Alertar cuando falten 2 días hábiles o menos (si el cron falla un día, no se pierde la alerta;
+        // el registro en pqrsdf_notificaciones evita enviarla dos veces)
+        $fechaObjetivo = \App\Support\DiasHabiles::sumar(Carbon::today(), 2)->toDateString();
 
         $pqrs = EncuestaPqrsdf::with('usuario')
-            ->whereDate('fecha_limite_respuesta', $fechaObjetivo)
+            ->whereDate('fecha_limite_respuesta', '>=', Carbon::today()->toDateString())
+            ->whereDate('fecha_limite_respuesta', '<=', $fechaObjetivo)
             ->whereIn('estado', ['Asignada', 'Corregir', 'Revisión'])
             ->get();
 

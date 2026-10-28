@@ -395,8 +395,7 @@ class PqrsController extends Controller
                             ->whereRaw(
                                 'fecha_respuesta >= ?',
                                 [
-                                    $hoy->copy()
-                                        ->subWeekdays(5)
+                                    \App\Support\DiasHabiles::restar($hoy, 5)
                                         ->toDateString()
                                 ]
                             );

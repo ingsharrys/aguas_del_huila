@@ -181,14 +181,14 @@
                                                 <div>
                                                     <select name="dias" class="w-full border rounded-lg px-4 py-3" required>
                                                         <option value="">Seleccione el plazo</option>
-                                                        <option value="1">1 día</option>
-                                                        <option value="2">2 días</option>
-                                                        <option value="3">3 días</option>
-                                                        <option value="5">5 días</option>
-                                                        <option value="10">10 días</option>
-                                                        <option value="15">15 días</option>
-                                                        <option value="20">20 días</option>
-                                                        <option value="30">30 días</option>
+                                                        <option value="1">1 día hábil</option>
+                                                        <option value="2">2 días hábiles</option>
+                                                        <option value="3">3 días hábiles</option>
+                                                        <option value="5">5 días hábiles</option>
+                                                        <option value="10">10 días hábiles</option>
+                                                        <option value="15">15 días hábiles</option>
+                                                        <option value="20">20 días hábiles</option>
+                                                        <option value="30">30 días hábiles</option>
                                                     </select>
                                                 </div>
 
@@ -247,14 +247,14 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Nuevo Plazo <span class="text-red-500">*</span></label>
                                             <select name="dias" class="w-full border rounded-lg px-4 py-2.5 text-black" required>
                                                 <option value="">Seleccione el plazo</option>
-                                                <option value="1">1 día</option>
-                                                <option value="2">2 días</option>
-                                                <option value="3">3 días</option>
-                                                <option value="5">5 días</option>
-                                                <option value="10">10 días</option>
-                                                <option value="15">15 días</option>
-                                                <option value="20">20 días</option>
-                                                <option value="30">30 días</option>
+                                                <option value="1">1 día hábil</option>
+                                                <option value="2">2 días hábiles</option>
+                                                <option value="3">3 días hábiles</option>
+                                                <option value="5">5 días hábiles</option>
+                                                <option value="10">10 días hábiles</option>
+                                                <option value="15">15 días hábiles</option>
+                                                <option value="20">20 días hábiles</option>
+                                                <option value="30">30 días hábiles</option>
                                             </select>
                                         </div>
 
@@ -780,7 +780,7 @@
                                     </p>
                                     @endif
                                     <p class="text-xs text-gray-500 mt-1">
-                                        Plazo: {{ $asignacion->dias }} días | Fecha Límite: {{ $asignacion->fecha_limite }}
+                                        Plazo: {{ $asignacion->dias }} días hábiles | Fecha Límite: {{ $asignacion->fecha_limite }}
                                     </p>
                                 </div>
                                 <span class="text-xs text-gray-400">

@@ -236,9 +236,9 @@
                                                 <span class="text-xs text-gray-400">Sin límite establecido</span>
                                             @elseif ($pqr->estado === 'Respondida')
                                                 <span class="text-xs text-green-600 font-medium">✓ {{ \Carbon\Carbon::parse($pqr->fecha_limite_respuesta)->format('d/m/Y') }}</span>
-                                            @elseif (now()->diffInDays($pqr->fecha_limite_respuesta, false) < 3)
+                                            @elseif (\App\Support\DiasHabiles::restantes($pqr->fecha_limite_respuesta) < 3)
                                                 <span class="text-xs text-red-600 font-medium">⚠ {{ \Carbon\Carbon::parse($pqr->fecha_limite_respuesta)->format('d/m/Y') }}</span>
-                                            @elseif (now()->diffInDays($pqr->fecha_limite_respuesta, false) < 7)
+                                            @elseif (\App\Support\DiasHabiles::restantes($pqr->fecha_limite_respuesta) < 7)
                                                 <span class="text-xs text-yellow-600 font-medium">⚠ {{ \Carbon\Carbon::parse($pqr->fecha_limite_respuesta)->format('d/m/Y') }}</span>
                                             @else
                                                 <span class="text-xs text-gray-600">Límite: {{ \Carbon\Carbon::parse($pqr->fecha_limite_respuesta)->format('d/m/Y') }}</span>

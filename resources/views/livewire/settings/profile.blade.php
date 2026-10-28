@@ -353,8 +353,7 @@ new class extends Component {
     </form>
 
 
-    {{-- Eliminar cuenta --}}
-    <livewire:settings.delete-user-form />
+    {{-- La eliminación de cuentas está deshabilitada: los usuarios se deshabilitan desde Usuarios --}}
 
 </x-settings.layout>
 </section>
