@@ -54,6 +54,7 @@ class EncuestaAdminController extends Controller
     {
         // Período: 30, 90 o 365 días, o todo el histórico
         $periodo = in_array($request->query('periodo'), ['30', '90', '365', 'todo'], true) ? $request->query('periodo') : '90';
+        $tab = $request->query('tab') === 'evaluacion' ? 'evaluacion' : 'tramites';
         $hasta = now()->endOfDay();
         $desde = $periodo === 'todo' ? null : now()->subDays((int) $periodo - 1)->startOfDay();
         $desdeAnterior = $desde?->copy()->subDays((int) $periodo);
@@ -101,7 +102,7 @@ class EncuestaAdminController extends Controller
 
         $estadisticas = compact('tramites', 'evaluacion', 'cacsp');
 
-        return view('encuestas.index', compact('estadisticas', 'periodo', 'tendencia'));
+        return view('encuestas.index', compact('estadisticas', 'periodo', 'tendencia', 'tab'));
     }
 
     private function estadisticasEncuesta($consulta, string $tipo, $desde, $desdeAnterior): array

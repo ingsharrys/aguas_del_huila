@@ -26,8 +26,7 @@
 <div class="enc">
     <div class="enc-cabecera">
         <div>
-            <p class="enc-subtitulo" style="margin: 0 0 4px"><a href="{{ route('dashboard.encuestas') }}" style="color: inherit">Encuestas</a> / Atención al cliente</p>
-            <h1 class="enc-titulo">Atención al Cliente · Servicios Públicos</h1>
+            <h1 class="enc-titulo">Encuestas</h1>
             <p class="enc-subtitulo">Resultados del cuestionario CACSP · {{ number_format($total, 0, ',', '.') }} {{ $total === 1 ? 'encuesta' : 'encuestas' }}</p>
         </div>
         <div class="enc-acciones">
@@ -42,6 +41,8 @@
             <a class="enc-boton primario" href="{{ route('dashboard.encuestas.cacsp.listado', $filtros) }}">Ver respuestas</a>
         </div>
     </div>
+
+    @include('encuestas.partials.tabs', ['activa' => 'cacsp', 'conteos' => ['cacsp' => $total]])
 
     {{-- Filtros --}}
     <form method="GET" class="enc-filtros">

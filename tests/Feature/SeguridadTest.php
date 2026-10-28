@@ -433,6 +433,18 @@ class SeguridadTest extends TestCase
             ->assertSessionHasErrors(['respuestas.d_estrato', 'respuestas.P2_edad', 'respuestas.P6_telefono']);
     }
 
+    public function test_cacsp_formulario_por_pasos(): void
+    {
+        DB::table('municipios_col')->insertOrIgnore(['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1]);
+
+        $this->get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos')
+            ->assertOk()->assertSee('cx-paso', false)->assertSee('Revisión y envío')->assertSee('Neiva')->assertSee('cacsp-reglas', false);
+
+        $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2']]);
+        $this->get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos')
+            ->assertSee('¡Cuestionario enviado!')->assertSee('Registrar otro cuestionario');
+    }
+
     public function test_cacsp_resultados_listado_detalle_y_exportacion(): void
     {
         $admin = $this->usuario('Administrador');
@@ -500,5 +512,12 @@ class SeguridadTest extends TestCase
 
         $this->actingAs($admin)->get('/dashboard/encuestas?periodo=todo')->assertOk()
             ->assertViewHas('estadisticas', fn ($e) => $e['tramites']['total'] === 2 && $e['tramites']['kpis']['informacion'] === 50);
+
+        // Pestañas: cada encuesta en su propia página
+        $this->actingAs($admin)->get('/dashboard/encuestas?tab=evaluacion&periodo=30')->assertOk()
+            ->assertViewHas('tab', 'evaluacion')->assertSee('Evaluación del sitio web')->assertDontSee('Costos reportados');
+        $this->actingAs($admin)->get('/dashboard/encuestas?tab=tramites')->assertOk()
+            ->assertSee('Costos reportados')->assertDontSee('¿Fue fácil navegar el sitio?');
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp')->assertOk()->assertSee('Atención al cliente (CACSP)');
     }
 }

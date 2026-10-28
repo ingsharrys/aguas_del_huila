@@ -126,5 +126,11 @@
     .enc-leyenda-linea { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 12px; color: var(--texto-3); }
     .enc-leyenda-linea span { display: inline-flex; align-items: center; gap: 6px; }
     .enc-leyenda-linea i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    /* Pestañas entre encuestas */
+    .enc-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--borde); overflow-x: auto; scrollbar-width: none; }
+    .enc-tabs a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--texto-3); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+    .enc-tabs a:hover { color: var(--texto); }
+    .enc-tabs a[aria-current="page"] { color: var(--texto); border-bottom-color: #3987e5; }
+    .enc-tabs small { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--texto-2); font-variant-numeric: tabular-nums; }
     .enc-tooltip b { display: block; font-size: 13px; }
 </style>

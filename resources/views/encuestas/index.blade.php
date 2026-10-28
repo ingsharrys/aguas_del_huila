@@ -16,6 +16,22 @@
     $ordinal = ['var(--seq-4)', 'var(--seq-3)', 'var(--seq-2)', 'var(--seq-1)'];
 
     $pct = fn ($v, $t) => $t ? round($v / $t * 100) : 0;
+
+    // Pestaña activa: cada encuesta tiene su propia página
+    $esTramites = $tab === 'tramites';
+    $actual = $esTramites ? $tr : $ev;
+    $serie = $tendencia[$tab];
+    $kpis = $esTramites
+        ? [
+            ['Calidad de la información', $tr['kpis']['informacion'], 'Excelente o buena'],
+            ['Trámite fácil de realizar', $tr['kpis']['facilidad'], 'Respondió Sí'],
+            ['Beneficio del trámite', $tr['kpis']['beneficio'], 'Alto o moderado'],
+        ]
+        : [
+            ['Satisfacción con el sitio', $ev['kpis']['satisfaccion'], 'Satisfecho o muy satisfecho'],
+            ['Encontró la información', $ev['kpis']['informacion'], 'Sí, toda'],
+            ['Información actualizada', $ev['kpis']['actualizada'], 'Actualizada o muy actualizada'],
+        ];
 @endphp
 
 @include('encuestas.partials.estilos')
@@ -26,41 +42,35 @@
     <div class="enc-cabecera">
         <div>
             <h1 class="enc-titulo">Encuestas</h1>
-            <p class="enc-subtitulo">Satisfacción con trámites y servicios y evaluación del sitio web · {{ $textoPeriodo }}</p>
+            <p class="enc-subtitulo">Resultados de las encuestas de percepción ciudadana · {{ $textoPeriodo }}</p>
         </div>
         <nav class="enc-segmento" aria-label="Período">
             @foreach($periodos as $valor => $etiqueta)
-                <a href="{{ route('dashboard.encuestas', ['periodo' => $valor]) }}" @if($periodo === (string) $valor) aria-current="page" @endif>{{ $etiqueta }}</a>
+                <a href="{{ route('dashboard.encuestas', ['tab' => $tab, 'periodo' => $valor]) }}" @if($periodo === (string) $valor) aria-current="page" @endif>{{ $etiqueta }}</a>
             @endforeach
         </nav>
     </div>
 
-    {{-- Indicadores principales --}}
-    <div class="enc-grid">
-        @foreach([
-            ['Respuestas · Trámites', $tr['total'], $tr['variacion'], "{$tr['historico']} en total"],
-            ['Respuestas · Evaluación web', $ev['total'], $ev['variacion'], "{$ev['historico']} en total"],
-        ] as [$etiqueta, $valor, $variacion, $pie])
-            <div class="enc-tarjeta">
-                <p class="enc-kpi-etiqueta">{{ $etiqueta }}</p>
-                <p class="enc-kpi-valor">{{ number_format($valor, 0, ',', '.') }}</p>
-                <div class="enc-kpi-pie">
-                    @if(!is_null($variacion))
-                        <span class="enc-delta {{ $variacion >= 0 ? 'sube' : 'baja' }}" title="Comparado con el período anterior">
-                            {{ $variacion >= 0 ? '▲' : '▼' }} {{ abs($variacion) }}%
-                        </span>
-                        <span>vs. período anterior</span>
-                    @else
-                        <span>{{ $pie }}</span>
-                    @endif
-                </div>
-            </div>
-        @endforeach
+    @include('encuestas.partials.tabs', ['activa' => $tab, 'conteos' => ['tramites' => $tr['total'], 'evaluacion' => $ev['total'], 'cacsp' => $estadisticas['cacsp']['total']]])
 
-        @foreach([
-            ['Calidad de la información', $tr['kpis']['informacion'], 'Excelente o buena · Trámites'],
-            ['Satisfacción con el sitio', $ev['kpis']['satisfaccion'], 'Satisfecho o muy satisfecho · Web'],
-        ] as [$etiqueta, $valor, $nota])
+    {{-- Indicadores de la encuesta activa --}}
+    <div class="enc-grid">
+        <div class="enc-tarjeta">
+            <p class="enc-kpi-etiqueta">Respuestas</p>
+            <p class="enc-kpi-valor">{{ number_format($actual['total'], 0, ',', '.') }}</p>
+            <div class="enc-kpi-pie">
+                @if(!is_null($actual['variacion']))
+                    <span class="enc-delta {{ $actual['variacion'] >= 0 ? 'sube' : 'baja' }}" title="Comparado con el período anterior">
+                        {{ $actual['variacion'] >= 0 ? '▲' : '▼' }} {{ abs($actual['variacion']) }}%
+                    </span>
+                    <span>vs. período anterior</span>
+                @else
+                    <span>{{ number_format($actual['historico'], 0, ',', '.') }} en total</span>
+                @endif
+            </div>
+        </div>
+
+        @foreach($kpis as [$etiqueta, $valor, $nota])
             <div class="enc-tarjeta">
                 <p class="enc-kpi-etiqueta">{{ $etiqueta }}</p>
                 <p class="enc-kpi-valor">{{ is_null($valor) ? '—' : $valor . '%' }}</p>
@@ -75,16 +85,17 @@
         <div class="enc-tarjeta-cab">
             <div>
                 <h3>Respuestas en el tiempo</h3>
-                <p class="enc-nota">{{ count($tendencia['etiquetas']) > 0 && ($periodo === 'todo' || (int) $periodo > 90) ? 'Por mes' : 'Por semana' }}</p>
+                <p class="enc-nota">{{ $periodo === 'todo' || (int) $periodo > 90 ? 'Por mes' : 'Por semana' }}</p>
             </div>
         </div>
-        @if(array_sum($tendencia['tramites']) + array_sum($tendencia['evaluacion']) === 0)
+        @if(array_sum($serie) === 0)
             <p class="enc-vacio">No hay respuestas en {{ $textoPeriodo }}.</p>
         @else
-            <div class="enc-grafico"><canvas id="enc-tendencia" role="img" aria-label="Respuestas por período de las encuestas de trámites y de evaluación web"></canvas></div>
+            <div class="enc-grafico"><canvas id="enc-tendencia" role="img" aria-label="Respuestas por período"></canvas></div>
         @endif
     </div>
 
+    @if($esTramites)
     {{-- ================= Trámites y servicios ================= --}}
     <section class="enc-seccion">
         <div class="enc-seccion-cab">
@@ -140,7 +151,7 @@
             </div>
         </div>
     </section>
-
+    @else
     {{-- ================= Evaluación del sitio web ================= --}}
     <section class="enc-seccion">
         <div class="enc-seccion-cab">
@@ -170,36 +181,12 @@
             @include('encuestas.partials.sino', ['titulo' => '¿Fue fácil navegar el sitio?', 'datos' => $ev['preguntas']['facilidad']])
         </div>
     </section>
-
-    {{-- ================= Atención al cliente (CACSP) ================= --}}
-    <section class="enc-seccion">
-        <div class="enc-seccion-cab">
-            <h2>Atención al cliente · Servicios públicos (CACSP)</h2>
-            <div class="enc-acciones">
-                <a class="enc-boton" href="{{ route('cuestionario.cacsp') }}" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                    Ver formulario
-                </a>
-                <a class="enc-boton primario" href="{{ route('dashboard.encuestas.cacsp', ['periodo' => $periodo]) }}">Ver resultados</a>
-            </div>
-        </div>
-        <div class="enc-tarjeta" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between">
-            <div>
-                <p class="enc-kpi-etiqueta">Cuestionarios en {{ $textoPeriodo }}</p>
-                <p class="enc-kpi-valor">{{ number_format($estadisticas['cacsp']['total'], 0, ',', '.') }}</p>
-                <div class="enc-kpi-pie"><span>{{ number_format($estadisticas['cacsp']['historico'], 0, ',', '.') }} en total</span></div>
-            </div>
-            <p class="enc-subtitulo" style="max-width: 520px">
-                Calidad de acueducto, alcantarillado y aseo, procesos de facturación y pago, atención en los puntos y percepciones por municipio.
-                Sus resultados tienen un módulo propio con indicadores, filtros por municipio, listado de respuestas y exportación.
-            </p>
-        </div>
-    </section>
+    @endif
 
     <div class="enc-tooltip" id="enc-tooltip" role="tooltip"></div>
 </div>
 
-<script type="application/json" id="enc-datos-tendencia">@json($tendencia)</script>
+<script type="application/json" id="enc-datos-tendencia">@json(['etiquetas' => $tendencia['etiquetas'], 'serie' => $serie])</script>
 
 <script>
     (function () {
@@ -239,8 +226,7 @@
                 data: {
                     labels: datos.etiquetas,
                     datasets: [
-                        { label: 'Trámites y servicios', data: datos.tramites, borderColor: color('--serie-1'), backgroundColor: color('--serie-1') },
-                        { label: 'Evaluación web', data: datos.evaluacion, borderColor: color('--serie-2'), backgroundColor: color('--serie-2') },
+                        { label: 'Respuestas', data: datos.serie, borderColor: color('--serie-1'), backgroundColor: 'rgba(57,135,229,.12)', fill: true },
                     ].map(serie => ({ ...serie, borderWidth: 2, cubicInterpolationMode: 'monotone', pointRadius: 0, pointHoverRadius: 5, pointHoverBorderWidth: 2, pointHoverBorderColor: color('--surface') })),
                 },
                 options: {
@@ -251,7 +237,7 @@
                         y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,.06)' }, border: { display: false }, ticks: { color: color('--texto-3'), precision: 0 } },
                     },
                     plugins: {
-                        legend: { position: 'top', align: 'end', labels: { color: color('--texto-2'), usePointStyle: true, pointStyle: 'line', boxWidth: 18, padding: 16 } },
+                        legend: { display: false },
                         tooltip: { backgroundColor: '#0b0b0b', borderColor: color('--borde'), borderWidth: 1, padding: 10, titleColor: '#f0efec', bodyColor: '#c3c2b7', usePointStyle: true },
                     },
                 },
