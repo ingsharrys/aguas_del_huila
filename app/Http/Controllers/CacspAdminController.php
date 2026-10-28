@@ -15,7 +15,8 @@ class CacspAdminController extends Controller
 {
     private const PERIODOS = ['30' => '30 días', '90' => '90 días', '365' => '12 meses', 'todo' => 'Todo'];
 
-    private const CONTROL = ['a_id_muestra', 'P45_encuestador', 'P45_encuestador_cc', 'P46_supervisor', 'P46_supervisor_cc'];
+    // Datos de identificación: se ven en el listado y el detalle, no se grafican
+    private const CONTROL = ['a_codigo_suscriptor', 'P1_cedula'];
 
     public function resultados(Request $request)
     {
@@ -76,7 +77,7 @@ class CacspAdminController extends Controller
             'Punto de atención'          => $this->satisfaccion($resultados['P19'] ?? []),
         ];
 
-        $municipios = DB::table('municipios_col')->where('departamento_id', 18)->orderBy('nombre')->pluck('nombre', 'id');
+        $municipios = collect(Cuestionario::preguntas()['b_municipio']['opciones'] ?? []);
         $periodos = self::PERIODOS;
 
         return view('encuestas.cacsp.resultados', compact('preguntas', 'resultados', 'generales', 'kpis', 'total', 'periodo', 'periodos', 'municipio', 'municipios'));
@@ -88,16 +89,26 @@ class CacspAdminController extends Controller
 
         $buscar = trim((string) $request->query('buscar'));
 
+        // Cédula y código suscriptor se guardan como respuestas
+        $respuesta = fn (string $clave) => DB::table('cuestionarios_cacsp_respuestas')->select('valor')
+            ->whereColumn('cuestionario_id', 'cuestionarios_cacsp.id')->where('pregunta_key', $clave)->limit(1);
+
         $cuestionarios = $consulta
             ->leftJoin('municipios_col', 'municipios_col.id', '=', 'cuestionarios_cacsp.municipio_id')
             ->select('cuestionarios_cacsp.*', 'municipios_col.nombre as municipio_nombre')
+            ->selectSub($respuesta('P1_cedula'), 'cedula')
+            ->selectSub($respuesta('a_codigo_suscriptor'), 'codigo_suscriptor')
             ->when($buscar !== '', fn ($q) => $q->where(fn ($w) => $w->where('cuestionarios_cacsp.nombre', 'like', "%$buscar%")
                 ->orWhere('cuestionarios_cacsp.barrio', 'like', "%$buscar%")
-                ->orWhere('cuestionarios_cacsp.direccion', 'like', "%$buscar%")))
+                ->orWhere('cuestionarios_cacsp.direccion', 'like', "%$buscar%")
+                ->orWhereExists(fn ($e) => $e->from('cuestionarios_cacsp_respuestas')
+                    ->whereColumn('cuestionario_id', 'cuestionarios_cacsp.id')
+                    ->whereIn('pregunta_key', ['P1_cedula', 'a_codigo_suscriptor'])
+                    ->where('valor', 'like', "%$buscar%"))))
             ->orderByDesc('cuestionarios_cacsp.fecha_encuesta')->orderByDesc('cuestionarios_cacsp.id')
             ->paginate(20)->withQueryString();
 
-        $municipios = DB::table('municipios_col')->where('departamento_id', 18)->orderBy('nombre')->pluck('nombre', 'id');
+        $municipios = collect(Cuestionario::preguntas()['b_municipio']['opciones'] ?? []);
         $periodos = self::PERIODOS;
 
         return view('encuestas.cacsp.listado', compact('cuestionarios', 'periodo', 'periodos', 'municipio', 'municipios', 'buscar'));

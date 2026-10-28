@@ -7,7 +7,9 @@
         'Ubicación' => ucfirst(strtolower((string) $cuestionario->ubicacion)),
         'Estrato' => $cuestionario->estrato,
         'Sector' => ucfirst(strtolower((string) $cuestionario->sector)),
+        'Código suscriptor' => $respuestas['a_codigo_suscriptor'] ?? null,
         'Nombre' => $cuestionario->nombre,
+        'Número de cédula' => $respuestas['P1_cedula'] ?? null,
         'Edad' => $cuestionario->edad,
         'Sexo' => ['MASCULINO' => 'Masculino', 'FEMENINO' => 'Femenino', 'PREFIERO_NO_DECIR' => 'Prefiere no responder'][$cuestionario->sexo] ?? '',
         'Dirección' => $cuestionario->direccion,
@@ -44,7 +46,7 @@
         <h3 style="margin-bottom: 12px">Respuestas</h3>
         <table class="enc-tabla">
             @foreach($preguntas as $clave => $pregunta)
-                @continue(array_key_exists($clave, \App\Support\CuestionarioCacsp::DATOS_GENERALES))
+                @continue(array_key_exists($clave, \App\Support\CuestionarioCacsp::DATOS_GENERALES) || in_array($clave, ['a_codigo_suscriptor', 'P1_cedula'], true))
                 @if($pregunta['tipo'] === 'matriz')
                     @php $filasConRespuesta = collect($pregunta['filas'])->filter(fn ($f, $k) => isset($respuestas["$clave.$k"])); @endphp
                     @continue($filasConRespuesta->isEmpty())

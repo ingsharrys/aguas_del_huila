@@ -354,16 +354,28 @@ class SeguridadTest extends TestCase
     // 6. Cuestionario CACSP
     private function cacsp(array $respuestas, bool $autoriza = true, array $alternativas = []): \Illuminate\Testing\TestResponse
     {
-        DB::table('municipios_col')->insertOrIgnore(['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1]);
+        $this->municipiosCacsp();
 
         return $this->post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos', [
             'respuestas' => array_replace_recursive([
-                'b_municipio' => '10', 'c_ubicacion' => '2', 'd_estrato' => '3', 'e_sector' => '1', 'P1_nombre' => 'Luz', 'P2_edad' => 30,
+                'a_codigo_suscriptor' => 'SUS-0042', 'b_municipio' => '21', 'c_ubicacion' => '1', 'd_estrato' => '3', 'e_sector' => '1',
+                'P1_nombre' => 'Luz', 'P1_cedula' => '1075123456', 'P2_edad' => 30,
                 'P3_sexo' => '2', 'P4_direccion' => 'Vereda X', 'P5_barrio' => 'Rural', 'P6_telefono' => '3001234567',
                 'P44_fecha' => now()->toDateString(),
             ], $respuestas),
             'alternativas' => $alternativas,
         ] + ($autoriza ? ['autoriza' => 1] : []));
+    }
+
+    private function municipiosCacsp(): void
+    {
+        DB::table('municipios_col')->insertOrIgnore([
+            ['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1],
+            ['id' => 20, 'departamento_id' => 18, 'nombre' => 'Natagá', 'estado' => 1],
+            ['id' => 21, 'departamento_id' => 18, 'nombre' => 'Paicol', 'estado' => 1],
+            ['id' => 22, 'departamento_id' => 18, 'nombre' => 'SANTA MARIA', 'estado' => 1],
+            ['id' => 23, 'departamento_id' => 18, 'nombre' => 'Tarqui', 'estado' => 1],
+        ]);
     }
 
     private function cacspCompleto(): array
@@ -392,7 +404,7 @@ class SeguridadTest extends TestCase
         $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '1', 'aseo' => '1'], 'P8' => '5', 'P24' => 'X'])->assertSessionHasNoErrors();
 
         $claves = DB::table('cuestionarios_cacsp_respuestas')->pluck('pregunta_key')->all();
-        $this->assertEqualsCanonicalizing(['P7.acueducto', 'P7.alcantarillado', 'P7.aseo'], $claves);
+        $this->assertEqualsCanonicalizing(['a_codigo_suscriptor', 'P1_cedula', 'P7.acueducto', 'P7.alcantarillado', 'P7.aseo'], $claves);
     }
 
     public function test_cacsp_condicionales_obligatorias(): void
@@ -413,17 +425,48 @@ class SeguridadTest extends TestCase
 
         $c = DB::table('cuestionarios_cacsp')->first();
         $this->assertSame('9999999', $c->telefono);
-        $this->assertSame('RURAL', $c->ubicacion);
+        $this->assertSame('URBANO', $c->ubicacion);
         $this->assertSame('FEMENINO', $c->sexo);
 
         $r = DB::table('cuestionarios_cacsp_respuestas')->pluck('valor', 'pregunta_key');
         $this->assertSame('20 minutos', $r['P21']);
+        $this->assertSame('1075123456', $r['P1_cedula']);
+        $this->assertSame('SUS-0042', $r['a_codigo_suscriptor']);
         $this->assertSame('["1","6"]', $r['P37']);
         $this->assertSame('Poda de árboles', $r['P37_otro']);
         $this->assertSame('4', $r['P9.presion']);
         foreach (['P11', 'P12', 'P13.olores', 'P17', 'P30', 'P38.alcantarillado', 'P42'] as $oculta) {
             $this->assertArrayNotHasKey($oculta, $r->all(), "$oculta debía ignorarse");
         }
+    }
+
+    public function test_cacsp_ajustes_municipios_ubicacion_y_cedula(): void
+    {
+        // Solo los cuatro municipios, solo urbano y cédula numérica
+        $this->cacsp(['b_municipio' => '10', 'c_ubicacion' => '2', 'P1_cedula' => '10.751', 'P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2']])
+            ->assertSessionHasErrors(['respuestas.b_municipio', 'respuestas.c_ubicacion', 'respuestas.P1_cedula']);
+        $this->cacsp(['a_codigo_suscriptor' => '', 'P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2']])
+            ->assertSessionHasErrors('respuestas.a_codigo_suscriptor');
+    }
+
+    public function test_cacsp_santa_maria_sin_aseo(): void
+    {
+        // Aunque llegue "aseo = Sí" y respuestas de aseo, en Santa María se ignoran
+        $datos = $this->cacspCompleto();
+        $datos['b_municipio'] = '22';
+        $this->cacsp($datos)->assertSessionHasNoErrors();
+
+        $claves = DB::table('cuestionarios_cacsp_respuestas')->pluck('pregunta_key')->all();
+        $this->assertContains('P8', $claves);
+        foreach (['P7.aseo', 'P24', 'P25', 'P35.participo', 'P37', 'P38.aseo', 'P43'] as $aseo) {
+            $this->assertNotContains($aseo, $claves, "$aseo no debía guardarse en Santa María");
+        }
+
+        // En Santa María no se exigen las preguntas de aseo
+        $sinAseo = $this->cacspCompleto();
+        $sinAseo['b_municipio'] = '22';
+        unset($sinAseo['P24'], $sinAseo['P25'], $sinAseo['P35'], $sinAseo['P37'], $sinAseo['P37_otro'], $sinAseo['P7']['aseo']);
+        $this->cacsp($sinAseo)->assertSessionHasNoErrors();
     }
 
     public function test_cacsp_requiere_autorizacion_y_valores_validos(): void
@@ -435,10 +478,12 @@ class SeguridadTest extends TestCase
 
     public function test_cacsp_formulario_por_pasos(): void
     {
-        DB::table('municipios_col')->insertOrIgnore(['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1]);
+        $this->municipiosCacsp();
 
         $this->get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos')
-            ->assertOk()->assertSee('cx-paso', false)->assertSee('Revisión y envío')->assertSee('Neiva')->assertSee('cacsp-reglas', false);
+            ->assertOk()->assertSee('cx-paso', false)->assertSee('Revisión y envío')->assertSee('Paicol')->assertSee('SANTA MARIA')
+            ->assertDontSee('<option value="10"', false)->assertDontSee('>Rural<', false)->assertSee('Código suscriptor')->assertSee('Número de cédula')
+            ->assertDontSee('Encuestador')->assertDontSee('Supervisor')->assertSee('cacsp-reglas', false);
 
         $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2']]);
         $this->get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos')
@@ -457,12 +502,14 @@ class SeguridadTest extends TestCase
             ->assertViewHas('kpis', fn ($k) => $k['Calidad del Acueducto'] === 100 && $k['Calidad del Aseo'] === 0 && $k['Calidad del Alcantarillado'] === null)
             ->assertSee('Ciudad Limpia')->assertSee('Poda de árboles');
 
-        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/respuestas?buscar=Vereda')->assertOk()->assertSee('Luz')->assertSee('Neiva');
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/respuestas?buscar=Vereda')->assertOk()->assertSee('Luz')->assertSee('Paicol');
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/respuestas?buscar=1075123456')->assertOk()->assertSee('SUS-0042');
         $this->actingAs($admin)->get("/dashboard/encuestas/cacsp/respuestas/$id")->assertOk()->assertSee('20 minutos')->assertSee('Muy buena');
 
         $csv = $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/exportar')->assertOk()->streamedContent();
         $this->assertStringContainsString('Municipio', $csv);
-        $this->assertStringContainsString('Neiva', $csv);
+        $this->assertStringContainsString('Paicol', $csv);
+        $this->assertStringContainsString('1075123456', $csv);
         $this->assertStringContainsString('Recolección de basuras en domicilios, Otro', $csv);
 
         $this->actingAs($this->usuario('Extranet'))->delete("/dashboard/encuestas/cacsp/respuestas/$id")->assertForbidden();

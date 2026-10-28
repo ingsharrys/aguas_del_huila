@@ -19,6 +19,10 @@
 |  - alternativa: casilla que reemplaza la respuesta (ej. "No tiene teléfono" => 9999999).
 |  - otro: valor de la opción "Otro" que habilita la pregunta "<clave>_otro".
 |  - escala: true en preguntas de calificación (5 = mejor, 1 = peor, 9 = no sabe).
+|  - solo: en opciones de base de datos, limita la lista a esos nombres (sin importar tildes).
+|  - predeterminado: valor seleccionado de entrada.
+|  - En condiciones, "opcion:Nombre" se refiere a una opción por su texto (ej. un municipio)
+|    y ['distinto' => ...] se cumple cuando la respuesta NO es esa.
 |
 */
 
@@ -45,30 +49,34 @@ $atencion = [
 $tieneAcueducto      = ['P7.acueducto' => '1'];
 $tieneAlcantarillado = ['P7.alcantarillado' => '1'];
 $tieneAseo           = ['P7.aseo' => '1'];
+// En Santa María solo se evalúan acueducto y alcantarillado (no se pregunta por aseo)
+$municipioConAseo    = ['b_municipio' => ['distinto' => 'opcion:Santa María']];
 $tieneAcuOAlc        = ['P7.acueducto' => '1', 'P7.alcantarillado' => '1'];
 $noSabe              = ['etiqueta' => 'No sabe / No responde', 'valor' => '99'];
 
 return [
 
     /* ----------------------------------------------------------------- Identificación */
-    'a_id_muestra' => [
+    'a_codigo_suscriptor' => [
         'seccion' => 'Identificación de la encuesta',
-        'titulo' => 'Id de muestra',
+        'titulo' => 'Código suscriptor',
         'tipo' => 'text',
-        'obligatoria' => false,
-        'ayuda' => 'Código asignado por el supervisor (si aplica).',
+        'obligatoria' => true,
+        'ayuda' => 'Aparece en la factura del servicio.',
     ],
     'b_municipio' => [
         'titulo' => 'Municipio',
         'tipo' => 'select',
         'obligatoria' => true,
         'opciones' => 'db:municipios_col,departamento_id,18',
+        'solo' => ['Natagá', 'Paicol', 'Santa María', 'Tarqui'],
     ],
     'c_ubicacion' => [
         'titulo' => 'Ubicación',
         'tipo' => 'radio',
         'obligatoria' => true,
-        'opciones' => ['1' => 'Urbano', '2' => 'Rural'],
+        'opciones' => ['1' => 'Urbano'],
+        'predeterminado' => '1',
     ],
     'd_estrato' => [
         'titulo' => 'Estrato',
@@ -88,6 +96,11 @@ return [
         'seccion' => 'Datos generales del usuario',
         'titulo' => 'Nombre',
         'tipo' => 'text',
+        'obligatoria' => true,
+    ],
+    'P1_cedula' => [
+        'titulo' => 'Número de cédula',
+        'tipo' => 'cedula',
         'obligatoria' => true,
     ],
     'P2_edad' => [
@@ -130,7 +143,7 @@ return [
         'filas' => [
             'acueducto' => 'Servicio de Acueducto',
             'alcantarillado' => 'Servicio de Alcantarillado',
-            'aseo' => 'Servicio de Aseo',
+            'aseo' => ['Servicio de Aseo', $municipioConAseo],
         ],
         // Según el documento: si NO tiene acueducto, la encuesta termina
         'finaliza_si' => ['P7.acueducto' => '2'],
@@ -501,39 +514,12 @@ return [
         'si' => $tieneAseo,
     ],
 
-    /* ----------------------------------------------------------------- Control */
+    /* ----------------------------------------------------------------- Fecha */
     'P44_fecha' => [
-        'seccion' => 'Datos de control',
-        'titulo' => '44. Fecha de realización de la encuesta',
+        'seccion' => 'Fecha de diligenciamiento',
+        'titulo' => 'Fecha de diligenciamiento de la encuesta',
         'tipo' => 'date',
         'obligatoria' => true,
         'siempre' => true,
-    ],
-    'P45_encuestador' => [
-        'titulo' => '45. Encuestador (nombres y apellidos)',
-        'tipo' => 'text',
-        'obligatoria' => false,
-        'siempre' => true,
-        'ayuda' => 'Solo si la encuesta la aplica un encuestador.',
-    ],
-    'P45_encuestador_cc' => [
-        'titulo' => 'Número de cédula del encuestador',
-        'tipo' => 'number',
-        'obligatoria' => false,
-        'siempre' => true,
-        'si' => ['P45_encuestador' => '*'],
-    ],
-    'P46_supervisor' => [
-        'titulo' => '46. Supervisor (nombres y apellidos)',
-        'tipo' => 'text',
-        'obligatoria' => false,
-        'siempre' => true,
-    ],
-    'P46_supervisor_cc' => [
-        'titulo' => 'Número de cédula del supervisor',
-        'tipo' => 'number',
-        'obligatoria' => false,
-        'siempre' => true,
-        'si' => ['P46_supervisor' => '*'],
     ],
 ];

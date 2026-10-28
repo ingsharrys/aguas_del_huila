@@ -46,6 +46,7 @@ class CuestionarioController extends Controller
             'before_or_equal' => 'La fecha no puede ser posterior a hoy.',
             'after'           => 'Escriba una fecha válida.',
             'accepted'        => 'Debe autorizar el tratamiento de datos personales.',
+            'respuestas.P1_cedula.regex' => 'Escriba la cédula solo con números (entre 5 y 12 dígitos), sin puntos ni espacios.',
         ], $nombres);
 
         $datos = Cuestionario::normalizar($respuestas, $alternativas);

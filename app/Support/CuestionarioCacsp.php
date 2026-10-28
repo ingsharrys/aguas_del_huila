@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 /**
@@ -59,6 +60,15 @@ class CuestionarioCacsp
                     ->all();
             }
 
+            // Limitar la lista a ciertos nombres (sin importar tildes ni mayúsculas)
+            if (!empty($pregunta['solo']) && is_array($preguntas[$clave]['opciones'] ?? null)) {
+                $permitidos = array_map([static::class, 'normalizarTexto'], $pregunta['solo']);
+                $preguntas[$clave]['opciones'] = array_filter(
+                    $preguntas[$clave]['opciones'],
+                    fn ($nombre) => in_array(static::normalizarTexto($nombre), $permitidos, true)
+                );
+            }
+
             // Normalizar filas de matrices: [clave => ['texto' => ..., 'si' => [...]]]
             if (($pregunta['tipo'] ?? null) === 'matriz') {
                 $preguntas[$clave]['filas'] = collect($pregunta['filas'])->map(fn ($fila) => is_array($fila)
@@ -67,7 +77,53 @@ class CuestionarioCacsp
             }
         }
 
+        // Resolver referencias "opcion:Nombre" en las condiciones al valor real de la opción
+        foreach ($preguntas as $clave => $pregunta) {
+            foreach (['si', 'si_alguno', 'finaliza_si'] as $tipoCondicion) {
+                if (!empty($pregunta[$tipoCondicion])) {
+                    $preguntas[$clave][$tipoCondicion] = static::resolverCondiciones($pregunta[$tipoCondicion], $preguntas);
+                }
+            }
+            if (($pregunta['tipo'] ?? null) === 'matriz') {
+                foreach ($pregunta['filas'] as $fila => $definicion) {
+                    $preguntas[$clave]['filas'][$fila]['si'] = static::resolverCondiciones($definicion['si'], $preguntas);
+                }
+            }
+        }
+
         return static::$preguntas = $preguntas;
+    }
+
+    private static function resolverCondiciones(array $condiciones, array $preguntas): array
+    {
+        foreach ($condiciones as $ruta => $esperado) {
+            $opciones = $preguntas[strtok($ruta, '.')]['opciones'] ?? [];
+
+            $resolver = function ($valor) use ($opciones) {
+                if (!is_string($valor) || !str_starts_with($valor, 'opcion:')) {
+                    return $valor;
+                }
+                $buscado = static::normalizarTexto(substr($valor, 7));
+                foreach ((array) $opciones as $clave => $etiqueta) {
+                    if (static::normalizarTexto($etiqueta) === $buscado) {
+                        return (string) $clave;
+                    }
+                }
+
+                return '__sin_coincidencia__';
+            };
+
+            $condiciones[$ruta] = is_array($esperado)
+                ? array_map(fn ($v) => is_array($v) ? array_map($resolver, $v) : $resolver($v), $esperado)
+                : $resolver($esperado);
+        }
+
+        return $condiciones;
+    }
+
+    public static function normalizarTexto(string $texto): string
+    {
+        return Str::lower(trim(Str::ascii($texto)));
     }
 
     /**
@@ -92,11 +148,19 @@ class CuestionarioCacsp
             $visible = (!$finalizado || !empty($pregunta['siempre']))
                 && static::cumple($pregunta, $respuestas, $visibles);
 
+            // Lo que no se ve no cuenta para las condiciones siguientes (aunque llegue en la petición)
+            if (!$visible) {
+                unset($respuestas[$clave]);
+            }
+
             $visibles[$clave] = $visible;
 
             if ($visible && ($pregunta['tipo'] ?? null) === 'matriz') {
                 foreach ($pregunta['filas'] as $fila => $definicion) {
                     $filas[$clave][$fila] = static::condiciones($definicion['si'], $respuestas, $visibles, false);
+                    if (!$filas[$clave][$fila] && is_array($respuestas[$clave] ?? null)) {
+                        unset($respuestas[$clave][$fila]);
+                    }
                 }
                 // Una matriz sin filas visibles se oculta
                 if (!in_array(true, $filas[$clave] ?? [], true)) {
@@ -149,6 +213,10 @@ class CuestionarioCacsp
 
     private static function coincide(mixed $valor, mixed $esperado): bool
     {
+        if (is_array($esperado) && array_key_exists('distinto', $esperado)) {
+            return !static::coincide($valor, $esperado['distinto']);
+        }
+
         if ($esperado === '*') {
             return !blank($valor);
         }
@@ -211,6 +279,9 @@ class CuestionarioCacsp
                     break;
                 case 'tel':
                     $reglas[$campo] = [$requerido, 'nullable', 'regex:/^[0-9+\s()-]{7,20}$/'];
+                    break;
+                case 'cedula':
+                    $reglas[$campo] = [$requerido, 'nullable', 'regex:/^[0-9]{5,12}$/'];
                     break;
                 case 'date':
                     $reglas[$campo] = [$requerido, 'nullable', 'date', 'before_or_equal:today', 'after:2020-01-01'];

@@ -264,7 +264,7 @@
                                     <div class="cx-preguntas">
                                         @foreach($seccion['preguntas'] as $key => $pregunta)
                                             @php
-                                                $oldValue = old("respuestas.$key");
+                                                $oldValue = old("respuestas.$key", $errors->any() ? null : ($pregunta['predeterminado'] ?? null));
                                                 $tipo = $pregunta['tipo'];
                                                 $opciones = is_array($pregunta['opciones'] ?? null) ? $pregunta['opciones'] : [];
                                                 $obligatoria = !empty($pregunta['obligatoria']);
@@ -275,22 +275,23 @@
                                             @endphp
 
                                             <div class="cx-pregunta pregunta-container {{ $ancho ? 'cx-ancho' : '' }} {{ $errorPropio ? 'con-error' : '' }}" data-key="{{ $key }}">
-                                                <label class="cx-pregunta-titulo" id="titulo-{{ $key }}" @if(in_array($tipo, ['text', 'number', 'tel', 'date', 'textarea', 'select'])) for="campo-{{ $key }}" @endif>
+                                                <label class="cx-pregunta-titulo" id="titulo-{{ $key }}" @if(in_array($tipo, ['text', 'number', 'tel', 'cedula', 'date', 'textarea', 'select'])) for="campo-{{ $key }}" @endif>
                                                     {{ $pregunta['titulo'] }}@if($obligatoria)<span class="cx-obligatoria" aria-hidden="true">*</span>@endif
                                                 </label>
                                                 @isset($pregunta['ayuda'])<p class="cx-ayuda">{{ $pregunta['ayuda'] }}</p>@endisset
 
-                                                @if(in_array($tipo, ['text', 'number', 'tel', 'date']))
-                                                    <input type="{{ $tipo }}" id="campo-{{ $key }}" name="respuestas[{{ $key }}]" class="cx-input"
+                                                @if(in_array($tipo, ['text', 'number', 'tel', 'cedula', 'date']))
+                                                    <input type="{{ $tipo === 'cedula' ? 'text' : $tipo }}" id="campo-{{ $key }}" name="respuestas[{{ $key }}]" class="cx-input"
                                                            value="{{ $oldValue ?? ($tipo === 'date' ? now()->toDateString() : '') }}"
                                                            @if($obligatoria) required @endif
                                                            @if($tipo === 'number') inputmode="numeric" @endif
                                                            @if($tipo === 'tel') inputmode="tel" pattern="[0-9+\s()\-]{7,20}" autocomplete="tel" @endif
+                                                           @if($tipo === 'cedula') inputmode="numeric" pattern="[0-9]{5,12}" maxlength="12" placeholder="Sin puntos ni espacios" title="Entre 5 y 12 dígitos, sin puntos ni espacios" @endif
                                                            @if($key === 'P1_nombre') autocomplete="name" @endif
                                                            @if($tipo === 'date') max="{{ now()->toDateString() }}" @endif
                                                            @isset($pregunta['atributos']['min']) min="{{ $pregunta['atributos']['min'] }}" @endisset
                                                            @isset($pregunta['atributos']['max']) max="{{ $pregunta['atributos']['max'] }}" @endisset
-                                                           @if($tipo !== 'date') maxlength="255" @endif>
+                                                           @if(!in_array($tipo, ['date', 'cedula'])) maxlength="255" @endif>
 
                                                 @elseif($tipo === 'textarea')
                                                     <textarea id="campo-{{ $key }}" name="respuestas[{{ $key }}]" rows="3" maxlength="2000" class="cx-input" @if($obligatoria) required @endif>{{ $oldValue }}</textarea>
@@ -460,6 +461,9 @@
                 }
 
                 function coincide(ruta, esperado, visibles) {
+                    if (esperado && typeof esperado === 'object' && !Array.isArray(esperado) && 'distinto' in esperado) {
+                        return !coincide(ruta, esperado.distinto, visibles);
+                    }
                     if (visibles[ruta.split('.')[0]] === false) return false;
                     const actuales = valor(ruta);
                     if (esperado === '*') return actuales.length > 0;

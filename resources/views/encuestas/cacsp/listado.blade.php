@@ -32,7 +32,7 @@
                 <option value="{{ $id }}" @selected($municipio == $id)>{{ $nombre }}</option>
             @endforeach
         </select>
-        <input type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar por nombre, barrio o dirección" style="min-width: 260px">
+        <input type="search" name="buscar" value="{{ $buscar }}" placeholder="Buscar por nombre, cédula, código suscriptor o barrio" style="min-width: 260px">
         <button class="enc-boton" type="submit">Buscar</button>
     </form>
 
@@ -40,7 +40,7 @@
         <table class="enc-tabla">
             <thead>
                 <tr>
-                    <th>Fecha</th><th>Municipio</th><th>Nombre</th><th>Edad</th><th>Sexo</th><th>Estrato</th><th>Ubicación</th><th>Barrio</th><th></th>
+                    <th>Fecha</th><th>Municipio</th><th>Código suscriptor</th><th>Nombre</th><th>Cédula</th><th>Edad</th><th>Sexo</th><th>Estrato</th><th>Barrio</th><th></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,16 +48,17 @@
                     <tr>
                         <td>{{ optional($c->fecha_encuesta)->format('d/m/Y') }}</td>
                         <td>{{ $c->municipio_nombre ?? '—' }}</td>
+                        <td>{{ $c->codigo_suscriptor ?? '—' }}</td>
                         <td style="color: var(--texto)">{{ $c->nombre }}</td>
+                        <td>{{ $c->cedula ?? '—' }}</td>
                         <td>{{ $c->edad }}</td>
                         <td>{{ $sexo[$c->sexo] ?? '—' }}</td>
                         <td>{{ $c->estrato }}</td>
-                        <td>{{ ucfirst(strtolower((string) $c->ubicacion)) }}</td>
                         <td>{{ $c->barrio }}</td>
                         <td><a href="{{ route('dashboard.encuestas.cacsp.ver', $c->id) }}">Ver</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="9"><p class="enc-vacio">No hay cuestionarios con estos filtros.</p></td></tr>
+                    <tr><td colspan="10"><p class="enc-vacio">No hay cuestionarios con estos filtros.</p></td></tr>
                 @endforelse
             </tbody>
         </table>
