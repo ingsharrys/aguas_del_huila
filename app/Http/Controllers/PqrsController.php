@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Services\CorreoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -291,20 +292,20 @@ class PqrsController extends Controller
 
             // 1. Correo al administrador
             try {
-                Mail::to(trim('info@aguasdelhuila.gov.co'))->send(new PqrsAdminMail($pqrs));
-                // Mail::to(trim('sabicriollo@gmail.com'))->send(new PqrsAdminMail($pqrs));
+                $destinatariosInternos = CorreoService::destinatarios('pqrsdf_radicacion_interna', ['info@aguasdelhuila.gov.co']);
+                CorreoService::enviar('pqrsdf_radicacion_interna', $destinatariosInternos, new PqrsAdminMail($pqrs));
 
                 Log::channel('emails')->info("Correo ADMIN enviado con éxito", [
                     'pqrs_id' => $pqrs->id ?? null,
                     'radicado' => $pqrs->codigo_radicado ?? null,
-                    'destino' => 'info@aguasdelhuila.gov.co',
+                    'destino' => implode(', ', $destinatariosInternos ?? []),
                     'fecha'   => now()->toDateTimeString(),
                 ]);
             } catch (\Throwable $e) {
                 Log::channel('emails')->error("Error enviando correo ADMIN", [
                     'pqrs_id' => $pqrs->id ?? null,
                     'radicado' => $pqrs->codigo_radicado ?? null,
-                    'destino' => 'info@aguasdelhuila.gov.co',
+                    'destino' => implode(', ', $destinatariosInternos ?? []),
                     'excepcion' => get_class($e),
                     'error'   => $e->getMessage(),
                     'fecha'   => now()->toDateTimeString(),
@@ -314,7 +315,7 @@ class PqrsController extends Controller
             // 2. Correo al ciudadano (si ingresó correo)
             if (!empty($pqrs->correo_electronico)) {
                 try {
-                    Mail::to(trim($pqrs->correo_electronico))->send(new PqrsUsuarioMail($pqrs));
+                    CorreoService::enviar('pqrsdf_radicacion_ciudadano', $pqrs->correo_electronico, new PqrsUsuarioMail($pqrs));
 
                     Log::channel('emails')->info("Correo CIUDADANO enviado con éxito", [
                         'pqrs_id' => $pqrs->id ?? null,

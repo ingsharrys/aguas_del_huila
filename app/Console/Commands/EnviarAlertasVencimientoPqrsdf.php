@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Services\CorreoService;
 use Illuminate\Support\Facades\Log;
 
 class EnviarAlertasVencimientoPqrsdf extends Command
@@ -148,7 +149,7 @@ class EnviarAlertasVencimientoPqrsdf extends Command
             }
 
             // El envío ocurre fuera de la transacción.
-            Mail::to($destinatario->email)->send(
+            CorreoService::enviar('pqrsdf_vencimiento', $destinatario->email,
                 new AlertaVencimientoPqrsdfMail(
                     $pqr,
                     $destinatario,

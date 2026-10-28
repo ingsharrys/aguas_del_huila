@@ -25,6 +25,7 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestPreguntaController;
 use App\Http\Controllers\CuestionarioController;
+use App\Http\Controllers\ConfiguracionCorreoController;
 // Controladores para páginas
 use App\Http\Controllers\HomeController;
 // Controladores para páginel buscadoras
@@ -209,6 +210,13 @@ Route::prefix('dashboard')->group(function () {
         Route::resource('categorias', CategoriaController::class);
         Route::get('/importar/archivos', [ArchivoController::class, 'importarForm'])->name('archivos.importar.form');
         Route::post('/importar/archivos/zip', [ArchivoController::class, 'importar'])->name('archivos.importar');
+        // Configuración de correo (SMTP y remitentes por formulario)
+        Route::controller(ConfiguracionCorreoController::class)->prefix('configuracion/correo')->group(function () {
+            Route::get('/', 'edit')->name('configuracion.correo');
+            Route::put('/smtp', 'updateSmtp')->name('configuracion.correo.smtp');
+            Route::put('/probar', 'probar')->middleware('throttle:5,1')->name('configuracion.correo.probar');
+            Route::put('/remitentes', 'updateRemitentes')->name('configuracion.correo.remitentes');
+        });
     });
 
 });

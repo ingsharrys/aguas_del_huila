@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use App\Models\PqrsdfRespuesta;
 use App\Models\PqrsdfDocumento;
 use Illuminate\Support\Facades\Mail;
+use App\Services\CorreoService;
 use App\Mail\PqrsRespuestaMail;
 use App\Mail\PqrsAsignacionMail;
 use App\Exports\PqrsdfExport;
@@ -781,7 +782,7 @@ class EncuestaAdminController extends Controller
         // Enviar correo de notificación
         if (!empty($usuario->email)) {
             try {
-                Mail::to(trim($usuario->email))->send(new PqrsAsignacionMail($pqrs));
+                CorreoService::enviar('pqrsdf_asignacion', $usuario->email, new PqrsAsignacionMail($pqrs));
 
                 Log::channel('emails')->info("Correo ASIGNACIÓN enviado con éxito", [
                     'pqrs_id' => $pqrs->id ?? null,
@@ -1181,7 +1182,7 @@ class EncuestaAdminController extends Controller
         // 1. Correo al ciudadano (si ingresó correo)
         if (!empty($pqrsdf->correo_electronico)) {
             try {
-                Mail::to(trim($pqrsdf->correo_electronico))->send(new PqrsRespuestaMail($respuesta));
+                CorreoService::enviar('pqrsdf_respuesta', $pqrsdf->correo_electronico, new PqrsRespuestaMail($respuesta));
 
                 Log::channel('emails')->info("Correo de respuesta CIUDADANO enviado con éxito", [
                     'pqrs_id' => $pqrsdf->id ?? null,
