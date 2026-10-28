@@ -69,7 +69,7 @@ class ArchivoController extends Controller
         $year = now()->format('Y');
 
         // Obtener la extensión del archivo
-        $extension = ArchivoSeguro::extension($request->file('archivo'), ArchivoSeguro::DOCUMENTOS_INSTITUCIONALES);
+        $extension = ArchivoSeguro::extension($request->file('archivo'), ArchivoSeguro::DOCUMENTOS_INSTITUCIONALES, 'archivo');
 
         // Definir el nombre final del archivo
         $filename = $slug . '.' . $extension;

@@ -106,8 +106,8 @@
                                 required
                             >
                                 <option value="">Seleccione una opción</option>
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
+                                <option value="1" @selected(old('discapacidad') == '1')>Sí</option>
+                                <option value="0" @selected(old('discapacidad') == '0')>No</option>
                             </select>
                         </div>
                     
@@ -125,11 +125,11 @@
                                 required
                             >
                                 <option value="">Seleccione una opción</option>
-                                <option value="visual">Visual</option>
-                                <option value="auditiva">Auditiva</option>
-                                <option value="fisica_motora">Física o motora</option>
-                                <option value="cognitiva">Cognitiva</option>
-                                <option value="otra">Otra</option>
+                                <option value="visual" @selected(old('tipo_discapacidad') == 'visual')>Visual</option>
+                                <option value="auditiva" @selected(old('tipo_discapacidad') == 'auditiva')>Auditiva</option>
+                                <option value="fisica_motora" @selected(old('tipo_discapacidad') == 'fisica_motora')>Física o motora</option>
+                                <option value="cognitiva" @selected(old('tipo_discapacidad') == 'cognitiva')>Cognitiva</option>
+                                <option value="otra" @selected(old('tipo_discapacidad') == 'otra')>Otra</option>
                             </select>
                         </div>
                     
@@ -141,7 +141,7 @@
                             <input
                                 type="text"
                                 id="otra_discapacidad"
-                                name="otra_discapacidad"
+                                name="otra_discapacidad" value="{{ old('otra_discapacidad') }}"
                                 disabled
                                 class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                 placeholder="Ingrese el tipo de discapacidad"
@@ -167,7 +167,7 @@
                                             <span class="block text-xs text-gray-500">Se registrarán sus datos de contacto</span>
                                         </div>
                                     </div>
-                                    <input type="radio" id="identificado" name="identificado_anonimo" value="identificado" checked onchange="toggleFormulario()" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer" />
+                                    <input type="radio" id="identificado" name="identificado_anonimo" value="identificado" @checked(old('identificado_anonimo', 'identificado') === 'identificado') onchange="toggleFormulario()" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer" />
                                 </label>
 
                                 <!-- Opción: Anónimo -->
@@ -181,7 +181,7 @@
                                             <span class="block text-xs text-gray-500">No se solicitará información personal</span>
                                         </div>
                                     </div>
-                                    <input type="radio" id="anonimo" name="identificado_anonimo" value="anonimo" onchange="toggleFormulario()" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer" />
+                                    <input type="radio" id="anonimo" name="identificado_anonimo" value="anonimo" onchange="toggleFormulario()" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer"  @checked(old('identificado_anonimo') === 'anonimo')/>
                                 </label>
 
                             </div>
@@ -221,10 +221,10 @@
                                     class="campo-identificado block w-full text-sm text-black border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 px-2 py-4"
                                 >
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Persona Natural">Persona Natural</option>
-                                    <option value="Persona Jurídica">Persona Jurídica</option>
-                                    <option value="Niños, Niñas y Adolescentes">Niños, Niñas y Adolescentes</option>
-                                    <option value="Apoderado">Apoderado</option>
+                                    <option value="Persona Natural" @selected(old('tipo_solicitante') == 'Persona Natural')>Persona Natural</option>
+                                    <option value="Persona Jurídica" @selected(old('tipo_solicitante') == 'Persona Jurídica')>Persona Jurídica</option>
+                                    <option value="Niños, Niñas y Adolescentes" @selected(old('tipo_solicitante') == 'Niños, Niñas y Adolescentes')>Niños, Niñas y Adolescentes</option>
+                                    <option value="Apoderado" @selected(old('tipo_solicitante') == 'Apoderado')>Apoderado</option>
                                 </select>
                             </div>
 
@@ -259,7 +259,7 @@
                                 <input
                                     type="number"
                                     id="numero_identificacion"
-                                    name="numero_identificacion"
+                                    name="numero_identificacion" value="{{ old('numero_identificacion') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el número de identificación / NIT"
                                 >
@@ -273,7 +273,7 @@
                                 <input
                                     type="text"
                                     id="razon_social"
-                                    name="razon_social"
+                                    name="razon_social" value="{{ old('razon_social') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese la razón social"
                                 >
@@ -287,7 +287,7 @@
                                 <input
                                     type="text"
                                     id="nombre_usuario"
-                                    name="nombre_usuario"
+                                    name="nombre_usuario" value="{{ old('nombre_usuario') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el nombre del usuario"
                                 >
@@ -301,7 +301,7 @@
                                 <input
                                     type="text"
                                     id="apellido_usuario"
-                                    name="apellido_usuario"
+                                    name="apellido_usuario" value="{{ old('apellido_usuario') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el apellido del usuario"
                                 >
@@ -315,7 +315,7 @@
                                 <input
                                     type="email"
                                     id="correo_electronico"
-                                    name="correo_electronico"
+                                    name="correo_electronico" value="{{ old('correo_electronico') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el correo electrónico"
                                 >
@@ -333,8 +333,8 @@
                                     class="campo-identificado block w-full text-sm text-black border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 px-2 py-4"
                                 >
                                     <option value="">Seleccione un país</option>
-                                    <option value="Colombia">Colombia</option>
-                                    <option value="otro">Otro</option>
+                                    <option value="Colombia" @selected(old('pais') == 'Colombia')>Colombia</option>
+                                    <option value="otro" @selected(old('pais') == 'otro')>Otro</option>
                                 </select>
                             </div>
 
@@ -347,7 +347,7 @@
                                 <input
                                     type="text"
                                     id="otro_pais"
-                                    name="otro_pais"
+                                    name="otro_pais" value="{{ old('otro_pais') }}"
                                     class="w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el nombre del país"
                                 >
@@ -369,7 +369,7 @@
 
                                     @foreach($departamentos as $departamento)
 
-                                        <option value="{{ $departamento->id }}">
+                                        <option value="{{ $departamento->id }}" @selected(old('departamento_id') == $departamento->id)>
 
                                             {{ $departamento->nombre }}
 
@@ -404,7 +404,7 @@
                                 <input
                                     type="text"
                                     id="direccion"
-                                    name="direccion"
+                                    name="direccion" value="{{ old('direccion') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese la dirección"
                                 >
@@ -413,13 +413,13 @@
                             <!-- telefono fijo -->
                             <div>
                                 <label for="fijo" class="block text-sm font-semibold text-gray-800 mb-2">
-                                    Teléfono Fijo <span class="font-bold text-red-800">*</span>
+                                    Teléfono Fijo <span class="text-gray-500 font-normal">(opcional)</span>
                                 </label>
 
                                 <input
                                     type="number"
                                     id="fijo"
-                                    name="fijo"
+                                    name="fijo" data-opcional="1" value="{{ old('fijo') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el teléfono fijo"
                                 >
@@ -434,7 +434,7 @@
                                 <input
                                     type="number"
                                     id="movil"
-                                    name="movil"
+                                    name="movil" value="{{ old('movil') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el teléfono móvil"
                                 >
@@ -463,40 +463,40 @@
                                 >
                                     <option value="">Seleccione una opción</option>
                                     <optgroup label="Notificaciones">
-                                        <option value="Fallos">Fallos</option>
-                                        <option value="Avisos">Avisos</option>
-                                        <option value="Sentencias">Sentencias</option>
-                                        <option value="PDA">PDA</option>
-                                        <option value="Edictos">Edictos</option>
+                                        <option value="Fallos" @selected(old('tipo_pqrsf') == 'Fallos')>Fallos</option>
+                                        <option value="Avisos" @selected(old('tipo_pqrsf') == 'Avisos')>Avisos</option>
+                                        <option value="Sentencias" @selected(old('tipo_pqrsf') == 'Sentencias')>Sentencias</option>
+                                        <option value="PDA" @selected(old('tipo_pqrsf') == 'PDA')>PDA</option>
+                                        <option value="Edictos" @selected(old('tipo_pqrsf') == 'Edictos')>Edictos</option>
                                     </optgroup>
 
                                     <optgroup label="Peticiones">
-                                        <option value="Solicitud disponibilidad de servicios">Solicitud disponibilidad de servicios</option>
-                                        <option value="Denuncia">Denuncia</option>
-                                        <option value="Solicitud de permiso laboral">Solicitud de permiso laboral</option>
-                                        <option value="Derechos de petición">Derechos de petición</option>
-                                        <option value="Memorandos">Memorandos</option>
-                                        <option value="Cobros">Cobros</option>
-                                        <option value="Solicitud de certificado">Solicitud de certificado</option>
-                                        <option value="Acciones populares">Acciones populares</option>
-                                        <option value="Acciones de tutelas">Acciones de tutelas</option>
-                                        <option value="Solicitud certificado laboral">Solicitud certificado laboral</option>
-                                        <option value="Solicitud visita técnica">Solicitud visita técnica</option>
+                                        <option value="Solicitud disponibilidad de servicios" @selected(old('tipo_pqrsf') == 'Solicitud disponibilidad de servicios')>Solicitud disponibilidad de servicios</option>
+                                        <option value="Denuncia" @selected(old('tipo_pqrsf') == 'Denuncia')>Denuncia</option>
+                                        <option value="Solicitud de permiso laboral" @selected(old('tipo_pqrsf') == 'Solicitud de permiso laboral')>Solicitud de permiso laboral</option>
+                                        <option value="Derechos de petición" @selected(old('tipo_pqrsf') == 'Derechos de petición')>Derechos de petición</option>
+                                        <option value="Memorandos" @selected(old('tipo_pqrsf') == 'Memorandos')>Memorandos</option>
+                                        <option value="Cobros" @selected(old('tipo_pqrsf') == 'Cobros')>Cobros</option>
+                                        <option value="Solicitud de certificado" @selected(old('tipo_pqrsf') == 'Solicitud de certificado')>Solicitud de certificado</option>
+                                        <option value="Acciones populares" @selected(old('tipo_pqrsf') == 'Acciones populares')>Acciones populares</option>
+                                        <option value="Acciones de tutelas" @selected(old('tipo_pqrsf') == 'Acciones de tutelas')>Acciones de tutelas</option>
+                                        <option value="Solicitud certificado laboral" @selected(old('tipo_pqrsf') == 'Solicitud certificado laboral')>Solicitud certificado laboral</option>
+                                        <option value="Solicitud visita técnica" @selected(old('tipo_pqrsf') == 'Solicitud visita técnica')>Solicitud visita técnica</option>
                                     </optgroup>
 
                                     <optgroup label="Quejas">
-                                        <option value="Prestación de servicios">Prestación de servicios</option>
-                                        <option value="Daños causados por obras">Daños causados por obras</option>
+                                        <option value="Prestación de servicios" @selected(old('tipo_pqrsf') == 'Prestación de servicios')>Prestación de servicios</option>
+                                        <option value="Daños causados por obras" @selected(old('tipo_pqrsf') == 'Daños causados por obras')>Daños causados por obras</option>
                                     </optgroup>
 
                                     <optgroup label="Reclamos">
-                                        <option value="Facturación">Facturación</option>
-                                        <option value="Solicitud de información">Solicitud de información</option>
+                                        <option value="Facturación" @selected(old('tipo_pqrsf') == 'Facturación')>Facturación</option>
+                                        <option value="Solicitud de información" @selected(old('tipo_pqrsf') == 'Solicitud de información')>Solicitud de información</option>
                                     </optgroup>
 
                                     <optgroup label="Sugerencias">
-                                        <option value="Citaciones - Invitaciones">Citaciones - Invitaciones</option>
-                                        <option value="Propuesta">Propuesta</option>
+                                        <option value="Citaciones - Invitaciones" @selected(old('tipo_pqrsf') == 'Citaciones - Invitaciones')>Citaciones - Invitaciones</option>
+                                        <option value="Propuesta" @selected(old('tipo_pqrsf') == 'Propuesta')>Propuesta</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -514,9 +514,9 @@
                                     required
                                 >
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Cartelera Virtual">Cartelera Virtual</option>
-                                    <option value="Correo Electrónico">Correo electrónico</option>
-                                    <option value="Físico / Mensajería">Físico / Mensajería</option>
+                                    <option value="Cartelera Virtual" @selected(old('tipo_respuesta') == 'Cartelera Virtual')>Cartelera Virtual</option>
+                                    <option value="Correo Electrónico" @selected(old('tipo_respuesta') == 'Correo Electrónico')>Correo electrónico</option>
+                                    <option value="Físico / Mensajería" @selected(old('tipo_respuesta') == 'Físico / Mensajería')>Físico / Mensajería</option>
                                 </select>
                             </div>
 
@@ -528,7 +528,7 @@
                                 <input
                                     type="email"
                                     id="correo_electronico_mensajeria"
-                                    name="correo_electronico"
+                                    name="correo_electronico" value="{{ old('correo_electronico') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el correo electrónico"
                                     disabled
@@ -544,7 +544,7 @@
                                 <input
                                     type="text"
                                     id="direccion_mensajeria"
-                                    name="direccion_mensajeria"
+                                    name="direccion_mensajeria" value="{{ old('direccion_mensajeria') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="EJ: Calle 1 # 1-1, Barrio Centro, Neiva, Huila"
                                     required
@@ -560,7 +560,7 @@
                                 <input
                                     type="text"
                                     id="asunto"
-                                    name="asunto"
+                                    name="asunto" value="{{ old('asunto') }}"
                                     class="campo-identificado w-full border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500 px-2 py-4 text-gray-900"
                                     placeholder="Ingrese el asunto"
                                     required
@@ -580,7 +580,7 @@
                                     placeholder="Ingrese la descripción"
                                     rows="4"
                                     required
-                                ></textarea>
+                                >{{ old('descripcion') }}</textarea>
                             </div>
 
                             <!-- Documentos adjuntos (opcional) -->
@@ -840,10 +840,20 @@
                 const selectTipoRespuesta = document.getElementById('tipo_respuesta');
 
                 // Forzar Cartelera Virtual cuando el usuario sea anónimo
+                const opcionCartelera = selectTipoRespuesta.querySelector('option[value="Cartelera Virtual"]');
+
                 if (!esIdentificado) {
+                    opcionCartelera.hidden = false;
+                    opcionCartelera.disabled = false;
                     selectTipoRespuesta.value = 'Cartelera Virtual';
                     selectTipoRespuesta.disabled = true;
                 } else {
+                    // La Cartelera Virtual es solo para solicitudes anónimas
+                    opcionCartelera.hidden = true;
+                    opcionCartelera.disabled = true;
+                    if (selectTipoRespuesta.value === 'Cartelera Virtual') {
+                        selectTipoRespuesta.value = '';
+                    }
                     selectTipoRespuesta.disabled = false;
                 }
 
@@ -945,7 +955,7 @@
 
                         // Solo son obligatorios los campos visibles (un campo oculto obligatorio bloquea el envío)
                         campos.forEach(campo => {
-                            campo.required = !campo.closest('.hidden');
+                            campo.required = !campo.closest('.hidden') && !campo.dataset.opcional;
                         });
 
                     } else {
@@ -980,6 +990,8 @@
                 const razonSocial = document.getElementById('razon_social');
                 const nombreUsuario = document.getElementById('nombre_usuario');
                 const apellidoUsuario = document.getElementById('apellido_usuario');
+
+                let tipoIdentificacionAnterior = @json(old('tipo_identificacion'));
 
                 function actualizarTipoSolicitante() {
 
@@ -1034,6 +1046,12 @@
                     }
 
                     tipoIdentificacion.selectedIndex = 0;
+
+                    // Recuperar el valor enviado si el formulario volvió con errores
+                    if (tipoIdentificacionAnterior) {
+                        tipoIdentificacion.value = tipoIdentificacionAnterior;
+                        tipoIdentificacionAnterior = null;
+                    }
                 }
 
                 tipoSolicitante.addEventListener('change', actualizarTipoSolicitante);
@@ -1123,6 +1141,12 @@
 
                             });
 
+                            // Recuperar el municipio enviado si el formulario volvió con errores
+                            if (municipioAnterior) {
+                                municipio.value = municipioAnterior;
+                                municipioAnterior = null;
+                            }
+
                         })
 
                         .catch(error => {
@@ -1135,6 +1159,12 @@
                         });
 
                 });
+
+                // Si el formulario volvió con errores, recargar los municipios del departamento elegido
+                let municipioAnterior = @json(old('municipio_id'));
+                if (departamento.value) {
+                    departamento.dispatchEvent(new Event('change'));
+                }
             </script>
 
             <!-- modal de busqueda -->

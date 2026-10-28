@@ -52,7 +52,7 @@ class BannerController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = ArchivoSeguro::extension($request->file('imagen'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('imagen'), ArchivoSeguro::IMAGENES, 'imagen');
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen')->storeAs("banners/{$year}", $filename, 'public');
@@ -105,7 +105,7 @@ class BannerController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = ArchivoSeguro::extension($request->file('imagen'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('imagen'), ArchivoSeguro::IMAGENES, 'imagen');
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen')->storeAs("banners/{$year}", $filename, 'public');

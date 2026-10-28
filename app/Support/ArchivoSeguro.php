@@ -18,16 +18,16 @@ class ArchivoSeguro
 
     // Documentos institucionales (incluye formatos de datos y comprimidos para descargas)
     public const DOCUMENTOS_INSTITUCIONALES = [
-        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp', 'csv', 'txt',
-        'jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mp3', 'zip', 'rar',
+        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'pps', 'ppsx', 'odt', 'ods', 'odp', 'odg', 'csv', 'txt', 'rtf',
+        'jpg', 'jpeg', 'png', 'gif', 'webp', 'tif', 'tiff', 'mp4', 'mov', 'mp3', 'zip', 'rar', '7z', 'kmz', 'kml', 'dwg', 'dxf',
     ];
 
     /**
      * Guarda el archivo y devuelve la ruta relativa dentro del disco.
      */
-    public static function guardar(UploadedFile $archivo, string $carpeta, array $permitidas, string $disco = 'public'): string
+    public static function guardar(UploadedFile $archivo, string $carpeta, array $permitidas, string $disco = 'public', string $campo = 'file'): string
     {
-        $extension = static::extension($archivo, $permitidas);
+        $extension = static::extension($archivo, $permitidas, $campo);
 
         return $archivo->storeAs($carpeta, Str::uuid() . '.' . $extension, $disco);
     }
@@ -35,21 +35,27 @@ class ArchivoSeguro
     /**
      * Extensión segura: la del nombre original solo si está permitida y coincide con el contenido.
      */
-    public static function extension(UploadedFile $archivo, array $permitidas): string
+    public static function extension(UploadedFile $archivo, array $permitidas, string $campo = 'archivo'): string
     {
         $original = strtolower($archivo->getClientOriginalExtension());
         $detectada = strtolower((string) $archivo->guessExtension());
 
-        // Equivalencias habituales entre la extensión y la detección por contenido
+        // Extensiones que el contenido puede reportar de otra forma (Office = zip, CSV = texto, etc.)
         $equivalentes = [
-            'jpeg' => 'jpg',
-            'docx' => 'zip', 'xlsx' => 'zip', 'pptx' => 'zip', 'odt' => 'zip', 'ods' => 'zip', 'odp' => 'zip',
-            'doc' => 'bin', 'xls' => 'bin', 'ppt' => 'bin', 'csv' => 'txt',
+            'jpg'  => ['jpeg'], 'jpeg' => ['jpg'], 'tif' => ['tiff'], 'tiff' => ['tif'],
+            'docx' => ['zip'], 'xlsx' => ['zip'], 'xlsm' => ['zip', 'xlsx'], 'pptx' => ['zip'], 'ppsx' => ['zip', 'pptx'],
+            'odt' => ['zip'], 'ods' => ['zip'], 'odp' => ['zip'], 'odg' => ['zip'], 'kmz' => ['zip'],
+            'doc' => ['xls', 'ppt', 'msg'], 'xls' => ['doc', 'ppt', 'html', 'txt'], 'ppt' => ['doc', 'xls', 'pps'], 'pps' => ['ppt'],
+            'csv' => ['txt', 'c', 'html'], 'txt' => ['c', 'csv'], 'kml' => ['xml', 'txt'], 'dxf' => ['txt'], 'rtf' => ['txt'],
+            'mov' => ['qt'],
         ];
 
+        $imagenes = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'tif', 'tiff'];
+
         $coincide = $original === $detectada
-            || ($equivalentes[$original] ?? null) === $detectada
-            || ($equivalentes[$detectada] ?? null) === $original
+            || in_array($detectada, $equivalentes[$original] ?? [], true)
+            // Imagen con la extensión de otro formato de imagen (ej. JPG guardado como .png)
+            || (in_array($original, $imagenes, true) && in_array($detectada, $imagenes, true))
             || in_array($detectada, ['', 'bin'], true); // contenido no identificable: se confía en la lista blanca
 
         if (in_array($original, $permitidas, true) && $coincide) {
@@ -57,7 +63,7 @@ class ArchivoSeguro
         }
 
         throw ValidationException::withMessages([
-            'archivo' => "El archivo \"{$archivo->getClientOriginalName()}\" no tiene un formato permitido.",
+            $campo => "El archivo \"{$archivo->getClientOriginalName()}\" no tiene un formato permitido.",
         ]);
     }
 }

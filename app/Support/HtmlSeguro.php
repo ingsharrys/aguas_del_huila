@@ -27,13 +27,21 @@ class HtmlSeguro
         '#^https://player\.vimeo\.com/video/#i',
         '#^https://(www\.)?google\.com/maps/embed#i',
         '#^https://(www\.)?facebook\.com/plugins/#i',
+        '#^https://(docs|drive|calendar)\.google\.com/#i',
+        '#^https://app\.powerbi\.com/#i',
+        '#^https://(www\.)?canva\.com/design/#i',
+        '#^https://(e\.)?issuu\.com/#i',
+        '#^https://view\.genial\.ly/#i',
+        '#^https://(www\.)?slideshare\.net/#i',
+        '#^https://open\.spotify\.com/embed/#i',
+        '#^https://(www\.)?datos\.gov\.co/#i',
     ];
 
     // Etiquetas que se eliminan junto con su contenido
     private const PELIGROSAS = ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'svg', 'math', 'link', 'meta', 'base', 'frame', 'frameset', 'template', 'noscript'];
 
     private const ATRIBUTOS = [
-        '*'   => ['style', 'title', 'class'],
+        '*'   => ['style', 'title', 'class', 'id'],
         'a'   => ['href', 'target', 'rel'],
         'img' => ['src', 'alt', 'width', 'height'],
         'td'  => ['colspan', 'rowspan', 'width', 'height', 'align', 'valign'],
@@ -51,7 +59,9 @@ class HtmlSeguro
         'text-align', 'color', 'background-color', 'font-weight', 'font-style', 'font-size', 'font-family',
         'text-decoration', 'width', 'height', 'max-width', 'padding', 'padding-left', 'padding-right',
         'margin', 'margin-left', 'margin-right', 'border', 'border-collapse', 'vertical-align', 'line-height',
-        'list-style-type',
+        'list-style-type', 'float', 'display', 'margin-top', 'margin-bottom', 'padding-top', 'padding-bottom',
+        'border-width', 'border-style', 'border-color', 'border-top', 'border-bottom', 'border-left', 'border-right',
+        'text-indent', 'text-transform', 'letter-spacing', 'white-space', 'min-width', 'min-height', 'max-height', 'object-fit',
     ];
 
     /**

@@ -73,7 +73,7 @@ class NoticiaController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES, 'imagen_portada');
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');
@@ -136,7 +136,7 @@ class NoticiaController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES, 'imagen_portada');
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');

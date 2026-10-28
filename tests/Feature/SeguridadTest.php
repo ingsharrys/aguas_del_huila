@@ -193,7 +193,7 @@ class SeguridadTest extends TestCase
 
         $propia = PqrsdfRespuesta::forceCreate(['pqrsdf_id' => $deArea->id, 'usuario_id' => $jefe->id, 'estado' => 1]);
         $otra = PqrsdfRespuesta::forceCreate(['pqrsdf_id' => $deArea->id, 'usuario_id' => $extranet->id, 'estado' => 1]);
-        $this->assertFalse(Gate::forUser($jefe)->allows('aprobarRespuesta', [$deArea, $propia]), 'un jefe no aprueba su propia respuesta');
+        $this->assertTrue(Gate::forUser($jefe)->allows('aprobarRespuesta', [$deArea, $propia]), 'el jefe aprueba aunque la PQRSDF esté asignada a él');
         $this->assertTrue(Gate::forUser($jefe)->allows('aprobarRespuesta', [$deArea, $otra]));
         $this->assertFalse(Gate::forUser($extranet)->allows('aprobarRespuesta', [$suya, $otra]));
     }
@@ -246,6 +246,33 @@ class SeguridadTest extends TestCase
         $this->assertSame(0, EncuestaPqrsdf::count());
     }
 
+    public function test_pqrsdf_identificada_no_puede_usar_cartelera(): void
+    {
+        $this->post('/participa/pqr', $this->datosPqrs(['tipo_respuesta' => 'Cartelera Virtual']))->assertSessionHasErrors('tipo_respuesta');
+    }
+
+    public function test_archivos_legitimos_no_se_rechazan(): void
+    {
+        $casos = [
+            ['informe.pdf', "%PDF-1.4\n%âãÏÓ\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF"],
+            ['datos.csv', "nombre,valor\nAna,1\n"],
+            ['nota.txt', "Hola mundo"],
+            ['foto.jpg', base64_decode('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==')],
+            ['foto-renombrada.png', base64_decode('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==')],
+        ];
+        foreach ($casos as [$nombre, $contenido]) {
+            $tmp = tempnam(sys_get_temp_dir(), 'leg');
+            file_put_contents($tmp, $contenido);
+            $ext = \App\Support\ArchivoSeguro::extension(new UploadedFile($tmp, $nombre, null, null, true), \App\Support\ArchivoSeguro::DOCUMENTOS_INSTITUCIONALES);
+            $this->assertSame(pathinfo($nombre, PATHINFO_EXTENSION), $ext, $nombre);
+        }
+
+        $tmp = tempnam(sys_get_temp_dir(), 'mal');
+        file_put_contents($tmp, '<html><script>alert(1)</script></html>');
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        \App\Support\ArchivoSeguro::extension(new UploadedFile($tmp, 'informe.pdf', null, null, true), \App\Support\ArchivoSeguro::DOCUMENTOS);
+    }
+
     public function test_pqrsdf_identificada_completa_se_radica(): void
     {
         $this->post('/participa/pqr', $this->datosPqrs())->assertSessionHasNoErrors();
@@ -286,11 +313,8 @@ class SeguridadTest extends TestCase
     }
 
     // 5. Cartelera virtual
-    public function test_cartelera_no_muestra_respuestas_vencidas_y_limpia_html(): void
+    public function test_cartelera_limpia_html_de_la_respuesta(): void
     {
-        $vieja = $this->pqrs(['identificado_anonimo' => 'anonimo', 'tipo_respuesta' => 'Cartelera Virtual', 'estado' => 'Respondida', 'fecha_respuesta' => now()->subWeekdays(10)]);
-        $this->getJson("/participa/pqr/carteleravirtual/{$vieja->codigo_radicado}/respuesta")->assertNotFound();
-
         $nueva = $this->pqrs(['identificado_anonimo' => 'anonimo', 'tipo_respuesta' => 'Cartelera Virtual', 'estado' => 'Respondida', 'fecha_respuesta' => now()]);
         PqrsdfRespuesta::forceCreate(['pqrsdf_id' => $nueva->id, 'tipo_respuesta' => 'Cartelera Virtual', 'estado' => 2, 'titulo_respuesta' => 'T', 'texto_respuesta' => '<p>Hola</p><img src=x onerror=alert(1)><script>alert(2)</script>']);
 

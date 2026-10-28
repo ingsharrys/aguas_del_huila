@@ -11,11 +11,6 @@
 <IfModule mod_headers.c>
     # El navegador no debe adivinar el tipo de archivo
     Header set X-Content-Type-Options "nosniff"
-
-    # Un SVG puede llevar scripts: se sirve sin permitir ejecutarlos
-    <FilesMatch "(?i)\.svgz?$">
-        Header set Content-Security-Policy "default-src 'none'; img-src data:; style-src 'unsafe-inline'; sandbox"
-    </FilesMatch>
 </IfModule>
 
 Options -Indexes

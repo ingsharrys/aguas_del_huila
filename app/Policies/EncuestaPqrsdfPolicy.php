@@ -47,7 +47,7 @@ class EncuestaPqrsdfPolicy
     }
 
     /**
-     * Aprobar una respuesta para enviarla al ciudadano: Administrador, Editor o jefe, y no su propia respuesta.
+     * Aprobar o devolver una respuesta en revisión: Administrador, Editor o jefe.
      */
     public function aprobarRespuesta(User $user, EncuestaPqrsdf $pqrs, PqrsdfRespuesta $respuesta): bool
     {
@@ -59,7 +59,7 @@ class EncuestaPqrsdfPolicy
             return true;
         }
 
-        return (bool) $user->es_jefe && $respuesta->usuario_id != $user->id;
+        return (bool) $user->es_jefe;
     }
 
     public function eliminar(User $user, EncuestaPqrsdf $pqrs): bool

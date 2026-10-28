@@ -90,6 +90,7 @@
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', "{{ route('upload.image') }}");
                 xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                xhr.setRequestHeader('Accept', 'application/json');
 
                 xhr.upload.onprogress = (e) => {
                     progress(e.loaded / e.total * 100);
@@ -97,7 +98,9 @@
 
                 xhr.onload = () => {
                     if (xhr.status < 200 || xhr.status >= 300) {
-                        reject('Error HTTP: ' + xhr.status);
+                        let mensaje = 'Error al subir la imagen (' + xhr.status + ').';
+                        try { const r = JSON.parse(xhr.responseText); mensaje = (r.errors && r.errors.file && r.errors.file[0]) || r.message || mensaje; } catch (e) {}
+                        reject({ message: mensaje, remove: true });
                         return;
                     }
 

@@ -926,6 +926,11 @@ class EncuestaAdminController extends Controller
 
         Gate::authorize('gestionar', $pqrsdf);
 
+        // Verificar el formato real de los adjuntos antes de guardar (el error se muestra en el formulario)
+        foreach ($request->file('documentos', []) as $i => $documento) {
+            ArchivoSeguro::extension($documento, ArchivoSeguro::DOCUMENTOS, "documentos.$i");
+        }
+
 
         /*
         |--------------------------------------------------------------------------

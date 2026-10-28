@@ -70,7 +70,7 @@ class FuncionarioController extends Controller
         if ($request->hasFile('foto')) {
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('foto')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES, 'foto');
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('foto')->storeAs("funcionarios/", $filename, 'public');
@@ -146,7 +146,7 @@ class FuncionarioController extends Controller
                 PATHINFO_FILENAME
             );
 
-            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES);
+            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES, 'foto');
 
             $filename = Str::slug($originalName)
                 . '-'

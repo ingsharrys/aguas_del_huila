@@ -151,6 +151,11 @@ class PqrsController extends Controller
             'documentos.*'          => 'documento adjunto',
         ]);
 
+        // Verificar el formato real de los adjuntos antes de guardar (el error se muestra en el formulario)
+        foreach ($request->file('documentos', []) as $i => $documento) {
+            ArchivoSeguro::extension($documento, ArchivoSeguro::DOCUMENTOS, "documentos.$i");
+        }
+
         // Una solicitud anónima no guarda datos personales aunque lleguen en la petición
         if (!$esIdentificado) {
             $request->merge(array_fill_keys([
@@ -414,12 +419,6 @@ class PqrsController extends Controller
             ->where('identificado_anonimo', 'anonimo')
             ->where('tipo_respuesta', 'Cartelera Virtual')
             ->first();
-
-        // Las respuestas solo están publicadas durante 5 días hábiles, igual que en el listado
-        if ($pqr && $pqr->estado === 'Respondida' && (!$pqr->fecha_respuesta
-            || Carbon::parse($pqr->fecha_respuesta)->lt(Carbon::today()->subWeekdays(5)))) {
-            $pqr = null;
-        }
 
         if (!$pqr) {
             return response()->json([
