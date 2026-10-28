@@ -57,7 +57,7 @@
                 <!-- Columna derecha – Contenido -->
                 <div class="lg:col-span-2 bg-white shadow-md p-6 rounded-lg">
                     <div class="prose max-w-none text-black">
-                        {!! $post->contenido !!}
+                        {!! \App\Support\HtmlSeguro::contenido($post->contenido) !!}
                     </div>
 
                     <!-- Archivos disponibles para comentarios -->

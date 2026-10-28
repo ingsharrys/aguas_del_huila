@@ -52,7 +52,7 @@ class AreaController extends Controller
     {
         $data = $request->validate([
             'nombre'    => 'required|string|max:255|unique:areas,nombre,' . $area->id,
-            'parent_id' => 'nullable|exists:areas,id',
+            'parent_id' => 'nullable|exists:areas,id|not_in:' . $area->id, // un área no puede ser su propia área padre
             'estado'    => 'required|boolean',
         ]);
 

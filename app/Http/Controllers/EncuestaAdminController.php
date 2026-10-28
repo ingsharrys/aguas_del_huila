@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\PqrsdfRespuesta;
 use App\Models\PqrsdfDocumento;
+use App\Models\PqrsdfArchivos;
+use App\Support\ArchivoSeguro;
+use App\Support\HtmlSeguro;
 use Illuminate\Support\Facades\Mail;
 use App\Services\CorreoService;
 use App\Mail\PqrsRespuestaMail;
@@ -23,6 +26,7 @@ use App\Exports\PqrsdfExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 
 class EncuestaAdminController extends Controller
 {
@@ -134,6 +138,7 @@ class EncuestaAdminController extends Controller
 
     public function destroy(EncuestaEvaluacion $evaluacion)
     {
+        abort_unless(auth()->user()->hasAnyRole(['Administrador', 'Editor']), 403);
 
         // Eliminar la evaluación de la base de datos
         $evaluacion->delete();
@@ -166,6 +171,7 @@ class EncuestaAdminController extends Controller
 
     public function destroyTramite(Encuesta $tramite)
     {
+        abort_unless(auth()->user()->hasAnyRole(['Administrador', 'Editor']), 403);
 
         // Eliminar el trámite de la base de datos
         $tramite->delete();
@@ -221,7 +227,7 @@ class EncuestaAdminController extends Controller
                 // Asignadas pero todavía sin responder
                 'revision' => EncuestaPqrsdf::where(
                     'estado',
-                    'Revsión'
+                    'Revisión'
                 )->count(),
 
                 // Asignadas y próximas a vencer
@@ -680,6 +686,7 @@ class EncuestaAdminController extends Controller
 
     public function destroyPqrsdf(EncuestaPqrsdf $pqrsdf)
     {
+        Gate::authorize('eliminar', $pqrsdf);
 
         // Eliminar el PQRSDF de la base de datos
         $pqrsdf->delete();
@@ -687,6 +694,27 @@ class EncuestaAdminController extends Controller
         // Redirigir con mensaje de éxito
         session()->flash('success', 'PQRSDF eliminado correctamente');
         return redirect()->route('dashboard.comunicaciones.pqrsdf');
+    }
+
+    /**
+     * Adjunto de un ciudadano: solo para quien puede ver la PQRSDF.
+     */
+    public function descargarArchivoPqrsdf(PqrsdfArchivos $archivo)
+    {
+        $pqrs = EncuestaPqrsdf::findOrFail($archivo->pqrsdf_id);
+
+        Gate::authorize('ver', $pqrs);
+
+        // Los adjuntos nuevos están en el disco privado; los antiguos pueden seguir en el público
+        $disco = Storage::disk('local')->exists($archivo->ruta) ? 'local' : 'public';
+        abort_unless(Storage::disk($disco)->exists($archivo->ruta), 404);
+
+        $nombre = $archivo->nombre_original ?: basename($archivo->ruta);
+        $verEnNavegador = in_array(strtolower((string) $archivo->extension), ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+
+        return $verEnNavegador
+            ? Storage::disk($disco)->response($archivo->ruta, $nombre, ['X-Content-Type-Options' => 'nosniff'])
+            : Storage::disk($disco)->download($archivo->ruta, $nombre);
     }
 
     public function exportarPqrsdf(Request $request)
@@ -705,6 +733,8 @@ class EncuestaAdminController extends Controller
                 'departamento',
                 'municipio',
             ])->findOrFail($id);
+
+        Gate::authorize('ver', $pqrs);
 
         $areas = Area::with([
             'usuarios' => function ($query) {
@@ -736,6 +766,7 @@ class EncuestaAdminController extends Controller
         ]);
 
         $pqrs = EncuestaPqrsdf::findOrFail($id);
+        Gate::authorize('gestionar', $pqrs);
         $usuario = User::with('area')->findOrFail($request->user_id);
 
         // Verificar que el usuario tenga un área asignada
@@ -893,6 +924,8 @@ class EncuestaAdminController extends Controller
             $request->pqrsdf_id
         );
 
+        Gate::authorize('gestionar', $pqrsdf);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -937,7 +970,7 @@ class EncuestaAdminController extends Controller
 
                 'titulo_respuesta' => $request->titulo_respuesta,
 
-                'texto_respuesta' => $request->texto_respuesta,
+                'texto_respuesta' => HtmlSeguro::limpiar($request->texto_respuesta),
 
                 'estado' => 1,
 
@@ -962,66 +995,9 @@ class EncuestaAdminController extends Controller
 
                     $nombreOriginal = $documento->getClientOriginalName();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Obtener nombre sin extensión
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $nombre = pathinfo(
-                        $nombreOriginal,
-                        PATHINFO_FILENAME
-                    );
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Crear slug
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $slug = Str::slug($nombre);
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Extensión
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $extension = strtolower(
-                        $documento->getClientOriginalExtension()
-                    );
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Crear nombre final
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $filename = $slug . '.' . $extension;
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Evitar archivos con el mismo nombre
-                    |--------------------------------------------------------------------------
-                    */
-
-                    if (
-                        PqrsdfDocumento::where(
-                            'nombre_archivo',
-                            $filename
-                        )->exists()
-                    ) {
-
-                        $slug .= '-' . uniqid();
-
-                        $filename = $slug . '.' . $extension;
-                    }
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Guardar archivo
-                    |--------------------------------------------------------------------------
-                    */
+                    // Extensión de la lista permitida y nombre aleatorio (no adivinable)
+                    $extension = ArchivoSeguro::extension($documento, ArchivoSeguro::DOCUMENTOS);
+                    $filename = Str::uuid() . '.' . $extension;
 
                     $ruta = $documento->storeAs(
                         'posts/pqrsdf',
@@ -1151,6 +1127,8 @@ class EncuestaAdminController extends Controller
             'respuestas.documentos',
         ])->findOrFail($id);
 
+        Gate::authorize('ver', $pqrsdf);
+
         return view(
             'encuestas.pqrsdfRespuestas',
             compact('pqrsdf')
@@ -1162,6 +1140,8 @@ class EncuestaAdminController extends Controller
         $respuesta = PqrsdfRespuesta::findOrFail($id);
         // Cambiamos a $pqrsdf para mantener consistencia con el uso posterior
         $pqrsdf = EncuestaPqrsdf::findOrFail($respuesta->pqrsdf_id);
+
+        Gate::authorize('aprobarRespuesta', [$pqrsdf, $respuesta]);
 
         // 1. Actualizar la respuesta como aprobada
         $respuesta->update([
@@ -1214,6 +1194,8 @@ class EncuestaAdminController extends Controller
         $respuesta = PqrsdfRespuesta::findOrFail($id);
         $pqrs = EncuestaPqrsdf::findOrFail($respuesta->pqrsdf_id);
 
+        Gate::authorize('aprobarRespuesta', [$pqrs, $respuesta]);
+
         // 1. Actualizar la respuesta con las correcciones (estado 0 = Devuelta)
         $respuesta->update([
             'estado'         => 0, 
@@ -1237,6 +1219,9 @@ class EncuestaAdminController extends Controller
         ]);
 
         $pqrs = EncuestaPqrsdf::findOrFail($id);
+
+        Gate::authorize('gestionar', $pqrs);
+        abort_if(in_array($pqrs->estado, ['Cancelada', 'Respondida']), 422, 'La PQRSDF ya fue cerrada.');
 
         $pqrs->update([
             'estado' => 'Cancelada',

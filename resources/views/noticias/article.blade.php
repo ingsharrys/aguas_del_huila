@@ -51,7 +51,7 @@
                     </p>
 
                     <div class="prose max-w-none text-justify text-gray-900">
-                        {!! $noticia->contenido !!}
+                        {!! \App\Support\HtmlSeguro::contenido($noticia->contenido) !!}
                     </div>
 
                     <hr class="my-10">

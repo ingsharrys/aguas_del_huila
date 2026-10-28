@@ -106,7 +106,7 @@ class ServicioController extends Controller
         // Si se sube una nueva icono, eliminar la anterior y guardar la nueva
         if ($request->hasFile('icono')) {
             if ($servicio->icono) {
-                Storage::delete('public/' . $servicio->icono);
+                Storage::disk('public')->delete($servicio->icono);
             }
 
             $imagenIcon = $request->file('icono')->store('servicios/iconos', 'public');
@@ -116,7 +116,7 @@ class ServicioController extends Controller
         // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
         if ($request->hasFile('imagen_portada')) {
             if ($servicio->imagen_portada) {
-                Storage::delete('public/' . $servicio->imagen_portada);
+                Storage::disk('public')->delete($servicio->imagen_portada);
             }
 
             $imagen = $request->file('imagen_portada')->store('servicios', 'public');

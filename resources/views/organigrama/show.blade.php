@@ -73,7 +73,7 @@
         
                                         <div>
                                             <div class="text-black text-justify">
-                                                {!! $funcionario->descripcion !!}
+                                                {!! \App\Support\HtmlSeguro::contenido($funcionario->descripcion) !!}
                                             </div>
                                         </div>
         
@@ -181,7 +181,7 @@
                                             <div>
         
                                                 <div class="text-black text-justify">
-                                                    {!! $funcionario->descripcion !!}
+                                                    {!! \App\Support\HtmlSeguro::contenido($funcionario->descripcion) !!}
                                                 </div>
         
                                             </div>

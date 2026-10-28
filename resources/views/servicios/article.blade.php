@@ -30,7 +30,7 @@
                     </p>
 
                     <div class="prose max-w-none text-justify text-gray-900">
-                        {!! $servicio->contenido !!}
+                        {!! \App\Support\HtmlSeguro::contenido($servicio->contenido) !!}
                     </div>
 
                     <hr class="my-10">

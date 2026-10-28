@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ArchivoSeguro;
 use App\Models\Noticia;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
@@ -72,7 +73,7 @@ class NoticiaController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $request->file('imagen_portada')->getClientOriginalExtension();
+            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES);
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');
@@ -116,7 +117,7 @@ class NoticiaController extends Controller
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
             'categoria_id' => 'nullable|exists:categorias,id',
-            'imagen_portada' => 'nullable|image|max:500',
+            'imagen_portada' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:500',
         ], [
                 'imagen_portada.max' => 'La imagen no debe superar los 500 KB.',
             ]);
@@ -135,7 +136,7 @@ class NoticiaController extends Controller
             $year = now()->format('Y');
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('imagen_portada')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $request->file('imagen_portada')->getClientOriginalExtension();
+            $extension = ArchivoSeguro::extension($request->file('imagen_portada'), ArchivoSeguro::IMAGENES);
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('imagen_portada')->storeAs("noticias/{$year}", $filename, 'public');

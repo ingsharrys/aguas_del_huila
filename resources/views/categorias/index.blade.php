@@ -43,7 +43,7 @@
                             <tr class="hover:bg-blue-50 hover:text-gray-900">
                                 <td class="px-4 py-2 border">{{ $categoria->id }}</td>
                                 <td class="px-4 py-2 border">{{ $categoria->nombre }}</td>
-                                <td class="px-4 py-2 border">{!! $categoria->descripcion !!}</td>
+                                <td class="px-4 py-2 border">{!! \App\Support\HtmlSeguro::contenido($categoria->descripcion) !!}</td>
                                 <td class="px-4 py-2 border">{{ $categoria->created_at->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2 border text-center flex justify-center gap-2">
 

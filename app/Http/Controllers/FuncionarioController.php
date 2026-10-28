@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ArchivoSeguro;
 use App\Models\Funcionario;
 use App\Models\Organigrama;
 use Illuminate\Http\Request;
@@ -69,7 +70,7 @@ class FuncionarioController extends Controller
         if ($request->hasFile('foto')) {
             // Obtener el nombre y la extensión del archivo
             $originalName = pathinfo($request->file('foto')->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $request->file('foto')->getClientOriginalExtension();
+            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES);
             $filename = Str::slug($originalName) . '-' . uniqid() . '.' . $extension;
             // Guardar en la carpeta 'posts/archivos/AÑO/'
             $rutaImagen = $request->file('foto')->storeAs("funcionarios/", $filename, 'public');
@@ -145,7 +146,7 @@ class FuncionarioController extends Controller
                 PATHINFO_FILENAME
             );
 
-            $extension = $request->file('foto')->getClientOriginalExtension();
+            $extension = ArchivoSeguro::extension($request->file('foto'), ArchivoSeguro::IMAGENES);
 
             $filename = Str::slug($originalName)
                 . '-'
@@ -190,7 +191,7 @@ class FuncionarioController extends Controller
 
         // Redirigir con mensaje de éxito
         session()->flash('success', 'Noticia eliminada correctamente');
-        return redirect()->route('funcionario.index');
+        return redirect()->route('funcionarios.index');
     }
 
 

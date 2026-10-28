@@ -32,7 +32,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 // Manejar imagenes dentro del editor de texto
 use App\Http\Controllers\UploadController;
-Route::post('/upload-image', [UploadController::class, 'uploadImage'])->name('upload.image');
+Route::post('/upload-image', [UploadController::class, 'uploadImage'])
+    ->middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet|Control Interno', 'throttle:30,1'])
+    ->name('upload.image');
 
 // Página principal pública
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -55,7 +57,7 @@ Route::get('/documentos/{path}', [PostController::class, 'file'])
 // Página vista del archivo para descargas
 Route::get('/archivos/documentos/{postSlug}/{archivoSlug}', [PostController::class, 'document'])->name('posts.document');
 // Guardar comentario del archivo
-Route::post('/comentarios-archivo/{archivo}',[PostController::class,'guardarComentario'])->name('archivo.comentario');
+Route::post('/comentarios-archivo/{archivo}',[PostController::class,'guardarComentario'])->middleware('throttle:5,1')->name('archivo.comentario');
 
 // ===============================================================================================================
 // Contratacion ==================================================================================================
@@ -119,11 +121,11 @@ Route::view('/participa/convocatorias', 'participacion.convocatoria')->name('con
 Route::view('/participa/calendario', 'participacion.calendario')->name('calendario');
 // pqr 
 Route::get('/participa/pqr', [PqrsController::class, 'index'])->name('pqr');
-Route::get('/municipios/{departamento}',[PqrsController::class, 'municipios'])->name('municipios');
-Route::post('/participa/pqr',[PqrsController::class, 'store'])->name('pqr.store');
-Route::post('/participa/pqr/buscar', [PqrsController::class, 'searchCode'])->name('pqr.search');
-Route::get('/participa/pqr/carteleravirtual', [PqrsController::class, 'carteleravirtual'])->name('carteleravirtual');
-Route::get('/participa/pqr/carteleravirtual/{codigo}/respuesta',[PqrsController::class, 'consultarRespuestaCartelera'])->name('carteleravirtual.respuesta');
+Route::get('/municipios/{departamento}',[PqrsController::class, 'municipios'])->middleware('throttle:60,1')->name('municipios');
+Route::post('/participa/pqr',[PqrsController::class, 'store'])->middleware('throttle:5,1')->name('pqr.store');
+Route::post('/participa/pqr/buscar', [PqrsController::class, 'searchCode'])->middleware('throttle:10,1')->name('pqr.search');
+Route::get('/participa/pqr/carteleravirtual', [PqrsController::class, 'carteleravirtual'])->middleware('throttle:30,1')->name('carteleravirtual');
+Route::get('/participa/pqr/carteleravirtual/{codigo}/respuesta',[PqrsController::class, 'consultarRespuestaCartelera'])->middleware('throttle:15,1')->name('carteleravirtual.respuesta');
 // foro 
 Route::view('/participa/foro', 'participacion.foro')->name('foro');
 // chat 
@@ -134,13 +136,13 @@ Route::view('/participa/denuncias', 'participacion.denuncias')->name('denuncias'
 Route::view('/participa/directorio-funcionarios', 'participacion.directoriofuncionarios')->name('directoriofuncionarios');
 // Encuesta de tramites
 Route::get('/atencion-y-servicios-a-la-ciudadania/encuesta-de-satisfaccion-de-tramites-y-servicios',[EncuestaController::class, 'index'])->name('encuesta.tramite');
-Route::post('/atencion-y-servicios-a-la-ciudadania/encuesta-de-satisfaccion-de-tramites-y-servicios',[EncuestaController::class, 'store'])->name('tramite.store');
+Route::post('/atencion-y-servicios-a-la-ciudadania/encuesta-de-satisfaccion-de-tramites-y-servicios',[EncuestaController::class, 'store'])->middleware('throttle:5,1')->name('tramite.store');
 // Encuesta de satisfacción
 Route::get('/transparencia-y-acceso-a-la-informacion-publica/encuesta-de-evaluacion',[EncuestaController::class, 'formEvaluacion'])->name('encuesta.evaluacion');
-Route::post('/transparencia-y-acceso-a-la-informacion-publica/encuesta-de-evaluacion',[EncuestaController::class, 'storeEvaluacion'])->name('evaluacion.store');
+Route::post('/transparencia-y-acceso-a-la-informacion-publica/encuesta-de-evaluacion',[EncuestaController::class, 'storeEvaluacion'])->middleware('throttle:5,1')->name('evaluacion.store');
 // Cuestionario de atencion al cliente
 Route::get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos',[CuestionarioController::class, 'formCACSP'])->name('cuestionario.cacsp');
-Route::post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos',[CuestionarioController::class, 'storeCACSP'])->name('cuestionario.cacsp.store');
+Route::post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos',[CuestionarioController::class, 'storeCACSP'])->middleware('throttle:5,1')->name('cuestionario.cacsp.store');
 
 
 // ===============================================================================================================
@@ -191,23 +193,24 @@ Route::prefix('dashboard')->group(function () {
 
     // Administrador y Editor
     Route::middleware(['auth', 'user.active', 'role:Administrador|Editor'])->group(function () {
-        Route::resource('banners', BannerController::class);
-        Route::resource('noticias', NoticiaController::class);
+        Route::resource('banners', BannerController::class)->except(['show']);
+        Route::resource('noticias', NoticiaController::class)->except(['show']);
         Route::resource('posts', PostController::class);
-        Route::resource('archivos', ArchivoController::class);
+        Route::resource('archivos', ArchivoController::class)->except(['show', 'edit', 'update']);
         Route::resource('comentarios', ComentarioController::class)->only(['index','destroy']);
         Route::patch('comentarios/{comentario}/aprobar', [ComentarioController::class,'aprobar'])->name('comentarios.aprobar');
-        Route::resource('funcionarios', FuncionarioController::class);
-        Route::resource('usuarios', UsuarioController::class);
-        Route::resource('areas', AreaController::class);
-        Route::resource('cargos', CargoController::class);
+        Route::resource('funcionarios', FuncionarioController::class)->except(['show']);
+        Route::resource('usuarios', UsuarioController::class)->except(['show']);
         });
         
     // Solo Administrador
     Route::middleware(['auth', 'user.active', 'role:Administrador'])->group(function () {
-        Route::resource('servicios', ServicioController::class);
+        Route::resource('servicios', ServicioController::class)->except(['show']);
         Route::resource('organigrama', OrganigramaController::class); 
-        Route::resource('categorias', CategoriaController::class);
+        Route::resource('categorias', CategoriaController::class)->except(['show']);
+        // Áreas y cargos definen permisos (ej. Control Interno): solo Administrador
+        Route::resource('areas', AreaController::class)->except(['show']);
+        Route::resource('cargos', CargoController::class)->except(['show']);
         Route::get('/importar/archivos', [ArchivoController::class, 'importarForm'])->name('archivos.importar.form');
         Route::post('/importar/archivos/zip', [ArchivoController::class, 'importar'])->name('archivos.importar');
         // Configuración de correo (SMTP y remitentes por formulario)
@@ -249,6 +252,7 @@ Route::prefix('dashboard/comunicaciones')->group(function () {
         Route::get('/reportes', 'reportes')->name('dashboard.comunicaciones.reportes');
         Route::get('/pqrsdf', 'pqrsdf')->name('dashboard.comunicaciones.pqrsdf');
         Route::get('/pqrsdf/exportar','exportarPqrsdf')->name('dashboard.comunicaciones.pqrsdf.exportar');
+        Route::get('/pqrsdf/archivo/{archivo}','descargarArchivoPqrsdf')->name('dashboard.comunicaciones.pqrsdf.archivo');
         Route::get('/pqrsdf/{id}', 'showPqrsdf')->name('dashboard.comunicaciones.pqrsdf.show');
         Route::put('/pqrsdf/cancelar/{id}','cancelarPqrsdf')->name('dashboard.comunicaciones.pqrsdf.cancelar');
         Route::delete('/pqrsdf/{pqrsdf}', 'destroyPqrsdf')->name('dashboard.comunicaciones.pqrsdf.destroy');
@@ -307,4 +311,4 @@ Route::prefix('dashboard/test')->group(function () {
         
 // Vista del test para el público
 Route::get('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/{slug}',[TestController::class, 'show'])->name('test.publico');
-Route::post('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/{slug}',[TestController::class, 'resultados'])->name('test.publico.store');
+Route::post('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/{slug}',[TestController::class, 'resultados'])->middleware('throttle:10,1')->name('test.publico.store');

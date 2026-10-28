@@ -351,6 +351,7 @@ class TestController extends Controller
             'mensaje' => [
                 'required',
                 'string',
+                'max:1000',
             ],
 
             'respuestas' => [

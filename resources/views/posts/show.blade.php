@@ -51,7 +51,7 @@
 
                     <div x-show="tab === '{{ $pda->slug }}'">
                         <h2 class="text-2xl font-bold text-[#0047DC] mb-4">Plan Departamental de Aguas (PDA)</h2>
-                        <div class="text-gray-900 leading-relaxed">{!! $pda->contenido !!}</div>
+                        <div class="text-gray-900 leading-relaxed">{!! \App\Support\HtmlSeguro::contenido($pda->contenido) !!}</div>
                         @if(isset($archivos[$pda->id]) && $archivos[$pda->id]->count())
                             <h3 class="text-xl font-semibold text-[#0047DC] mb-2">Archivos disponibles:</h3>
                             <ul class="list-disc ml-6">
@@ -75,7 +75,7 @@
                     <div x-show="tab === '{{ $pdaHijo->slug }}'">
                         <h2 class="text-2xl font-bold text-[#0047DC] mb-4">{{ $pdaHijo->nombre }}</h2>
 
-                        <div class="text-gray-900 leading-relaxed">{!! $pdaHijo->contenido !!}</div>
+                        <div class="text-gray-900 leading-relaxed">{!! \App\Support\HtmlSeguro::contenido($pdaHijo->contenido) !!}</div>
 
                         @if(isset($archivos[$pdaHijo->id]) && $archivos[$pdaHijo->id]->count())
                             <h3 class="text-xl font-semibold text-[#0047DC] mt-6 mb-3">Archivos disponibles:</h3>

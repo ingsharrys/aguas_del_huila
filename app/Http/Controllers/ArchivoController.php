@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ArchivoSeguro;
 use App\Models\Post;
 use App\Models\Archivo;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class ArchivoController extends Controller
         $request->validate([
             'nombre' => 'required|string',
             'post_id' => 'required|int',
-            'archivo' => 'required|file|max:40960', // máx 40MB
+            'archivo' => 'required|file|max:40960|extensions:' . implode(',', ArchivoSeguro::DOCUMENTOS_INSTITUCIONALES), // máx 40MB
             'comentarios' => 'nullable|boolean',
             'inicio' => 'required_if:comentarios,1|nullable|date',
             'fin' => 'nullable|date|after_or_equal:inicio',
@@ -68,7 +69,7 @@ class ArchivoController extends Controller
         $year = now()->format('Y');
 
         // Obtener la extensión del archivo
-        $extension = $request->file('archivo')->getClientOriginalExtension();
+        $extension = ArchivoSeguro::extension($request->file('archivo'), ArchivoSeguro::DOCUMENTOS_INSTITUCIONALES);
 
         // Definir el nombre final del archivo
         $filename = $slug . '.' . $extension;

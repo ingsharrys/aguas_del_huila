@@ -76,6 +76,18 @@
                     </div>
                 </div>
 
+                @if($errors->any())
+                    <div id="errores-formulario" class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800" role="alert">
+                        <p class="font-semibold mb-2">No se pudo radicar la solicitud. Revise lo siguiente:</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            @foreach($errors->all() as $mensaje)
+                                <li>{{ $mensaje }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <script>document.addEventListener('DOMContentLoaded', () => document.getElementById('errores-formulario')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));</script>
+                @endif
+
                 <form action="{{ route('pqr.store') }}" method="POST" class="space-y-6" enctype="multipart/form-data">
                     @csrf
                 
@@ -578,7 +590,7 @@
 
                                 <div class="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition hover:border-green-500">
 
-                                    <input type="file" name="documentos[]" id="documentos" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip" class="hidden">
+                                    <input type="file" name="documentos[]" id="documentos" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx" class="hidden">
 
                                     <label for="documentos" class="block cursor-pointer">
 
@@ -588,7 +600,7 @@
 
                                         <p class="mt-1 text-xs text-gray-500">Puedes adjuntar hasta 5 archivos.</p>
 
-                                        <p class="mt-1 text-xs text-gray-400">PDF, imágenes, Word, Excel, PowerPoint o ZIP.</p>
+                                        <p class="mt-1 text-xs text-gray-400">PDF, imágenes, Word, Excel, o PowerPoint.</p>
 
                                         <p class="mt-1 text-xs text-gray-400">Tamaño máximo: 10 MB por archivo.</p>
 
@@ -931,8 +943,9 @@
                         bloque.classList.remove('hidden');
                         infocartelera.classList.add('hidden');
 
+                        // Solo son obligatorios los campos visibles (un campo oculto obligatorio bloquea el envío)
                         campos.forEach(campo => {
-                            campo.required = true;
+                            campo.required = !campo.closest('.hidden');
                         });
 
                     } else {
@@ -970,7 +983,7 @@
 
                 function actualizarTipoSolicitante() {
 
-                    const esJuridica = tipoSolicitante.value === 'persona_juridica';
+                    const esJuridica = tipoSolicitante.value === 'Persona Jurídica';
 
                     // Limpiar opciones
                     tipoIdentificacion.innerHTML = '';
@@ -1259,8 +1272,7 @@
                         'jpg', 'jpeg', 'png', 'gif', 'webp',
                         'doc', 'docx',
                         'xls', 'xlsx',
-                        'ppt', 'pptx',
-                        'zip'
+                        'ppt', 'pptx'
                     ];
 
                     let archivosSeleccionados = new DataTransfer();

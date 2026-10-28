@@ -271,7 +271,7 @@
 
                         <div class="prose max-w-none text-sm leading-7 text-gray-700">
 
-                            {!! nl2br($respuesta->texto_respuesta) !!}
+                            {!! \App\Support\HtmlSeguro::mostrar($respuesta->texto_respuesta) !!}
 
                         </div>
 
@@ -394,8 +394,8 @@
                             </div>
 
                         </div>
-                    @elseif($respuesta->estado == 1 && (!auth()->user()->hasRole('Control Interno') || $pqrsdf->area_id == 25))
-                        @if(auth()->user()->hasAnyRole(['Administrador', 'Editor']) || auth()->user()->es_jefe)
+                    @elseif($respuesta->estado == 1 && (!auth()->user()->hasRole('Control Interno') || $pqrsdf->area_id == config('pqrsdf.area_control_interno')))
+                        @if(auth()->user()->can('aprobarRespuesta', [$pqrsdf, $respuesta]))
                             <div class="bg-white p-5 rounded-lg shadow border-t border-green-700 mb-6 relative">
                                 <!-- 🎯 ACCIONES DEL JEFE (Solo visible si está en Revisión/Pendiente y el usuario es Jefe) -->
                                 <div class="mt-6 pt-4 border-t flex gap-3">

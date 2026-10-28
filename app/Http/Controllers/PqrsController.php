@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ArchivoSeguro;
+use App\Support\HtmlSeguro;
 use App\Mail\PqrsAdminMail;
 use App\Mail\PqrsUsuarioMail;
 use App\Models\DepartamentoCol;
@@ -16,6 +18,7 @@ use App\Services\CorreoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 
 class PqrsController extends Controller
@@ -65,38 +68,49 @@ class PqrsController extends Controller
                 : $request->input('tipo_respuesta'),
         ]);
 
+        $esIdentificado = $request->input('identificado_anonimo') === 'identificado';
+        $esJuridica     = $request->input('tipo_solicitante') === 'Persona Jurídica';
+        $esOtroPais     = strtolower((string) $request->input('pais')) === 'otro';
+
+        // Obligatorio solo si el ciudadano se identifica
+        $siIdentificado = $esIdentificado ? 'required' : 'nullable';
+
         $request->validate([
 
             'discapacidad'             => 'required|boolean',
-            'tipo_discapacidad'        => 'nullable|string|max:150',
-            'otra_discapacidad'        => 'nullable|string|max:255',
+            'tipo_discapacidad'        => 'required_if:discapacidad,1|nullable|string|max:150',
+            'otra_discapacidad'        => 'required_if:tipo_discapacidad,otra|nullable|string|max:255',
 
             'identificado_anonimo'     => 'required|in:identificado,anonimo',
 
-            'tipo_solicitante'         => 'nullable|string|max:100',
-            'tipo_identificacion'      => 'nullable|string|max:100',
-            'numero_identificacion'    => 'nullable|string|max:50',
+            'tipo_solicitante'         => [$siIdentificado, 'nullable', 'string', 'max:100'],
+            'tipo_identificacion'      => [$siIdentificado, 'nullable', 'string', 'max:100'],
+            'numero_identificacion'    => [$siIdentificado, 'nullable', 'string', 'max:50'],
 
-            'razon_social'             => 'nullable|string|max:255',
-            'nombre_usuario'           => 'nullable|string|max:150',
-            'apellido_usuario'         => 'nullable|string|max:150',
+            'razon_social'             => [$esIdentificado && $esJuridica ? 'required' : 'nullable', 'string', 'max:255'],
+            'nombre_usuario'           => [$esIdentificado && !$esJuridica ? 'required' : 'nullable', 'string', 'max:150'],
+            'apellido_usuario'         => [$esIdentificado && !$esJuridica ? 'required' : 'nullable', 'string', 'max:150'],
 
-            'correo_electronico'       => 'nullable|email|max:200',
+            // El correo es obligatorio para todo ciudadano identificado
+            'correo_electronico'       => [$siIdentificado, 'nullable', 'email', 'max:200'],
 
-            'pais'                     => 'nullable|string|max:100',
-            'otro_pais'                => 'nullable|string|max:100',
+            'pais'                     => [$siIdentificado, 'nullable', 'string', 'max:100'],
+            'otro_pais'                => [$esIdentificado && $esOtroPais ? 'required' : 'nullable', 'string', 'max:100'],
 
-            'departamento_id'          => 'nullable|exists:departamentos_col,id',
-            'municipio_id'             => 'nullable|exists:municipios_col,id',
+            'departamento_id'          => [$esIdentificado && !$esOtroPais ? 'required' : 'nullable', 'exists:departamentos_col,id'],
+            'municipio_id'             => [$esIdentificado && !$esOtroPais ? 'required' : 'nullable', 'exists:municipios_col,id'],
 
-            'direccion'                => 'nullable|string|max:255',
+            'direccion'                => [$siIdentificado, 'nullable', 'string', 'max:255'],
 
             'fijo'                     => 'nullable|string|max:30',
-            'movil'                    => 'nullable|string|max:30',
-            
+            'movil'                    => [$siIdentificado, 'nullable', 'string', 'max:30'],
+
             'tipo_pqrsf'               => 'required|string|max:255',
-            'tipo_respuesta'           => 'required|string|max:255',
-            'direccion_mensajeria'     => 'nullable|string',
+            // La Cartelera Virtual es solo para solicitudes anónimas
+            'tipo_respuesta'           => ['required', $esIdentificado
+                ? Rule::in(['Correo Electrónico', 'Físico / Mensajería'])
+                : Rule::in(['Cartelera Virtual'])],
+            'direccion_mensajeria'     => ['required_if:tipo_respuesta,Físico / Mensajería', 'nullable', 'string', 'max:500'],
 
             'asunto'                   => 'required|string|max:255',
 
@@ -104,11 +118,47 @@ class PqrsController extends Controller
 
             'documentos'               => ['nullable','array','max:5',],
 
-            'documentos.*'             => ['bail','file','max:10240','mimes:pdf,jpg,jpeg,png,gif,webp,doc,docx,xls,xlsx,ppt,pptx,zip',],
+            'documentos.*'             => ['bail','file','max:10240','mimes:pdf,jpg,jpeg,png,gif,webp,doc,docx,xls,xlsx,ppt,pptx','extensions:pdf,jpg,jpeg,png,gif,webp,doc,docx,xls,xlsx,ppt,pptx',],
 
             'autoriza'                 => 'accepted'
 
+        ], [
+            'required'    => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio.',
+            'email'       => 'El :attribute no es válido.',
+            'in'          => 'El valor de :attribute no es válido.',
+            'exists'      => 'El valor de :attribute no es válido.',
+            'accepted'    => 'Debe autorizar el tratamiento de datos personales.',
+        ], [
+            'tipo_discapacidad'     => 'tipo de discapacidad',
+            'otra_discapacidad'     => 'otra discapacidad',
+            'tipo_solicitante'      => 'tipo de solicitante',
+            'tipo_identificacion'   => 'tipo de identificación',
+            'numero_identificacion' => 'número de identificación',
+            'razon_social'          => 'razón social',
+            'nombre_usuario'        => 'nombre',
+            'apellido_usuario'      => 'apellido',
+            'correo_electronico'    => 'correo electrónico',
+            'pais'                  => 'país',
+            'otro_pais'             => 'nombre del país',
+            'departamento_id'       => 'departamento',
+            'municipio_id'          => 'municipio',
+            'direccion'             => 'dirección',
+            'movil'                 => 'teléfono móvil',
+            'tipo_pqrsf'            => 'tipo de PQRSF',
+            'tipo_respuesta'        => 'canal de respuesta',
+            'direccion_mensajeria'  => 'dirección de mensajería',
+            'documentos.*'          => 'documento adjunto',
         ]);
+
+        // Una solicitud anónima no guarda datos personales aunque lleguen en la petición
+        if (!$esIdentificado) {
+            $request->merge(array_fill_keys([
+                'tipo_solicitante', 'tipo_identificacion', 'numero_identificacion', 'razon_social',
+                'nombre_usuario', 'apellido_usuario', 'correo_electronico', 'pais', 'otro_pais',
+                'departamento_id', 'municipio_id', 'direccion', 'fijo', 'movil', 'direccion_mensajeria',
+            ], null));
+        }
 
         DB::beginTransaction();
 
@@ -197,75 +247,14 @@ class PqrsController extends Controller
 
                 foreach ($request->file('documentos') as $documento) {
 
-                    // Nombre original suministrado por el ciudadano.
+                    // Nombre original suministrado por el ciudadano (solo se guarda como dato).
                     $nombreOriginal = $documento->getClientOriginalName();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Obtener nombre sin extensión
-                    |--------------------------------------------------------------------------
-                    */
+                    // Extensión de la lista permitida y nombre aleatorio, en el disco privado
+                    $extension = ArchivoSeguro::extension($documento, ArchivoSeguro::DOCUMENTOS);
+                    $filename = Str::uuid() . '.' . $extension;
 
-                    $nombre = pathinfo(
-                        $nombreOriginal,
-                        PATHINFO_FILENAME
-                    );
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Crear slug
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $slug = Str::slug($nombre);
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Extensión
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $extension = strtolower(
-                        $documento->getClientOriginalExtension()
-                    );
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Crear nombre final
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $filename = $slug . '.' . $extension;
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Evitar archivos con el mismo nombre
-                    |--------------------------------------------------------------------------
-                    */
-
-                    if (
-                        PqrsdfArchivos::where(
-                            'nombre_archivo',
-                            $filename
-                        )->exists()
-                    ) {
-
-                        $slug .= '-' . uniqid();
-
-                        $filename = $slug . '.' . $extension;
-                    }
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Guardar archivo
-                    |--------------------------------------------------------------------------
-                    */
-
-                    $ruta = $documento->storeAs(
-                        'posts/pqrsdf/radicados',
-                        $filename,
-                        'public'
-                    );
+                    $ruta = $documento->storeAs('pqrsdf/radicados', $filename, 'local');
 
                     if ($ruta === false) {
                         throw new \RuntimeException(
@@ -348,7 +337,7 @@ class PqrsController extends Controller
             // Eliminar archivos físicos si la operación falló.
             foreach ($rutasGuardadas as $ruta) {
                 try {
-                    Storage::disk('local')->delete($ruta);
+                    Storage::disk('local')->delete($ruta); // adjuntos en disco privado
                 } catch (\Throwable $errorArchivo) {
                     report($errorArchivo);
                 }
@@ -426,6 +415,12 @@ class PqrsController extends Controller
             ->where('tipo_respuesta', 'Cartelera Virtual')
             ->first();
 
+        // Las respuestas solo están publicadas durante 5 días hábiles, igual que en el listado
+        if ($pqr && $pqr->estado === 'Respondida' && (!$pqr->fecha_respuesta
+            || Carbon::parse($pqr->fecha_respuesta)->lt(Carbon::today()->subWeekdays(5)))) {
+            $pqr = null;
+        }
+
         if (!$pqr) {
             return response()->json([
                 'message' => 'No se encontró una PQR disponible en la Cartelera Virtual.'
@@ -437,6 +432,7 @@ class PqrsController extends Controller
             'Radicada'   => 'Su solicitud ha sido radicada y está pendiente de gestión.',
             'Asignada'   => 'Su solicitud ha sido asignada al área responsable.',
             'Revisión'   => 'Su solicitud se encuentra en revisión.',
+            'Corregir'   => 'Su solicitud se encuentra en revisión.',
             'Cancelada'  => 'Su solicitud ha sido cancelada.',
         ];
 
@@ -474,7 +470,7 @@ class PqrsController extends Controller
             'estado' => $pqr->estado,
             'disponible' => true,
             'titulo' => $respuesta->titulo_respuesta,
-            'texto' => $respuesta->texto_respuesta,
+            'texto' => HtmlSeguro::mostrar($respuesta->texto_respuesta),
             'documentos' => $documentos,
         ]);
     }

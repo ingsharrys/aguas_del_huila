@@ -6,6 +6,7 @@
                 <h1 class="text-center content-center font-black text-white">Listado de Usuarios</h1>
                 
                 <div class="flex flex-wrap gap-4">
+                    @role('Administrador')
                     <!-- Botón: Ver Áreas (Azul con icono de capas/estructura) -->
                     <a href="{{ route('areas.index') }}" class="flex w-56 px-4 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-sm text-center items-center justify-center gap-2 font-medium transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -24,6 +25,7 @@
                         </svg> 
                         Ver Cargos
                     </a>
+                    @endrole
 
                     <!-- Botón: Agregar Usuario (Verde Esmeralda con icono de agregar persona) -->
                     <a href="{{ route('usuarios.create') }}" class="flex w-56 px-4 py-2.5 rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm text-center items-center justify-center gap-2 font-medium transition-colors">

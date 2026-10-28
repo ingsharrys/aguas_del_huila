@@ -114,7 +114,7 @@
                             </p>
                         @else
                             <div class="flex w-full justify-center items-center my-4 px-4">            
-                                @if($pqrs->area_id && $pqrs->user_id && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
+                                @if($pqrs->area_id && $pqrs->user_id && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == config('pqrsdf.area_control_interno')))
                                 <button type="button" onclick="abrirModalRespuesta({{ $pqrs->id }})" class="flex w-48 h-fit px-4 py-2 rounded-lg text-white bg-green-600 hover:bg-green-800 text-center justify-center gap-2 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg> Responder</button>
                                 @else
                                 <p class="text-sm text-gray-500">
@@ -144,7 +144,7 @@
                                             </p>
                                         </div>
 
-                                        @if($pqrs->estado != "Respondida" && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
+                                        @if($pqrs->estado != "Respondida" && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == config('pqrsdf.area_control_interno')))
                                             <!-- Botón para abrir el Modal -->
                                             <button 
                                                 type="button"
@@ -158,7 +158,7 @@
 
                                 <!-- SI ES LA PRIMERA ASIGNACIÓN: MOSTRAR FORMULARIO DIRECTO -->
                                 @else
-                                    @if(!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25)
+                                    @if(!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == config('pqrsdf.area_control_interno'))
                                         <form action="{{ route('dashboard.comunicaciones.pqrsdf.asignar', $pqrs->id) }}" method="POST">
                                             @csrf
 
@@ -637,7 +637,7 @@
                                     @foreach($pqrs->archivos as $documento)
 
                                         <a
-                                            href="{{ asset('storage/' . $documento->ruta) }}"
+                                            href="{{ route('dashboard.comunicaciones.pqrsdf.archivo', $documento) }}"
                                             target="_blank"
                                             class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 hover:border-blue-300 hover:bg-blue-50 transition"
                                         >
@@ -721,7 +721,7 @@
 
                     <div>
                         <!-- Botón para cancelar PQR -->
-                        @if($pqrs->estado !== 'Cancelada' && $pqrs->estado !== 'Respondida' && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
+                        @if($pqrs->estado !== 'Cancelada' && $pqrs->estado !== 'Respondida' && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == config('pqrsdf.area_control_interno')))
                             <button  type="button" onclick="document.getElementById('modalCancelar').classList.remove('hidden')" class="bg-red-600 hover:bg-red-700 text-white mt-2 px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer" >
                                 Cancelar PQRSDF
                             </button>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 use App\Models\Area;
 use App\Models\Cargo;
 
@@ -47,19 +48,59 @@ class UsuarioController extends Controller
         return view('usuarios.index', compact('usuarios', 'areas', 'cargos'));
     }
 
+    /**
+     * Roles que el usuario autenticado puede asignar. Solo un Administrador asigna el rol Administrador.
+     */
+    private function rolesAsignables()
+    {
+        $roles = Role::orderBy('name')->get();
+
+        if (!auth()->user()->hasRole('Administrador')) {
+            $roles = $roles->reject(fn ($role) => $role->name === 'Administrador');
+        }
+
+        return $roles->values();
+    }
+
+    /**
+     * Áreas que el usuario autenticado puede asignar (el área 1 queda reservada si es del área 1).
+     */
+    private function areasAsignables()
+    {
+        $areas = Area::where('estado', 1)->get();
+
+        if (auth()->user()->area_id == 1) {
+            $areas = $areas->reject(fn ($area) => $area->nombre === 'Administrador' || $area->id == 1);
+        }
+
+        return $areas->values();
+    }
+
+    /**
+     * Un usuario que no es Administrador no puede modificar ni eliminar a un Administrador.
+     */
+    private function autorizarSobre(User $usuario): void
+    {
+        abort_if(
+            $usuario->hasRole('Administrador') && !auth()->user()->hasRole('Administrador'),
+            403,
+            'No tiene permisos para modificar a un usuario Administrador.'
+        );
+    }
+
+    private function reglasRolYArea(): array
+    {
+        return [
+            'rol'     => ['required', 'string', Rule::in($this->rolesAsignables()->pluck('name')->all())],
+            'area_id' => ['required', Rule::in($this->areasAsignables()->pluck('id')->all())],
+        ];
+    }
+
     public function create()
     {
-        $user = auth()->user();
-
-        $roles = Role::all();
-        $areas = Area::where('estado', 1)->get();
+        $roles = $this->rolesAsignables();
+        $areas = $this->areasAsignables();
         $cargos = Cargo::where('estado', 1)->get();
-
-        // Si el usuario pertenece al área 1, excluimos el rol y el área de Administrador
-        if ($user->area_id == 1) {
-            $roles = $roles->reject(fn($role) => $role->name === 'Administrador');
-            $areas = $areas->reject(fn($area) => $area->nombre === 'Administrador' || $area->id == 1);
-        }
 
         return view('usuarios.create', compact('roles', 'areas', 'cargos'));
     }
@@ -72,9 +113,8 @@ class UsuarioController extends Controller
             'numero_identificacion' => 'required|string|max:50|unique:users,numero_identificacion',
             'username'              => 'required|string|max:100|unique:users,username',
             'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|min:6|confirmed',
-            'rol'                   => 'required|string',
-            'area_id'               => 'required|exists:areas,id',
+            'password'              => 'required|min:8|confirmed',
+            ...$this->reglasRolYArea(),
             'cargo_id'              => 'required|exists:cargos,id',
             'tipo_vinculacion'      => 'required|in:Contratista,Periodo Fijo / Libre Nombramiento,Planta',
             'fecha_terminacion'     => 'required_if:tipo_vinculacion,Contratista,Periodo Fijo / Libre Nombramiento|nullable|date',
@@ -84,6 +124,8 @@ class UsuarioController extends Controller
             'numero_identificacion.unique' => 'Este número de identificación ya está registrado.',
             'username.unique' => 'Este nombre de usuario ya está registrado.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
+            'rol.in' => 'No tiene permisos para asignar ese rol.',
+            'area_id.in' => 'No tiene permisos para asignar esa área.',
         ]);
 
         $usuario = User::create([
@@ -110,33 +152,28 @@ class UsuarioController extends Controller
 
     public function edit(User $usuario)
     {
-        $user = auth()->user();
+        $this->autorizarSobre($usuario);
 
-        $roles = Role::all();
+        $roles = $this->rolesAsignables();
         $userRoles = $usuario->roles->pluck('name')->toArray();
-        $areas = Area::where('estado', 1)->get();
+        $areas = $this->areasAsignables();
         $cargos = Cargo::where('estado', 1)->get();
-
-        // Si el usuario autenticado es del área 1, ocultamos el rol y área de Administrador
-        if ($user->area_id == 1) {
-            $roles = $roles->reject(fn($role) => $role->name === 'Administrador');
-            $areas = $areas->reject(fn($area) => $area->nombre === 'Administrador' || $area->id == 1);
-        }
 
         return view('usuarios.edit', compact('usuario', 'roles', 'userRoles', 'areas', 'cargos'));
     }
 
     public function update(Request $request, User $usuario)
     {
+        $this->autorizarSobre($usuario);
+
         $request->validate([
             'nombres'               => 'required|string|max:255',
             'apellidos'             => 'required|string|max:255',
             'numero_identificacion' => 'required|string|max:50|unique:users,numero_identificacion,' . $usuario->id,
             'username'              => 'required|string|max:100|unique:users,username,' . $usuario->id,
             'email'                 => 'required|email|unique:users,email,' . $usuario->id,
-            'password'              => 'nullable|min:6|confirmed',
-            'rol'                   => 'required|string',
-            'area_id'               => 'required|exists:areas,id',
+            'password'              => 'nullable|min:8|confirmed',
+            ...$this->reglasRolYArea(),
             'cargo_id'              => 'required|exists:cargos,id',
             'tipo_vinculacion'      => 'required|in:Contratista,Periodo Fijo / Libre Nombramiento,Planta',
             'fecha_terminacion'     => 'required_if:tipo_vinculacion,Contratista,Periodo Fijo / Libre Nombramiento|nullable|date',
@@ -147,6 +184,8 @@ class UsuarioController extends Controller
             'numero_identificacion.unique' => 'Este número de identificación ya está registrado.',
             'username.unique' => 'Este nombre de usuario ya está registrado.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
+            'rol.in' => 'No tiene permisos para asignar ese rol.',
+            'area_id.in' => 'No tiene permisos para asignar esa área.',
         ]);
 
         $datos = [
@@ -179,6 +218,13 @@ class UsuarioController extends Controller
 
     public function destroy(User $usuario)
     {
+        $this->autorizarSobre($usuario);
+
+        if ($usuario->is(auth()->user())) {
+            return redirect()->route('usuarios.index')
+                ->with('error', 'No puede eliminar su propio usuario.');
+        }
+
         $usuario->delete();
 
         return redirect()->route('usuarios.index')

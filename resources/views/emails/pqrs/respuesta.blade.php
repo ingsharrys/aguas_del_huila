@@ -67,7 +67,7 @@
 
                             <!-- Respuesta -->
 
-                            <div style="color:#374151; font-size:15px; line-height:1.7;" >{!! nl2br($respuesta->texto_respuesta) !!}</div>
+                            <div style="color:#374151; font-size:15px; line-height:1.7;" >{!! \App\Support\HtmlSeguro::mostrar($respuesta->texto_respuesta) !!}</div>
 
 
                             <!-- Información -->
