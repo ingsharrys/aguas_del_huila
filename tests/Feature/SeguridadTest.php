@@ -65,6 +65,20 @@ class SeguridadTest extends TestCase
         });
         Schema::create('cuestionarios_cacsp', fn ($t) => [$t->id(), $t->integer('municipio_id')->nullable(), $t->string('ubicacion')->nullable(), $t->integer('estrato')->nullable(), $t->string('sector')->nullable(), $t->string('nombre')->nullable(), $t->integer('edad')->nullable(), $t->string('sexo')->nullable(), $t->string('direccion')->nullable(), $t->string('barrio')->nullable(), $t->string('telefono')->nullable(), $t->date('fecha_encuesta')->nullable(), $t->timestamps()]);
         Schema::create('cuestionarios_cacsp_respuestas', fn ($t) => [$t->id(), $t->integer('cuestionario_id'), $t->string('pregunta_key'), $t->text('valor')->nullable(), $t->timestamps()]);
+        Schema::create('encuesta_satisfaccion', function ($t) {
+            $t->id();
+            foreach (['nombre', 'correo', 'telefono', 'tramite', 'medio', 'informacion', 'facilidad', 'grupo', 'beneficio', 'costos'] as $c) {
+                $t->text($c)->nullable();
+            }
+            $t->timestamps();
+        });
+        Schema::create('encuesta_evaluacion', function ($t) {
+            $t->id();
+            foreach (['actualizada', 'informacion', 'satisfaccion', 'facilidad'] as $c) {
+                $t->text($c)->nullable();
+            }
+            $t->timestamps();
+        });
         Schema::create('pqrsdf_documentos', fn ($t) => [$t->id(), $t->integer('respuesta_id'), $t->string('nombre_original')->nullable(), $t->string('ruta'), $t->timestamps()]);
 
         foreach (['Administrador', 'Editor', 'Extranet', 'Control Interno'] as $rol) {
@@ -392,5 +406,31 @@ class SeguridadTest extends TestCase
         $this->actingAs($admin)->delete("/dashboard/usuarios/{$otro->id}")->assertRedirect();
 
         $this->assertDatabaseHas('users', ['id' => $otro->id, 'estado' => 'Desactivado']);
+    }
+
+    // 8. Panel de encuestas
+    public function test_panel_encuestas_con_y_sin_datos(): void
+    {
+        $admin = $this->usuario('Administrador');
+
+        foreach (['30', '90', '365', 'todo'] as $periodo) {
+            $this->actingAs($admin)->get("/dashboard/encuestas?periodo=$periodo")->assertOk()->assertSee('Sin respuestas en este período');
+        }
+
+        DB::table('encuesta_satisfaccion')->insert([
+            ['tramite' => 'Matrícula', 'medio' => 'Presencial', 'informacion' => 'Excelente', 'facilidad' => 'Si', 'grupo' => 'Ciudadano', 'beneficio' => 'Alto', 'costos' => 'Transporte', 'created_at' => now()->subDays(3)],
+            ['tramite' => 'Matrícula', 'medio' => 'Página web', 'informacion' => 'Mala', 'facilidad' => 'No', 'grupo' => 'Empresa', 'beneficio' => 'Leve', 'costos' => null, 'created_at' => now()->subDays(40)],
+        ]);
+        DB::table('encuesta_evaluacion')->insert(['actualizada' => 'Actualizada', 'informacion' => 'Si, toda', 'satisfaccion' => 'Satisfecho', 'facilidad' => 'Si', 'created_at' => now()->subDays(1)]);
+
+        $respuesta = $this->actingAs($admin)->get('/dashboard/encuestas?periodo=30')->assertOk();
+        $respuesta->assertViewHas('estadisticas', fn ($e) => $e['tramites']['total'] === 1
+            && $e['tramites']['kpis']['informacion'] === 100
+            && $e['evaluacion']['kpis']['satisfaccion'] === 100
+            && $e['tramites']['top']['Matrícula'] === 1);
+        $respuesta->assertSee('Transporte');
+
+        $this->actingAs($admin)->get('/dashboard/encuestas?periodo=todo')->assertOk()
+            ->assertViewHas('estadisticas', fn ($e) => $e['tramites']['total'] === 2 && $e['tramites']['kpis']['informacion'] === 50);
     }
 }

@@ -31,89 +31,135 @@ use Illuminate\Support\Facades\Gate;
 
 class EncuestaAdminController extends Controller
 {
-    public function index()
+    /**
+     * Escalas de cada pregunta (en el orden en que se muestran). Las respuestas fuera de la escala se agregan al final.
+     */
+    private const ESCALAS_ENCUESTAS = [
+        'tramites' => [
+            'medio'       => ['Presencial', 'Página web', 'Dispositivo Móvil'],
+            'informacion' => ['Excelente', 'Buena', 'Regular', 'Mala', 'Muy Mala'],
+            'facilidad'   => ['Si', 'No'],
+            'grupo'       => ['Ciudadano', 'Empresa'],
+            'beneficio'   => ['Alto', 'Moderado', 'Leve', 'Sin afectación'],
+        ],
+        'evaluacion' => [
+            'actualizada'  => ['Muy Actualizada', 'Actualizada', 'Medianamente Actualizada', 'Poco Actualizada', 'Desactualizada'],
+            'informacion'  => ['Si, toda', 'Solo una parte', 'No encontré la información'],
+            'satisfaccion' => ['Muy Satisfecho', 'Satisfecho', 'Medianamente Satisfecho', 'Poco Satisfecho', 'Nada Satisfecho'],
+            'facilidad'    => ['Si', 'No'],
+        ],
+    ];
+
+    public function index(Request $request)
     {
+        // Período: 30, 90 o 365 días, o todo el histórico
+        $periodo = in_array($request->query('periodo'), ['30', '90', '365', 'todo'], true) ? $request->query('periodo') : '90';
+        $hasta = now()->endOfDay();
+        $desde = $periodo === 'todo' ? null : now()->subDays((int) $periodo - 1)->startOfDay();
+        $desdeAnterior = $desde?->copy()->subDays((int) $periodo);
 
-        $estadisticas = [
+        $tramites = $this->estadisticasEncuesta(Encuesta::query(), 'tramites', $desde, $desdeAnterior);
+        $evaluacion = $this->estadisticasEncuesta(EncuestaEvaluacion::query(), 'evaluacion', $desde, $desdeAnterior);
 
-            'tramites' => [
-
-                'total' => Encuesta::count(),
-
-                'medio' => Encuesta::select(
-                        'medio',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('medio')
-                    ->pluck('total', 'medio'),
-
-                'informacion' => Encuesta::select(
-                        'informacion',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('informacion')
-                    ->pluck('total', 'informacion'),
-
-                'facilidad' => Encuesta::select(
-                        'facilidad',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('facilidad')
-                    ->pluck('total', 'facilidad'),
-
-                'grupo' => Encuesta::select(
-                        'grupo',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('grupo')
-                    ->pluck('total', 'grupo'),
-
-                'beneficio' => Encuesta::select(
-                        'beneficio',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('beneficio')
-                    ->pluck('total', 'beneficio'),
-
-            ],
-
-            'evaluacion' => [
-
-                'total' => EncuestaEvaluacion::count(),
-
-                'actualizada' => EncuestaEvaluacion::select(
-                        'actualizada',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('actualizada')
-                    ->pluck('total', 'actualizada'),
-
-                'informacion' => EncuestaEvaluacion::select(
-                        'informacion',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('informacion')
-                    ->pluck('total', 'informacion'),
-
-                'satisfaccion' => EncuestaEvaluacion::select(
-                        'satisfaccion',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('satisfaccion')
-                    ->pluck('total', 'satisfaccion'),
-
-                'facilidad' => EncuestaEvaluacion::select(
-                        'facilidad',
-                        DB::raw('COUNT(*) as total')
-                    )
-                    ->groupBy('facilidad')
-                    ->pluck('total', 'facilidad'),
-
-            ]
-
+        // Indicadores (porcentaje de respuestas favorables)
+        $tramites['kpis'] = [
+            'informacion' => $this->porcentaje($tramites['preguntas']['informacion'], ['Excelente', 'Buena']),
+            'facilidad'   => $this->porcentaje($tramites['preguntas']['facilidad'], ['Si']),
+            'beneficio'   => $this->porcentaje($tramites['preguntas']['beneficio'], ['Alto', 'Moderado']),
+        ];
+        $evaluacion['kpis'] = [
+            'satisfaccion' => $this->porcentaje($evaluacion['preguntas']['satisfaccion'], ['Muy Satisfecho', 'Satisfecho']),
+            'informacion'  => $this->porcentaje($evaluacion['preguntas']['informacion'], ['Si, toda']),
+            'actualizada'  => $this->porcentaje($evaluacion['preguntas']['actualizada'], ['Muy Actualizada', 'Actualizada']),
+            'facilidad'    => $this->porcentaje($evaluacion['preguntas']['facilidad'], ['Si']),
         ];
 
-        return view('encuestas.index',compact('estadisticas'));
+        // Trámites más evaluados y últimos comentarios sobre costos
+        $filtro = fn ($q) => $desde ? $q->whereBetween('created_at', [$desde, $hasta]) : $q;
+
+        $tramites['top'] = $filtro(Encuesta::query())
+            ->whereNotNull('tramite')->where('tramite', '!=', '')
+            ->select('tramite', DB::raw('COUNT(*) as total'))
+            ->groupBy('tramite')->orderByDesc('total')->limit(6)
+            ->pluck('total', 'tramite');
+
+        $tramites['comentarios'] = $filtro(Encuesta::query())
+            ->whereNotNull('costos')->where('costos', '!=', '')
+            ->latest()->limit(5)
+            ->get(['tramite', 'costos', 'created_at']);
+
+        // Tendencia: por semana hasta 90 días, por mes en períodos más largos
+        $porMes = $periodo === 'todo' || (int) $periodo > 90;
+        $tendencia = $this->tendencia([$tramites['fechas'], $evaluacion['fechas']], $desde, $porMes);
+        unset($tramites['fechas'], $evaluacion['fechas']);
+
+        $estadisticas = compact('tramites', 'evaluacion');
+
+        return view('encuestas.index', compact('estadisticas', 'periodo', 'tendencia'));
+    }
+
+    private function estadisticasEncuesta($consulta, string $tipo, $desde, $desdeAnterior): array
+    {
+        $enRango = (clone $consulta)->when($desde, fn ($q) => $q->where('created_at', '>=', $desde));
+
+        $preguntas = [];
+        foreach (self::ESCALAS_ENCUESTAS[$tipo] as $campo => $escala) {
+            $conteos = (clone $enRango)->select($campo, DB::raw('COUNT(*) as total'))->groupBy($campo)->pluck('total', $campo);
+
+            // Ordenar según la escala e incluir las opciones sin respuestas
+            $ordenado = collect($escala)->mapWithKeys(fn ($opcion) => [$opcion => (int) ($conteos[$opcion] ?? 0)]);
+            foreach ($conteos as $opcion => $total) {
+                if ($opcion !== null && $opcion !== '' && !$ordenado->has($opcion)) {
+                    $ordenado[$opcion] = (int) $total;
+                }
+            }
+            $preguntas[$campo] = $ordenado->all();
+        }
+
+        $total = (clone $enRango)->count();
+        $anterior = $desde ? (clone $consulta)->where('created_at', '>=', $desdeAnterior)->where('created_at', '<', $desde)->count() : null;
+
+        return [
+            'total'     => $total,
+            'historico' => (clone $consulta)->count(),
+            'variacion' => $anterior ? round(($total - $anterior) / $anterior * 100) : null,
+            'preguntas' => $preguntas,
+            'fechas'    => (clone $enRango)->pluck('created_at')->filter()->all(),
+        ];
+    }
+
+    private function porcentaje(array $conteos, array $favorables): ?int
+    {
+        $total = array_sum($conteos);
+
+        return $total ? (int) round(array_sum(array_intersect_key($conteos, array_flip($favorables))) / $total * 100) : null;
+    }
+
+    /**
+     * Respuestas por semana o por mes para cada encuesta.
+     */
+    private function tendencia(array $series, $desde, bool $porMes): array
+    {
+        $formato = fn ($fecha) => $porMes ? Carbon::parse($fecha)->format('Y-m') : Carbon::parse($fecha)->startOfWeek()->format('Y-m-d');
+
+        $todas = collect($series)->flatten();
+        $inicio = $desde ? Carbon::parse($desde) : ($todas->isNotEmpty() ? Carbon::parse($todas->min()) : now()->subMonths(5));
+        $inicio = $porMes ? $inicio->copy()->startOfMonth() : $inicio->copy()->startOfWeek();
+
+        $etiquetas = [];
+        for ($fecha = $inicio->copy(); $fecha->lte(now()); $porMes ? $fecha->addMonth() : $fecha->addWeek()) {
+            $etiquetas[$fecha->format($porMes ? 'Y-m' : 'Y-m-d')] = $porMes
+                ? ucfirst($fecha->translatedFormat('M Y'))
+                : $fecha->translatedFormat('d M');
+        }
+
+        $datos = collect($series)->map(function ($fechas) use ($formato, $etiquetas) {
+            $conteo = collect($fechas)->countBy($formato);
+
+            return collect(array_keys($etiquetas))->map(fn ($clave) => (int) ($conteo[$clave] ?? 0))->all();
+        });
+
+        return ['etiquetas' => array_values($etiquetas), 'tramites' => $datos[0], 'evaluacion' => $datos[1]];
     }
 
     public function evaluacion(Request $request)
