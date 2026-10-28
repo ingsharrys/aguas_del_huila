@@ -20,6 +20,11 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\EncuestaController;
 use App\Http\Controllers\PqrsController;
 use App\Http\Controllers\EncuestaAdminController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\CargoController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\TestPreguntaController;
+use App\Http\Controllers\CuestionarioController;
 // Controladores para páginas
 use App\Http\Controllers\HomeController;
 // Controladores para páginel buscadoras
@@ -98,6 +103,9 @@ Route::view('/transparencia-y-acceso-a-la-informacion-publica', 'transparencia.t
 Route::view('/transparencia-y-acceso-a-la-informacion-publica/entes-de-control', 'transparencia.entescontrol')->name('entescontrol');
 // oficinas
 Route::view('/transparencia-y-acceso-a-la-informacion-publica/oficinas-aguas-del-huila', 'transparencia.oficinas')->name('oficinas');
+// Información para niños, niñas y adolescentes
+Route::get('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes',[TestController::class, 'infonino'])->name('infonino');
+Route::view('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/pintando-a-super-agua', 'transparencia.supergota')->name('supergota');
 
 // ===============================================================================================================
 // Participa =================================================================================================
@@ -113,6 +121,8 @@ Route::get('/participa/pqr', [PqrsController::class, 'index'])->name('pqr');
 Route::get('/municipios/{departamento}',[PqrsController::class, 'municipios'])->name('municipios');
 Route::post('/participa/pqr',[PqrsController::class, 'store'])->name('pqr.store');
 Route::post('/participa/pqr/buscar', [PqrsController::class, 'searchCode'])->name('pqr.search');
+Route::get('/participa/pqr/carteleravirtual', [PqrsController::class, 'carteleravirtual'])->name('carteleravirtual');
+Route::get('/participa/pqr/carteleravirtual/{codigo}/respuesta',[PqrsController::class, 'consultarRespuestaCartelera'])->name('carteleravirtual.respuesta');
 // foro 
 Route::view('/participa/foro', 'participacion.foro')->name('foro');
 // chat 
@@ -127,6 +137,10 @@ Route::post('/atencion-y-servicios-a-la-ciudadania/encuesta-de-satisfaccion-de-t
 // Encuesta de satisfacción
 Route::get('/transparencia-y-acceso-a-la-informacion-publica/encuesta-de-evaluacion',[EncuestaController::class, 'formEvaluacion'])->name('encuesta.evaluacion');
 Route::post('/transparencia-y-acceso-a-la-informacion-publica/encuesta-de-evaluacion',[EncuestaController::class, 'storeEvaluacion'])->name('evaluacion.store');
+// Cuestionario de atencion al cliente
+Route::get('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos',[CuestionarioController::class, 'formCACSP'])->name('cuestionario.cacsp');
+Route::post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos',[CuestionarioController::class, 'storeCACSP'])->name('cuestionario.cacsp.store');
+
 
 // ===============================================================================================================
 // pagos =================================================================================================
@@ -184,6 +198,8 @@ Route::prefix('dashboard')->group(function () {
         Route::patch('comentarios/{comentario}/aprobar', [ComentarioController::class,'aprobar'])->name('comentarios.aprobar');
         Route::resource('funcionarios', FuncionarioController::class);
         Route::resource('usuarios', UsuarioController::class);
+        Route::resource('areas', AreaController::class);
+        Route::resource('cargos', CargoController::class);
         });
         
     // Solo Administrador
@@ -201,7 +217,7 @@ Route::prefix('dashboard')->group(function () {
 Route::prefix('dashboard/encuestas')->group(function () {
 
     // Administrador y Extranet
-    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet'])->controller(EncuestaAdminController::class)->group(function () {
+    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet|Control Interno'])->controller(EncuestaAdminController::class)->group(function () {
         // Dashboard principal
         Route::get('/', 'index')->name('dashboard.encuestas');
         // Encuesta de Trámites y Servicios
@@ -218,7 +234,7 @@ Route::prefix('dashboard/encuestas')->group(function () {
 Route::prefix('dashboard/comunicaciones')->group(function () {
 
     // Administrador y Extranet
-    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet'])->controller(EncuestaAdminController::class)->group(function () {
+    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet|Control Interno'])->controller(EncuestaAdminController::class)->group(function () {
         // Dashboard principal
         Route::get('/', 'comunicaciones')->name('dashboard.comunicaciones');
         // PQRSDF
@@ -236,3 +252,51 @@ Route::prefix('dashboard/comunicaciones')->group(function () {
     });
 
 });
+
+// Admin de test
+Route::prefix('dashboard/test')->group(function () {
+    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor'])->controller(TestController::class)->group(function () {
+        // Dashboard principal
+        Route::get('/', 'test')->name('test.dashboard');
+        // CRUD testes
+        Route::resource('testes', TestController::class);
+        // Preguntas de un test
+        Route::prefix('testes/{teste}/preguntas')
+            ->controller(TestPreguntaController::class)
+            ->group(function () {
+
+                Route::get('/', 'index')
+                    ->name('testes.preguntas.index');
+
+                Route::get('/create', 'create')
+                    ->name('testes.preguntas.create');
+
+                Route::post('/', 'store')
+                    ->name('testes.preguntas.store');
+
+                Route::get('/{pregunta}/edit', 'edit')
+                    ->name('testes.preguntas.edit');
+
+                Route::put('/{pregunta}', 'update')
+                    ->name('testes.preguntas.update');
+
+                Route::delete('/{pregunta}', 'destroy')
+                    ->name('testes.preguntas.destroy');
+            });
+        // Listado de participantes de un test
+        Route::prefix('testes/{teste}/participantes')
+            ->controller(TestController::class)
+            ->group(function () {
+
+                Route::get('/', 'participantes')
+                    ->name('testes.participantes.index');
+
+                Route::delete('/{intento}', 'participantesDestroy')
+                    ->name('testes.participantes.destroy');
+            });
+    });
+});
+        
+// Vista del test para el público
+Route::get('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/{slug}',[TestController::class, 'show'])->name('test.publico');
+Route::post('/transparencia-y-acceso-a-la-informacion-publica/informacion-para-ninos-ninas-y-adolescentes/{slug}',[TestController::class, 'resultados'])->name('test.publico.store');

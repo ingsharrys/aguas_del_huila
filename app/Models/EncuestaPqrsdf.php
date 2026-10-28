@@ -10,6 +10,8 @@ use App\Models\Area;
 use App\Models\User;
 use App\Models\PqrsdfRespuesta;
 use App\Models\PqrsdfAsignacion;
+use App\Models\PqrsdfArchivos;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EncuestaPqrsdf extends Model
 {
@@ -119,5 +121,13 @@ class EncuestaPqrsdf extends Model
     {
         return $this->belongsTo(User::class, 'cancelado_id');
     }
+
+    
+    // Archivos adjuntos enviados inicialmente con la PQR.
+    public function archivos(): HasMany
+    {
+        return $this->hasMany(PqrsdfArchivos::class,'pqrsdf_id');
+    }
+
     
 }

@@ -6,11 +6,15 @@ use App\Mail\PqrsAdminMail;
 use App\Mail\PqrsUsuarioMail;
 use App\Models\DepartamentoCol;
 use App\Models\EncuestaPqrsdf;
+use App\Models\PqrsdfArchivos;
 use App\Models\Municipio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-//use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class PqrsController extends Controller
@@ -54,6 +58,12 @@ class PqrsController extends Controller
                 
         }
 
+        $request->merge([
+            'tipo_respuesta' => $request->input('identificado_anonimo') === 'anonimo'
+                ? 'Cartelera Virtual'
+                : $request->input('tipo_respuesta'),
+        ]);
+
         $request->validate([
 
             'discapacidad'             => 'required|boolean',
@@ -91,11 +101,17 @@ class PqrsController extends Controller
 
             'descripcion'              => 'required|string',
 
+            'documentos'               => ['nullable','array','max:5',],
+
+            'documentos.*'             => ['bail','file','max:10240','mimes:pdf,jpg,jpeg,png,gif,webp,doc,docx,xls,xlsx,ppt,pptx,zip',],
+
             'autoriza'                 => 'accepted'
 
         ]);
 
         DB::beginTransaction();
+
+        $rutasGuardadas = [];
 
         try {
 
@@ -169,30 +185,173 @@ class PqrsController extends Controller
 
             ]);
 
+            
+            /*
+            |--------------------------------------------------------------------------
+            | Guardar archivos adjuntos de la PQR
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->hasFile('documentos')) {
+
+                foreach ($request->file('documentos') as $documento) {
+
+                    // Nombre original suministrado por el ciudadano.
+                    $nombreOriginal = $documento->getClientOriginalName();
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Obtener nombre sin extensión
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $nombre = pathinfo(
+                        $nombreOriginal,
+                        PATHINFO_FILENAME
+                    );
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Crear slug
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $slug = Str::slug($nombre);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Extensión
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $extension = strtolower(
+                        $documento->getClientOriginalExtension()
+                    );
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Crear nombre final
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $filename = $slug . '.' . $extension;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Evitar archivos con el mismo nombre
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (
+                        PqrsdfArchivos::where(
+                            'nombre_archivo',
+                            $filename
+                        )->exists()
+                    ) {
+
+                        $slug .= '-' . uniqid();
+
+                        $filename = $slug . '.' . $extension;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Guardar archivo
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $ruta = $documento->storeAs(
+                        'posts/pqrsdf/radicados',
+                        $filename,
+                        'public'
+                    );
+
+                    if ($ruta === false) {
+                        throw new \RuntimeException(
+                            'No fue posible almacenar uno de los archivos adjuntos.'
+                        );
+                    }
+
+                    // Guardar la ruta para eliminar el archivo si ocurre un error.
+                    $rutasGuardadas[] = $ruta;
+
+                    // Registrar los metadatos y asociarlos a la PQR.
+                    $pqrs->archivos()->create([
+                        'nombre_original' => $nombreOriginal,
+                        'nombre_archivo'  => $filename,
+                        'ruta'            => $ruta,
+                        'extension'       => $extension,
+                        'mime_type'       => $documento->getMimeType(),
+                        'tamano'          => $documento->getSize(),
+                    ]);
+                }
+            }
+
             DB::commit();
 
-            // Correo al administrador
-            // Log::info('Enviando correo al administrador');
-            Mail::to('info@aguasdelhuila.gov.co')->send(new PqrsAdminMail($pqrs));
-            //Mail::to('sabicriollo@gmail.com')->send(new PqrsAdminMail($pqrs));
+            // 1. Correo al administrador
+            try {
+                Mail::to(trim('info@aguasdelhuila.gov.co'))->send(new PqrsAdminMail($pqrs));
+                // Mail::to(trim('sabicriollo@gmail.com'))->send(new PqrsAdminMail($pqrs));
 
-            // Correo al ciudadano (si ingresó correo)
+                Log::channel('emails')->info("Correo ADMIN enviado con éxito", [
+                    'pqrs_id' => $pqrs->id ?? null,
+                    'radicado' => $pqrs->codigo_radicado ?? null,
+                    'destino' => 'info@aguasdelhuila.gov.co',
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::channel('emails')->error("Error enviando correo ADMIN", [
+                    'pqrs_id' => $pqrs->id ?? null,
+                    'radicado' => $pqrs->codigo_radicado ?? null,
+                    'destino' => 'info@aguasdelhuila.gov.co',
+                    'excepcion' => get_class($e),
+                    'error'   => $e->getMessage(),
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            }
+
+            // 2. Correo al ciudadano (si ingresó correo)
             if (!empty($pqrs->correo_electronico)) {
+                try {
+                    Mail::to(trim($pqrs->correo_electronico))->send(new PqrsUsuarioMail($pqrs));
 
-                Mail::to($pqrs->correo_electronico)->send(new PqrsUsuarioMail($pqrs));
-
+                    Log::channel('emails')->info("Correo CIUDADANO enviado con éxito", [
+                        'pqrs_id' => $pqrs->id ?? null,
+                        'radicado' => $pqrs->codigo_radicado ?? null,
+                        'destino' => $pqrs->correo_electronico,
+                        'fecha'   => now()->toDateTimeString(),
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::channel('emails')->error("Error enviando correo CIUDADANO", [
+                        'pqrs_id' => $pqrs->id ?? null,
+                        'radicado' => $pqrs->codigo_radicado ?? null,
+                        'destino' => $pqrs->correo_electronico,
+                        'excepcion' => get_class($e),
+                        'error'   => $e->getMessage(),
+                        'fecha'   => now()->toDateTimeString(),
+                    ]);
+                }
             }
 
             return redirect()
                 ->back()
-                ->with(
-                    'success',
-                    "Su solicitud fue registrada correctamente. Código de radicado: {$codigo}"
-                );
+                ->with('success', true)
+                ->with('codigo_radicado', $codigo)
+                ->with('identificado_anonimo', $pqrs->identificado_anonimo);
 
         } catch (\Throwable $e) {
 
             DB::rollBack();
+
+            // Eliminar archivos físicos si la operación falló.
+            foreach ($rutasGuardadas as $ruta) {
+                try {
+                    Storage::disk('local')->delete($ruta);
+                } catch (\Throwable $errorArchivo) {
+                    report($errorArchivo);
+                }
+            }
 
             report($e);
 
@@ -222,6 +381,101 @@ class PqrsController extends Controller
                 'mostrarModal' => true,
                 'resultadoBusqueda' => $pqrs
             ]);
+    }
+
+    // PQRSDF Cartelera Virtual
+    public function carteleravirtual(Request $request)
+    {
+        $hoy = Carbon::today();
+        $codigo = trim($request->input('codigo_radicado', ''));
+
+        $pqrs = EncuestaPqrsdf::where('identificado_anonimo', 'anonimo')
+            ->where('tipo_respuesta', 'Cartelera Virtual')
+            ->where(function ($query) use ($hoy) {
+                $query->where('estado', '!=', 'Respondida')
+                    ->orWhereNull('estado')
+                    ->orWhere(function ($subquery) use ($hoy) {
+                        $subquery->where('estado', 'Respondida')
+                            ->whereNotNull('fecha_respuesta')
+                            ->whereRaw(
+                                'fecha_respuesta >= ?',
+                                [
+                                    $hoy->copy()
+                                        ->subWeekdays(5)
+                                        ->toDateString()
+                                ]
+                            );
+                    });
+            })
+            ->when($codigo !== '', function ($query) use ($codigo) {
+                $query->where('codigo_radicado', 'LIKE', '%' . $codigo . '%');
+            })
+            ->orderByDesc('created_at')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('participacion.carteleravirtual', compact('pqrs', 'codigo'));
+    }
+
+    // Consulta de respuesta en la Cartelera Virtual - Modal
+    public function consultarRespuestaCartelera($codigo)
+    {
+        $pqr = EncuestaPqrsdf::where('codigo_radicado', $codigo)
+            ->where('identificado_anonimo', 'anonimo')
+            ->where('tipo_respuesta', 'Cartelera Virtual')
+            ->first();
+
+        if (!$pqr) {
+            return response()->json([
+                'message' => 'No se encontró una PQR disponible en la Cartelera Virtual.'
+            ], 404);
+        }
+
+        $estados = [
+            'Respondida' => 'La respuesta a su solicitud está disponible.',
+            'Radicada'   => 'Su solicitud ha sido radicada y está pendiente de gestión.',
+            'Asignada'   => 'Su solicitud ha sido asignada al área responsable.',
+            'Revisión'   => 'Su solicitud se encuentra en revisión.',
+            'Cancelada'  => 'Su solicitud ha sido cancelada.',
+        ];
+
+        if ($pqr->estado !== 'Respondida') {
+            return response()->json([
+                'codigo_radicado' => $pqr->codigo_radicado,
+                'estado' => $pqr->estado,
+                'mensaje' => $estados[$pqr->estado] ?? 'Su solicitud se encuentra pendiente de gestión.',
+                'disponible' => false,
+            ]);
+        }
+
+        $respuesta = DB::table('pqrsdf_respuestas')
+            ->where('pqrsdf_id', $pqr->id)
+            ->where('tipo_respuesta', 'Cartelera Virtual')
+            ->where('estado', 2)
+            ->first();
+
+        if (!$respuesta) {
+            return response()->json([
+                'codigo_radicado' => $pqr->codigo_radicado,
+                'estado' => 'Respondida',
+                'mensaje' => 'La solicitud figura como respondida, pero su respuesta aún no está disponible para consulta pública.',
+                'disponible' => false,
+            ]);
+        }
+
+        $documentos = DB::table('pqrsdf_documentos')
+            ->where('respuesta_id', $respuesta->id)
+            ->select('nombre_original', 'ruta')
+            ->get();
+
+        return response()->json([
+            'codigo_radicado' => $pqr->codigo_radicado,
+            'estado' => $pqr->estado,
+            'disponible' => true,
+            'titulo' => $respuesta->titulo_respuesta,
+            'texto' => $respuesta->texto_respuesta,
+            'documentos' => $documentos,
+        ]);
     }
 
 

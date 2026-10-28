@@ -78,11 +78,7 @@
 
                                 <tr>
                                     <td><strong>Medio de respuesta</strong></td>
-                                    @if($pqrs->tipo_respuesta == 'Correo Electrónico')
-                                        <td>Correo Electrónico</td>
-                                    @else
-                                        <td>Físico / Mensajería</td>
-                                    @endif
+                                    <td>{{ $pqrs->tipo_respuesta }}</td>
                                 </tr>
 
                             </table>
@@ -133,4 +129,4 @@
 </body>
 
 </html>
-```
+

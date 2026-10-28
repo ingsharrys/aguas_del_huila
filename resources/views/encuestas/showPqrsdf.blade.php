@@ -114,7 +114,7 @@
                             </p>
                         @else
                             <div class="flex w-full justify-center items-center my-4 px-4">            
-                                @if($pqrs->area_id && $pqrs->user_id)
+                                @if($pqrs->area_id && $pqrs->user_id && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
                                 <button type="button" onclick="abrirModalRespuesta({{ $pqrs->id }})" class="flex w-48 h-fit px-4 py-2 rounded-lg text-white bg-green-600 hover:bg-green-800 text-center justify-center gap-2 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg> Responder</button>
                                 @else
                                 <p class="text-sm text-gray-500">
@@ -144,7 +144,7 @@
                                             </p>
                                         </div>
 
-                                        @if($pqrs->estado != "Respondida")
+                                        @if($pqrs->estado != "Respondida" && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
                                             <!-- Botón para abrir el Modal -->
                                             <button 
                                                 type="button"
@@ -158,46 +158,48 @@
 
                                 <!-- SI ES LA PRIMERA ASIGNACIÓN: MOSTRAR FORMULARIO DIRECTO -->
                                 @else
-                                    <form action="{{ route('dashboard.comunicaciones.pqrsdf.asignar', $pqrs->id) }}" method="POST">
-                                        @csrf
+                                    @if(!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25)
+                                        <form action="{{ route('dashboard.comunicaciones.pqrsdf.asignar', $pqrs->id) }}" method="POST">
+                                            @csrf
 
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-black">
-                                            <div>
-                                                <select name="user_id" class="w-full border rounded-lg px-4 py-3" required>
-                                                    <option value="">Seleccione un usuario</option>
-                                                    @foreach ($areas as $area)
-                                                        @if ($area->usuarios->count())
-                                                            <optgroup label="{{ $area->nombre }}">
-                                                                @foreach ($area->usuarios as $usuario)
-                                                                    <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                                                                @endforeach
-                                                            </optgroup>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-black">
+                                                <div>
+                                                    <select name="user_id" class="w-full border rounded-lg px-4 py-3" required>
+                                                        <option value="">Seleccione un usuario</option>
+                                                        @foreach ($areas as $area)
+                                                            @if ($area->usuarios->count())
+                                                                <optgroup label="{{ $area->nombre }}">
+                                                                    @foreach ($area->usuarios as $usuario)
+                                                                        <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
 
-                                            <div>
-                                                <select name="dias" class="w-full border rounded-lg px-4 py-3" required>
-                                                    <option value="">Seleccione el plazo</option>
-                                                    <option value="1">1 día</option>
-                                                    <option value="2">2 días</option>
-                                                    <option value="3">3 días</option>
-                                                    <option value="5">5 días</option>
-                                                    <option value="10">10 días</option>
-                                                    <option value="15">15 días</option>
-                                                    <option value="20">20 días</option>
-                                                    <option value="30">30 días</option>
-                                                </select>
-                                            </div>
+                                                <div>
+                                                    <select name="dias" class="w-full border rounded-lg px-4 py-3" required>
+                                                        <option value="">Seleccione el plazo</option>
+                                                        <option value="1">1 día</option>
+                                                        <option value="2">2 días</option>
+                                                        <option value="3">3 días</option>
+                                                        <option value="5">5 días</option>
+                                                        <option value="10">10 días</option>
+                                                        <option value="15">15 días</option>
+                                                        <option value="20">20 días</option>
+                                                        <option value="30">30 días</option>
+                                                    </select>
+                                                </div>
 
-                                            <div>
-                                                <button type="submit" class="bg-[#0047DC] hover:bg-[#0037AE] text-white px-8 py-3 rounded-lg font-semibold transition cursor-pointer w-full">
-                                                    Asignar
-                                                </button>
+                                                <div>
+                                                    <button type="submit" class="bg-[#0047DC] hover:bg-[#0037AE] text-white px-8 py-3 rounded-lg font-semibold transition cursor-pointer w-full">
+                                                        Asignar
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    @endif
                                 @endif
                             </div>
 
@@ -619,6 +621,79 @@
 
                         </div>
 
+                        <!-- Documentos -->
+
+                        @if($pqrs->archivos->count())
+
+                            <div class="border border-gray-200 rounded-xl bg-gray-50 px-6 py-5">
+
+                                <p class="mb-3 text-xs font-medium uppercase text-gray-500">
+                                    Documentos adjuntos
+                                </p>
+
+
+                                <div class="space-y-2">
+
+                                    @foreach($pqrs->archivos as $documento)
+
+                                        <a
+                                            href="{{ asset('storage/' . $documento->ruta) }}"
+                                            target="_blank"
+                                            class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 hover:border-blue-300 hover:bg-blue-50 transition"
+                                        >
+
+                                            <div class="flex min-w-0 items-center gap-3">
+
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="shrink-0 text-blue-500"
+                                                >
+                                                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                                                    <path d="M14 2v6h6"/>
+                                                    <path d="M10 13h4"/>
+                                                    <path d="M10 17h4"/>
+                                                </svg>
+
+
+                                                <div class="min-w-0">
+
+                                                    <p class="truncate text-sm font-medium text-gray-700">
+                                                        {{ $documento->nombre_original }}
+                                                    </p>
+
+                                                    <p class="text-xs text-gray-400">
+                                                        {{ strtoupper($documento->extension) }}
+                                                        -
+                                                        {{ number_format($documento->tamano / 1024, 2) }} KB
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <span class="text-xs font-medium text-blue-600">
+                                                Ver
+                                            </span>
+
+                                        </a>
+
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+
+                        @endif
+
                     </div>
 
                 </div>
@@ -646,7 +721,7 @@
 
                     <div>
                         <!-- Botón para cancelar PQR -->
-                        @if($pqrs->estado !== 'Cancelada' && $pqrs->estado !== 'Respondida')
+                        @if($pqrs->estado !== 'Cancelada' && $pqrs->estado !== 'Respondida' && (!auth()->user()->hasRole('Control Interno') || $pqrs->area_id == 25))
                             <button  type="button" onclick="document.getElementById('modalCancelar').classList.remove('hidden')" class="bg-red-600 hover:bg-red-700 text-white mt-2 px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer" >
                                 Cancelar PQRSDF
                             </button>
@@ -795,15 +870,6 @@
                                 <p class="mt-1 font-medium text-gray-800">{{ $pqrs->asunto ?? 'No especificado' }}</p>
                             </div>
 
-                            <!-- Descripción -->
-                            <div class="rounded-lg bg-gray-50 p-4 md:col-span-2">
-                                <p class="text-xs font-semibold uppercase text-gray-500">
-                                    Descripción
-                                </p>
-
-                                <p class="mt-1 font-medium text-gray-800">{{ $pqrs->descripcion ?? 'No especificado' }}</p>
-                            </div>
-
                         </div>
 
                     </div>
@@ -826,10 +892,20 @@
                             <input type="hidden" name="pqrsdf_id" value="{{ $pqrs->id }}">
                             <!-- Correo -->
                             @if($pqrs->tipo_respuesta == 'Correo Electrónico')
-                            <div id="campoCorreo" class="mb-5" >
-                                <label for="correo" class="mb-2 block text-sm font-medium text-gray-700" >Correo electrónico <span class="text-red-500">*</span></label>
-                                <input type="email" name="correo" id="correo" class="w-full text-black rounded-lg border border-gray-300 px-4 py-2.5 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200" value="{{ $pqrs->correo_electronico }}" placeholder="Correo electrónico de envío" >
-                            </div>
+                                <div id="campoCorreo" class="mb-5">
+                                    <label for="correo" class="mb-2 block text-sm font-medium text-gray-700">
+                                        Correo electrónico <span class="text-red-500">*</span>
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        name="correo" 
+                                        id="correo" 
+                                        class="w-full text-black rounded-lg border border-gray-300 px-4 py-2.5 outline-none bg-gray-100 cursor-not-allowed focus:ring-0" 
+                                        value="{{ $pqrs->correo_electronico }}" 
+                                        placeholder="Correo electrónico de envío" 
+                                        readonly
+                                    >
+                                </div>
                             @endif
 
                             @if($pqrs->tipo_respuesta == 'Físico / Mensajería')
@@ -868,7 +944,7 @@
                                 <label for="texto_respuesta" class="mb-2 block text-sm font-medium text-gray-700" > Texto de respuesta <span class="text-red-500">*</span> </label>
                                 <textarea  name="texto_respuesta"  id="texto_respuesta"  rows="15" class="w-full border-gray-300 rounded-lg shadow-sm resize-none px-2 py-4 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-200" placeholder="Escriba aquí la respuesta a la solicitud..." required >{{ old('texto_respuesta') }}</textarea>
                             </div>
-                            @if($pqrs->tipo_respuesta == 'Correo Electrónico')
+                            @if($pqrs->tipo_respuesta != 'Físico / Mensajería')
                             <!-- Documentos adjuntos -->
                             <div class="mb-6">
 

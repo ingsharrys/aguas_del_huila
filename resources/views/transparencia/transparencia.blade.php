@@ -488,7 +488,7 @@
                         <div class="pb-5 text-sm text-slate-900">
                             <ol class="custom-counter list-decimal pl-4 py-2">
                                 <li data-parent="8"><a href="{{ route('posts.file', 'buenas-practicas') }}" class="block hover:bg-blue-50 hover:text-[#0047DC]">Información para Grupos Específicos</a></li>
-                                <li data-parent="8"><a href="https://aguasdelhuila.gov.co/noticias/pintando-a-super-gota/561" class="block hover:bg-blue-50 hover:text-[#0047DC]">Información para niños, niñas y adolescentes</a></li>
+                                <li data-parent="8"><a href="{{ route('infonino') }}" class="block hover:bg-blue-50 hover:text-[#0047DC]">Información para niños, niñas y adolescentes</a></li>
                                 <li data-parent="8"><a href="{{ route('posts.file', 'buenas-practicas') }}" class="block hover:bg-blue-50 hover:text-[#0047DC]">Información para Mujeres</a></li>
                             </ol>
                         </div>
@@ -588,7 +588,7 @@
                     <div id="content-13" class="w-full max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-white px-4 rounded-lg text-left">
                         <div class="pb-5 text-sm text-slate-900">
                             <ol class="custom-counter list-decimal pl-4 py-2">
-                                <li data-parent="13"><a href="#" class="block hover:bg-blue-50 hover:text-[#0047DC]"></a></li>
+                                <li data-parent="13"><a href="{{ route('carteleravirtual') }}" class="block hover:bg-blue-50 hover:text-[#0047DC]">Cartelera Virtual</a></li>
                             </ol>
                         </div>
                     </div>

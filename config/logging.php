@@ -127,6 +127,13 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        // Log channel for emails sent by the application
+        'emails' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/emails.log'),
+            'level' => 'info',
+        ],
+
     ],
 
 ];

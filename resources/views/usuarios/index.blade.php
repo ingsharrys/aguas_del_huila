@@ -5,7 +5,37 @@
             <div class="flex w-full justify-between mb-4">
                 <h1 class="text-center content-center font-black text-white">Listado de Usuarios</h1>
                 
-                <a href="{{ route('usuarios.create') }}" class="flex w-56 px-4 py-2 border-green-700 rounded-lg text-white bg-green-600 text-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus-icon lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Agregar Usuario</a>
+                <div class="flex flex-wrap gap-4">
+                    <!-- Botón: Ver Áreas (Azul con icono de capas/estructura) -->
+                    <a href="{{ route('areas.index') }}" class="flex w-56 px-4 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-sm text-center items-center justify-center gap-2 font-medium transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                        </svg> 
+                        Ver Áreas
+                    </a>
+
+                    <!-- Botón: Ver Cargos (Púrpura con icono de portafolio/cargo) -->
+                    <a href="{{ route('cargos.index') }}" class="flex w-56 px-4 py-2.5 rounded-lg text-white bg-purple-600 hover:bg-purple-700 shadow-sm text-center items-center justify-center gap-2 font-medium transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg> 
+                        Ver Cargos
+                    </a>
+
+                    <!-- Botón: Agregar Usuario (Verde Esmeralda con icono de agregar persona) -->
+                    <a href="{{ route('usuarios.create') }}" class="flex w-56 px-4 py-2.5 rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm text-center items-center justify-center gap-2 font-medium transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <line x1="19" x2="19" y1="8" y2="14"/>
+                            <line x1="22" x2="16" y1="11" y2="11"/>
+                        </svg> 
+                        Agregar Usuario
+                    </a>
+                </div>
             </div>
 
             <!-- Formulario de Filtros -->

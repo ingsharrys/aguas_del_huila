@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva PQRSDF recibida</title>
 </head>
 
@@ -71,11 +72,7 @@
 
                                 <tr>
                                     <td><strong>Medio de respuesta</strong></td>
-                                    @if($pqrs->tipo_respuesta == 'correo_electronico')
-                                        <td>Correo electrónico</td>
-                                    @else
-                                        <td>Físico / Mensajería</td>
-                                    @endif
+                                    <td>{{ $pqrs->tipo_respuesta }}</td>
                                 </tr>
 
                             </table>
@@ -87,6 +84,8 @@
                                 <p style="margin-bottom:0;color:#555;line-height:1.7;">
                                     Ingrese al administrador de PQRSDF para gestionar la solicitud y dar respuesta al ciudadano.
                                 </p>
+
+                                <a href="{{ route('dashboard.comunicaciones.pqrsdf') }}" style="display:inline-block;margin-top:10px;padding:10px 20px;background:#0b5ed7;color:white;text-decoration:none;border-radius:5px;">Ir al administrador de PQRSDF</a>
 
                             </div>
 
@@ -121,4 +120,4 @@
 </body>
 
 </html>
-```
+

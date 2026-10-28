@@ -11,16 +11,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
+// use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
 use App\Models\PqrsdfRespuesta;
 use App\Models\PqrsdfDocumento;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PqrsRespuestaMail;
+use App\Mail\PqrsAsignacionMail;
 use App\Exports\PqrsdfExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Log;
 
 class EncuestaAdminController extends Controller
 {
@@ -407,9 +408,20 @@ class EncuestaAdminController extends Controller
             }
         }
 
-        // Estado
+        // Estado (Soporta uno o varios)
         if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
+            $estados = $request->estado;
+
+            if (!is_array($estados)) {
+                $estados = explode('-', $estados);
+            }
+
+            $query->whereIn('estado', $estados);
+        }
+
+        // Filtrar por Funcionario asignado
+        if ($request->filled('usuario_id')) {
+            $query->where('user_id', $request->usuario_id);
         }
 
         // Código de radicado
@@ -765,6 +777,35 @@ class EncuestaAdminController extends Controller
                 'motivo'          => $request->motivo, // Guardar el motivo de reasignación
             ]);
         });
+
+        // Enviar correo de notificación
+        if (!empty($usuario->email)) {
+            try {
+                Mail::to(trim($usuario->email))->send(new PqrsAsignacionMail($pqrs));
+
+                Log::channel('emails')->info("Correo ASIGNACIÓN enviado con éxito", [
+                    'pqrs_id' => $pqrs->id ?? null,
+                    'usuario' => $usuario->name ?? null,
+                    'destino' => $usuario->email,
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::channel('emails')->error("Error enviando correo ASIGNACIÓN", [
+                    'pqrs_id' => $pqrs->id ?? null,
+                    'usuario' => $usuario->name ?? null,
+                    'destino' => $usuario->email,
+                    'excepcion' => get_class($e),
+                    'error'   => $e->getMessage(),
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            }
+        } else {
+            Log::channel('emails')->warning("El usuario no tiene correo electrónico para notificación de asignación", [
+                'pqrs_id' => $pqrs->id ?? null,
+                'usuario' => $usuario->name ?? null,
+                'fecha'   => now()->toDateTimeString(),
+            ]);
+        }
 
         return redirect()
             ->route(
@@ -1137,9 +1178,27 @@ class EncuestaAdminController extends Controller
         // 3. Enviar correo a la persona (si existe el correo)
         $respuesta->load(['pqrsdf', 'usuario.area', 'documentos']);
         
-        // Usamos $pqrsdf que ya tenemos cargado
+        // 1. Correo al ciudadano (si ingresó correo)
         if (!empty($pqrsdf->correo_electronico)) {
-            Mail::to($pqrsdf->correo_electronico)->send(new PqrsRespuestaMail($respuesta));
+            try {
+                Mail::to(trim($pqrsdf->correo_electronico))->send(new PqrsRespuestaMail($respuesta));
+
+                Log::channel('emails')->info("Correo de respuesta CIUDADANO enviado con éxito", [
+                    'pqrs_id' => $pqrsdf->id ?? null,
+                    'radicado' => $pqrsdf->codigo_radicado ?? null,
+                    'destino' => $pqrsdf->correo_electronico,
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::channel('emails')->error("Error enviando correo de respuesta CIUDADANO", [
+                    'pqrs_id' => $pqrsdf->id ?? null,
+                    'radicado' => $pqrsdf->codigo_radicado ?? null,
+                    'destino' => $pqrsdf->correo_electronico,
+                    'excepcion' => get_class($e),
+                    'error'   => $e->getMessage(),
+                    'fecha'   => now()->toDateTimeString(),
+                ]);
+            }
         }
 
         return back()->with('success', 'La respuesta ha sido aprobada y la PQRSDF pasó a estado Respondida.');

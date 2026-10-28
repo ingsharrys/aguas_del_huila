@@ -27,14 +27,14 @@
 
                     <div class="w-full max-h-[900px] border rounded-lg shadow-lg overflow-hidden">
                         <object
-                            data="{{ asset('storage/img/cronograma_del_2026.svg') }}"
+                            data="{{ asset('storage/img/cronograma_del_2026-1.svg') }}"
                             type="image/svg+xml"
                             class="w-full h-full"
                             aria-label="Organigrama Aguas del Huila 2026">
 
                             <p class="p-4 text-center">
                                 Su navegador no soporta imágenes SVG.
-                                <a href="{{ asset('storage/img/cronograma_del_2026.svg') }}"
+                                <a href="{{ asset('storage/img/cronograma_del_2026-1.svg') }}"
                                 target="_blank"
                                 class="text-blue-600 underline">
                                     Abrir el organigrama

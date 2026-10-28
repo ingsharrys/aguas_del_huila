@@ -28,103 +28,102 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
 
-                        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                        <!-- Total de PQRSDF -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf') }}" class="block border border-gray-200 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-gray-500">
                                 Total de PQRSDF
                             </p>
-
                             <p class="text-3xl font-bold text-gray-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['total'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                        <!-- Sin asignar (Radicada) -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Radicada') }}" class="block border border-yellow-200 rounded-lg p-4 bg-yellow-50 hover:bg-yellow-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-yellow-700">
                                 Sin asignar
                             </p>
-
                             <p class="text-3xl font-bold text-yellow-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['sin_asignar'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                        <!-- Asignadas sin responder -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Asignada') }}" class="block border border-blue-200 rounded-lg p-4 bg-blue-50 hover:bg-blue-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-blue-700">
                                 Asignadas sin responder
                             </p>
-
                             <p class="text-3xl font-bold text-blue-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['asignadas'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                        <!-- En Revisión -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Revisión') }}" class="block border border-orange-200 rounded-lg p-4 bg-orange-50 hover:bg-orange-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-orange-700">
                                 En Revisión
                             </p>
-
                             <p class="text-3xl font-bold text-orange-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['revision'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                        <!-- Respondidas -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Respondida') }}" class="block border border-green-200 rounded-lg p-4 bg-green-50 hover:bg-green-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-green-700">
                                 Respondidas
                             </p>
-
                             <p class="text-3xl font-bold text-green-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['respondidas'] }}
                             </p>
-                        </div>
+                        </a>
 
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
 
-                        <div class="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                        <!-- Total por responder (Radicada y Asignada) -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Radicada-Asignada') }}" class="block border border-orange-200 rounded-lg p-4 bg-orange-50 hover:bg-orange-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-orange-700">
                                 Total por responder
                             </p>
-
                             <p class="text-3xl font-bold text-orange-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['por_responder'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                        <!-- Por Corregir (Devueltas por el jefe) -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?estado=Corregir') }}" class="block border border-yellow-200 rounded-lg p-4 bg-yellow-50 hover:bg-yellow-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-yellow-700">
                                 Por Corregir
                             </p>
-
                             <p class="text-3xl font-bold text-yellow-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['corregir'] }}
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-purple-200 rounded-lg p-4 bg-purple-50">
+                        <!-- Próximas a vencer -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?vencimiento=proximas') }}" class="block border border-purple-200 rounded-lg p-4 bg-purple-50 hover:bg-purple-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-purple-700">
                                 Próximas a vencer
                             </p>
-
                             <p class="text-3xl font-bold text-purple-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['proximas_vencer'] }}
                             </p>
-
                             <p class="text-xs text-purple-600 mt-1">
-                                Próximos 3 días
+                                Próximos 7 días
                             </p>
-                        </div>
+                        </a>
 
-                        <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                        <!-- Vencidas -->
+                        <a href="{{ url('/dashboard/comunicaciones/pqrsdf?vencimiento=vencidas') }}" class="block border border-red-200 rounded-lg p-4 bg-red-50 hover:bg-red-100 hover:shadow-md transition-all cursor-pointer">
                             <p class="text-sm text-red-700">
                                 Vencidas
                             </p>
-
                             <p class="text-3xl font-bold text-red-800 mt-1">
                                 {{ $estadisticas['pqrsdf']['vencidas'] }}
                             </p>
-                        </div>
+                        </a>
 
                         <div class="border border-indigo-200 rounded-lg p-4 bg-indigo-50">
                             <p class="text-sm text-indigo-700">
@@ -242,7 +241,7 @@
 
                                                 @foreach($estadisticas['pqrsdf']['por_area'] as $estadisticaArea)
 
-                                                    <tr class="border-b hover:bg-gray-50">
+                                                    <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="window.location.href='{{ url('/dashboard/comunicaciones/pqrsdf?area=') }}{{ $estadisticaArea->area?->id }}'">
 
                                                         <td class="px-4 py-3 font-medium text-gray-800">
                                                             {{ $estadisticaArea->area?->nombre ?? 'Sin asignar' }}
@@ -320,7 +319,7 @@
 
                                                 @foreach($estadisticas['pqrsdf']['por_usuario'] as $estadisticaUsuario)
 
-                                                    <tr class="border-b hover:bg-gray-50">
+                                                    <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="window.location.href='{{ url('/dashboard/comunicaciones/pqrsdf?usuario_id=') }}{{ $estadisticaUsuario->usuario?->id }}'">
 
                                                         <td class="px-4 py-3 font-medium text-gray-800">
                                                             {{ $estadisticaUsuario->usuario?->name ?? 'Usuario no disponible' }}

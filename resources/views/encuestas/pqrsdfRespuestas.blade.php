@@ -394,15 +394,17 @@
                             </div>
 
                         </div>
-                    @elseif($respuesta->estado == 1)
+                    @elseif($respuesta->estado == 1 && (!auth()->user()->hasRole('Control Interno') || $pqrsdf->area_id == 25))
                         @if(auth()->user()->hasAnyRole(['Administrador', 'Editor']) || auth()->user()->es_jefe)
                             <div class="bg-white p-5 rounded-lg shadow border-t border-green-700 mb-6 relative">
                                 <!-- 🎯 ACCIONES DEL JEFE (Solo visible si está en Revisión/Pendiente y el usuario es Jefe) -->
                                 <div class="mt-6 pt-4 border-t flex gap-3">
                                     <!-- Botón Aprobar -->
-                                    <form action="{{ route('dashboard.comunicaciones.pqrsdf.respuestas.aprobar', $respuesta->id) }}" method="POST">
+                                    <form action="{{ route('dashboard.comunicaciones.pqrsdf.respuestas.aprobar', $respuesta->id) }}" method="POST" class="inline-block aprobar-respuesta">
                                         @csrf
-                                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 cursor-pointer">
+                                        <button type="submit" 
+                                                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 cursor-pointer" 
+                                                title="Aprobar">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                                             Aprobar Respuesta
                                         </button>
@@ -513,6 +515,28 @@
 
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.aprobar-respuesta').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción aprobará la respuesta de la PQRSDF",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, aprobar respuesta',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 
 
 </x-layouts.app>

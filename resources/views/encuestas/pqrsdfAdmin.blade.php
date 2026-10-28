@@ -192,7 +192,7 @@
                                 <th scope="col" class="px-6 py-4 font-semibold">Estado</th>
                                 <th scope="col" class="px-6 py-4 font-semibold">Radicado</th>
                                 <th scope="col" class="px-6 py-4 font-semibold">Fechas</th>
-                                <th scope="col" class="px-6 py-4 font-semibold text-center">Acciones</th>
+                                <th scope="col" class="px-6 py-4 font-semibold text-center sm:sticky sm:right-0 sm:z-10 sm:bg-gray-50">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -245,7 +245,7 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap sm:sticky sm:right-0 sm:bg-white sm:shadow-md sm:z-10">
                                         <div class="flex items-center justify-center gap-1">
                                             <a href="{{ route('dashboard.comunicaciones.pqrsdf.show', $pqr->id) }}" 
                                             class="p-1.5 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors" 
