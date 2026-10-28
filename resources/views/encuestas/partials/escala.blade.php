@@ -1,7 +1,8 @@
 {{-- Pregunta con escala ordenada (de mejor a peor): barra apilada al 100 % + leyenda con cantidades --}}
 @php
     $total = array_sum($datos);
-    $favorable = $total ? round(array_sum(array_slice($datos, 0, max(1, intdiv(count($datos), 2)))) / $total * 100) : null;
+    // Se puede pasar $favorable ya calculado (ej. sin contar "No sabe"); si no, se toma la mitad superior de la escala
+    $favorable = array_key_exists('favorable', get_defined_vars()) ? $favorable : ($total ? round(array_sum(array_slice($datos, 0, max(1, intdiv(count($datos), 2)))) / $total * 100) : null);
 @endphp
 <div class="enc-tarjeta">
     <div class="enc-tarjeta-cab">

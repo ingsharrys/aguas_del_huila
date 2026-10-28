@@ -352,42 +352,110 @@ class SeguridadTest extends TestCase
     }
 
     // 6. Cuestionario CACSP
-    private function cacsp(array $respuestas, bool $autoriza = true): \Illuminate\Testing\TestResponse
+    private function cacsp(array $respuestas, bool $autoriza = true, array $alternativas = []): \Illuminate\Testing\TestResponse
     {
         DB::table('municipios_col')->insertOrIgnore(['id' => 10, 'departamento_id' => 18, 'nombre' => 'Neiva', 'estado' => 1]);
 
         return $this->post('/transparencia-y-acceso-a-la-informacion-publica/cuestionario-de-evaluacion-de-atencion-al-cliente-servicios-publicos', [
-            'respuestas' => array_merge([
-                'b_municipio' => 10, 'c_ubicacion' => '2', 'd_estrato' => '3', 'e_sector' => '1', 'P1_nombre' => 'Luz', 'P2_edad' => 30,
-                'P3_sexo' => '2', 'P4_direccion' => 'Vereda X', 'P5_barrio' => 'Rural',
+            'respuestas' => array_replace_recursive([
+                'b_municipio' => '10', 'c_ubicacion' => '2', 'd_estrato' => '3', 'e_sector' => '1', 'P1_nombre' => 'Luz', 'P2_edad' => 30,
+                'P3_sexo' => '2', 'P4_direccion' => 'Vereda X', 'P5_barrio' => 'Rural', 'P6_telefono' => '3001234567',
+                'P44_fecha' => now()->toDateString(),
             ], $respuestas),
+            'alternativas' => $alternativas,
         ] + ($autoriza ? ['autoriza' => 1] : []));
     }
 
-    public function test_cacsp_ninguno_no_se_combina(): void
+    private function cacspCompleto(): array
     {
-        $this->cacsp(['P7' => ['4', '1']])->assertSessionHasErrors('respuestas.P7');
+        $cal = fn (array $filas, string $v = '4') => array_fill_keys($filas, $v);
+
+        return [
+            'P7' => ['acueducto' => '1', 'alcantarillado' => '2', 'aseo' => '1'],
+            'P8' => '5', 'P9' => $cal(['continuidad', 'presion', 'calidad_agua']), 'P10' => '2',
+            'P14' => $cal(['aviso_suspension', 'factura_entender', 'exactitud_cobros', 'tiempo_pago']), 'P15' => $cal(['formas_pago', 'puntos_pago']),
+            'P16' => '2', 'P18' => '1', 'P19' => '4', 'P20' => $cal(['horarios', 'ubicacion', 'comodidad', 'tiempo', 'amabilidad', 'respuesta', 'claridad'], '9'),
+            'P21' => ['cantidad' => '20', 'unidad' => 'minutos'], 'P23' => '1',
+            'P24' => 'Ciudad Limpia', 'P25' => '3', 'P26' => $cal(['cumplimiento']), 'P27' => $cal(['factura_entender', 'tiempo_pago']),
+            'P28' => $cal(['formas_pago', 'puntos_pago']), 'P29' => '2',
+            'P35' => $cal(['participo', 'separa', 'canecas', 'dias_organicos', 'conoce_dias', 'continuar'], '1'),
+            'P36' => $cal(['parques', 'barrido']), 'P37' => ['1', '6'], 'P37_otro' => 'Poda de árboles',
+            'P38' => ['acueducto' => '3', 'aseo' => '2'], 'P39' => ['acueducto' => '2', 'aseo' => '1'], 'P40' => ['acueducto' => '1', 'aseo' => '9'],
+            'P41' => 'Continuidad', 'P43' => 'Puntualidad',
+            // Respuestas de preguntas que deben ignorarse (ocultas por los saltos)
+            'P11' => '3', 'P12' => '5', 'P17' => '1', 'P30' => '5',
+        ];
+    }
+
+    public function test_cacsp_sin_acueducto_termina_la_encuesta(): void
+    {
+        $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '1', 'aseo' => '1'], 'P8' => '5', 'P24' => 'X'])->assertSessionHasNoErrors();
+
+        $claves = DB::table('cuestionarios_cacsp_respuestas')->pluck('pregunta_key')->all();
+        $this->assertEqualsCanonicalizing(['P7.acueducto', 'P7.alcantarillado', 'P7.aseo'], $claves);
+    }
+
+    public function test_cacsp_condicionales_obligatorias(): void
+    {
+        $this->cacsp(['P7' => ['acueducto' => '1', 'alcantarillado' => '2', 'aseo' => '2']])
+            ->assertSessionHasErrors(['respuestas.P8', 'respuestas.P9.continuidad', 'respuestas.P10', 'respuestas.P41'])
+            ->assertSessionDoesntHaveErrors(['respuestas.P12', 'respuestas.P24', 'respuestas.P11']);
+
+        $datos = $this->cacspCompleto();
+        unset($datos['P37_otro']);
+        $this->cacsp($datos)->assertSessionHasErrors('respuestas.P37_otro');
         $this->assertSame(0, DB::table('cuestionarios_cacsp')->count());
     }
 
-    public function test_cacsp_condicionales_obligatorias_y_ocultas(): void
+    public function test_cacsp_completo_respeta_saltos_y_formatos(): void
     {
-        // Con acueducto, P8 es obligatoria
-        $this->cacsp(['P7' => ['1']])->assertSessionHasErrors('respuestas.P8');
+        $this->cacsp($this->cacspCompleto(), true, ['P6_telefono' => 1, 'P42' => 1])->assertSessionHasNoErrors();
 
-        // Solo aseo: las preguntas de acueducto enviadas se ignoran
-        $this->cacsp(['P7' => ['3'], 'P24' => 'EcoAseo', 'P35_1' => 'SI', 'P8' => '5', 'P11' => '2'])->assertSessionHasNoErrors();
-        $claves = DB::table('cuestionarios_cacsp_respuestas')->pluck('pregunta_key')->all();
-        $this->assertEqualsCanonicalizing(['P7', 'P24', 'P35_1'], $claves);
-        $this->assertSame('RURAL', DB::table('cuestionarios_cacsp')->value('ubicacion'));
-        $this->assertSame('FEMENINO', DB::table('cuestionarios_cacsp')->value('sexo'));
+        $c = DB::table('cuestionarios_cacsp')->first();
+        $this->assertSame('9999999', $c->telefono);
+        $this->assertSame('RURAL', $c->ubicacion);
+        $this->assertSame('FEMENINO', $c->sexo);
+
+        $r = DB::table('cuestionarios_cacsp_respuestas')->pluck('valor', 'pregunta_key');
+        $this->assertSame('20 minutos', $r['P21']);
+        $this->assertSame('["1","6"]', $r['P37']);
+        $this->assertSame('Poda de árboles', $r['P37_otro']);
+        $this->assertSame('4', $r['P9.presion']);
+        foreach (['P11', 'P12', 'P13.olores', 'P17', 'P30', 'P38.alcantarillado', 'P42'] as $oculta) {
+            $this->assertArrayNotHasKey($oculta, $r->all(), "$oculta debía ignorarse");
+        }
     }
 
     public function test_cacsp_requiere_autorizacion_y_valores_validos(): void
     {
-        $this->cacsp(['P7' => ['4']], false)->assertSessionHasErrors('autoriza');
-        $this->cacsp(['P7' => ['4'], 'd_estrato' => '9', 'P2_edad' => 15])->assertSessionHasErrors(['respuestas.d_estrato', 'respuestas.P2_edad']);
-        $this->cacsp(['P7' => ['4']])->assertSessionHasNoErrors();
+        $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2']], false)->assertSessionHasErrors('autoriza');
+        $this->cacsp(['P7' => ['acueducto' => '2', 'alcantarillado' => '2', 'aseo' => '2'], 'd_estrato' => '9', 'P2_edad' => 15, 'P6_telefono' => 'abc'])
+            ->assertSessionHasErrors(['respuestas.d_estrato', 'respuestas.P2_edad', 'respuestas.P6_telefono']);
+    }
+
+    public function test_cacsp_resultados_listado_detalle_y_exportacion(): void
+    {
+        $admin = $this->usuario('Administrador');
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp')->assertOk()->assertSee('Todavía no hay cuestionarios');
+
+        $this->cacsp($this->cacspCompleto())->assertSessionHasNoErrors();
+        $id = DB::table('cuestionarios_cacsp')->value('id');
+
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp?periodo=30')->assertOk()
+            ->assertViewHas('kpis', fn ($k) => $k['Calidad del Acueducto'] === 100 && $k['Calidad del Aseo'] === 0 && $k['Calidad del Alcantarillado'] === null)
+            ->assertSee('Ciudad Limpia')->assertSee('Poda de árboles');
+
+        $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/respuestas?buscar=Vereda')->assertOk()->assertSee('Luz')->assertSee('Neiva');
+        $this->actingAs($admin)->get("/dashboard/encuestas/cacsp/respuestas/$id")->assertOk()->assertSee('20 minutos')->assertSee('Muy buena');
+
+        $csv = $this->actingAs($admin)->get('/dashboard/encuestas/cacsp/exportar')->assertOk()->streamedContent();
+        $this->assertStringContainsString('Municipio', $csv);
+        $this->assertStringContainsString('Neiva', $csv);
+        $this->assertStringContainsString('Recolección de basuras en domicilios, Otro', $csv);
+
+        $this->actingAs($this->usuario('Extranet'))->delete("/dashboard/encuestas/cacsp/respuestas/$id")->assertForbidden();
+        $this->actingAs($admin)->delete("/dashboard/encuestas/cacsp/respuestas/$id")->assertRedirect();
+        $this->assertSame(0, DB::table('cuestionarios_cacsp_respuestas')->count());
     }
 
     // 7. Días hábiles y usuarios

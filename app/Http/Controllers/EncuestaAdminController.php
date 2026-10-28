@@ -93,7 +93,13 @@ class EncuestaAdminController extends Controller
         $tendencia = $this->tendencia([$tramites['fechas'], $evaluacion['fechas']], $desde, $porMes);
         unset($tramites['fechas'], $evaluacion['fechas']);
 
-        $estadisticas = compact('tramites', 'evaluacion');
+        // Cuestionario de Atención al Cliente (CACSP): resumen y enlace a su módulo
+        $cacsp = [
+            'total'     => \App\Models\CuestionarioCacsp::query()->when($desde, fn ($q) => $q->where('fecha_encuesta', '>=', $desde->toDateString()))->count(),
+            'historico' => \App\Models\CuestionarioCacsp::count(),
+        ];
+
+        $estadisticas = compact('tramites', 'evaluacion', 'cacsp');
 
         return view('encuestas.index', compact('estadisticas', 'periodo', 'tendencia'));
     }

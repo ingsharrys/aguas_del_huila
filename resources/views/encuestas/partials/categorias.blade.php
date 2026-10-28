@@ -1,6 +1,7 @@
 {{-- Distribución por categoría: barras horizontales de un solo tono, ordenadas de mayor a menor --}}
 @php
-    $datos = collect($datos)->sortDesc();
+    // Por defecto de mayor a menor; con 'ordenar' => false se respeta el orden natural (ej. estrato)
+    $datos = ($ordenar ?? true) ? collect($datos)->sortDesc() : collect($datos);
     $total = $datos->sum();
     $maximo = $datos->max() ?: 1;
 @endphp

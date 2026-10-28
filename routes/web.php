@@ -26,6 +26,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestPreguntaController;
 use App\Http\Controllers\CuestionarioController;
 use App\Http\Controllers\ConfiguracionCorreoController;
+use App\Http\Controllers\CacspAdminController;
 // Controladores para páginas
 use App\Http\Controllers\HomeController;
 // Controladores para páginel buscadoras
@@ -226,6 +227,15 @@ Route::prefix('dashboard')->group(function () {
 
 // Admin de encuestas
 Route::prefix('dashboard/encuestas')->group(function () {
+
+    // Cuestionario de Atención al Cliente de Servicios Públicos (CACSP)
+    Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet|Control Interno'])->controller(CacspAdminController::class)->prefix('cacsp')->group(function () {
+        Route::get('/', 'resultados')->name('dashboard.encuestas.cacsp');
+        Route::get('/respuestas', 'listado')->name('dashboard.encuestas.cacsp.listado');
+        Route::get('/exportar', 'exportar')->name('dashboard.encuestas.cacsp.exportar');
+        Route::get('/respuestas/{cuestionario}', 'ver')->name('dashboard.encuestas.cacsp.ver');
+        Route::delete('/respuestas/{cuestionario}', 'eliminar')->name('dashboard.encuestas.cacsp.eliminar');
+    });
 
     // Administrador y Extranet
     Route::middleware(['auth', 'user.active', 'role:Administrador|Editor|Extranet|Control Interno'])->controller(EncuestaAdminController::class)->group(function () {

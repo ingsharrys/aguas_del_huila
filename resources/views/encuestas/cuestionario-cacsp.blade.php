@@ -21,7 +21,7 @@
                         Transparencia y Acceso a la Información Pública
                     </a>
                     <span>/</span>
-                    </span class="font-bold"> Cuestionario de Evaluación de Atencion al Cliente Servicios Públicos</span>
+                    <span class="font-bold"> Cuestionario de Evaluación de Atencion al Cliente Servicios Públicos</span>
                 </p>
             </div>
         </div>
@@ -63,21 +63,19 @@
                 </div>
             @endif
 
+            <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                Aguas del Huila S.A. E.S.P. está realizando un estudio sobre la prestación de los servicios de acueducto, alcantarillado y aseo en el municipio.
+                Sus respuestas nos ayudarán a mejorar. Las preguntas marcadas con <span class="text-rose-500">*</span> son obligatorias.
+            </p>
+
             <form action="{{ route('cuestionario.cacsp.store') }}" method="POST" id="cacsp-form" class="space-y-8" novalidate>
                 @csrf
 
                 @php
-                    // Inicio de cada sección del cuestionario (clave de la primera pregunta => título)
-                    $secciones = [
-                        'a_id_muestra' => '1. Datos generales',
-                        'P7'           => '2. Servicios públicos del hogar',
-                        'P8'           => '3. Acueducto y alcantarillado',
-                        'P24'          => '4. Servicio de aseo',
-                        'P41'          => '5. Percepciones generales',
-                    ];
                     $abierta = false;
                     $clasesCampo = 'w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block p-3 transition-colors';
                     $clasesOpcion = 'flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-all has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50/50 has-[:checked]:ring-1 has-[:checked]:ring-blue-500';
+                    $numeroSeccion = 0;
                 @endphp
 
                 @foreach($preguntas as $key => $pregunta)
@@ -85,52 +83,48 @@
                         $oldValue = old("respuestas.$key");
                         $tipo = $pregunta['tipo'];
                         $opciones = is_array($pregunta['opciones'] ?? null) ? $pregunta['opciones'] : [];
-                        // En listas simples (ej. estrato 1..6) el valor enviado es la propia opción
-                        if (array_is_list($opciones)) {
-                            $opciones = array_combine(array_map('strval', $opciones), $opciones);
-                        }
-                        $condicion = $pregunta['condicion'] ?? null;
                         $obligatoria = !empty($pregunta['obligatoria']);
+                        $alternativa = $pregunta['alternativa'] ?? null;
+                        $altMarcada = (bool) old("alternativas.$key");
+                        $ancho = in_array($tipo, ['radio', 'checkbox', 'textarea', 'matriz', 'duracion']) || mb_strlen($pregunta['titulo']) > 60;
                     @endphp
 
-                    @if(isset($secciones[$key]))
+                    @if(isset($pregunta['seccion']))
                         @if($abierta)
                                 </div>
                             </div>
                         @endif
-                        @php $abierta = true; @endphp
+                        @php $abierta = true; $numeroSeccion++; @endphp
                         <div class="bg-gray-50/50 rounded-2xl border border-gray-200/80 overflow-hidden shadow-sm seccion-cacsp">
                             <div class="bg-gray-100/80 px-6 py-4 border-b border-gray-200">
-                                <h2 class="text-base font-semibold text-gray-800">{{ $secciones[$key] }}</h2>
+                                <h2 class="text-base font-semibold text-gray-800">{{ $numeroSeccion }}. {{ $pregunta['seccion'] }}</h2>
+                                @isset($pregunta['introduccion'])
+                                    <p class="text-sm text-gray-600 mt-1">{{ $pregunta['introduccion'] }}</p>
+                                @endisset
                             </div>
                             <div class="p-6 bg-white grid grid-cols-1 md:grid-cols-2 gap-6">
                     @endif
 
-                    {{-- Contenedor de la pregunta; las condicionales se muestran según las respuestas --}}
-                    <div class="pregunta-container {{ in_array($tipo, ['radio', 'checkbox', 'textarea']) ? 'md:col-span-2' : '' }} {{ $tipo === 'hidden' ? 'hidden' : '' }}"
-                         data-key="{{ $key }}"
-                         @if($condicion)
-                             data-condicion-campo="{{ $condicion['campo'] }}"
-                             data-condicion-operador="{{ $condicion['operador'] }}"
-                             data-condicion-valor="{{ json_encode(array_map('strval', (array) $condicion['valor'])) }}"
-                             style="display: none;"
-                         @endif>
+                    <div class="pregunta-container {{ $ancho ? 'md:col-span-2' : '' }}" data-key="{{ $key }}">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2" @if(in_array($tipo, ['text', 'number', 'tel', 'date', 'textarea', 'select'])) for="campo-{{ $key }}" @endif>
+                            {{ $pregunta['titulo'] }}
+                            @if($obligatoria) <span class="text-rose-500">*</span> @endif
+                        </label>
+                        @isset($pregunta['ayuda'])
+                            <p class="text-xs text-gray-500 -mt-1 mb-2">{{ $pregunta['ayuda'] }}</p>
+                        @endisset
 
-                        @if($tipo !== 'hidden')
-                            <label class="block text-sm font-semibold text-gray-900 mb-2" @if(in_array($tipo, ['text', 'number', 'textarea', 'select'])) for="campo-{{ $key }}" @endif>
-                                {{ $pregunta['titulo'] }}
-                                @if($obligatoria) <span class="text-rose-500">*</span> @endif
-                            </label>
-                        @endif
-
-                        @if($tipo === 'text' || $tipo === 'number')
-                            <input type="{{ $tipo }}" id="campo-{{ $key }}" name="respuestas[{{ $key }}]" value="{{ $oldValue }}"
+                        @if(in_array($tipo, ['text', 'number', 'tel', 'date']))
+                            <input type="{{ $tipo }}" id="campo-{{ $key }}" name="respuestas[{{ $key }}]"
+                                   value="{{ $oldValue ?? ($tipo === 'date' ? now()->toDateString() : '') }}"
                                    class="{{ $clasesCampo }}"
                                    @if($obligatoria) required @endif
                                    @if($tipo === 'number') inputmode="numeric" @endif
+                                   @if($tipo === 'tel') inputmode="tel" pattern="[0-9+\s()\-]{7,20}" @endif
+                                   @if($tipo === 'date') max="{{ now()->toDateString() }}" @endif
                                    @isset($pregunta['atributos']['min']) min="{{ $pregunta['atributos']['min'] }}" @endisset
                                    @isset($pregunta['atributos']['max']) max="{{ $pregunta['atributos']['max'] }}" @endisset
-                                   maxlength="255">
+                                   @if($tipo !== 'date') maxlength="255" @endif>
 
                         @elseif($tipo === 'textarea')
                             <textarea id="campo-{{ $key }}" name="respuestas[{{ $key }}]" rows="3" maxlength="2000" class="{{ $clasesCampo }}"
@@ -145,7 +139,7 @@
                             </select>
 
                         @elseif($tipo === 'radio')
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-{{ count($opciones) > 4 ? 3 : count($opciones) }} gap-3" role="radiogroup">
                                 @foreach($opciones as $val => $label)
                                     <label class="{{ $clasesOpcion }}">
                                         <input type="radio" name="respuestas[{{ $key }}]" value="{{ $val }}"
@@ -158,23 +152,60 @@
                             </div>
 
                         @elseif($tipo === 'checkbox')
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3" data-grupo-checkbox="{{ $key }}" @if($obligatoria) data-obligatorio="1" @endif>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" data-grupo-checkbox @if($obligatoria) data-obligatorio="1" @endif>
                                 @foreach($opciones as $val => $label)
                                     <label class="{{ $clasesOpcion }}">
                                         <input type="checkbox" name="respuestas[{{ $key }}][]" value="{{ $val }}"
                                                class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                               @if($key === 'P7' && (string) $val === '4') data-excluyente="1" @endif
                                                @checked(is_array($oldValue) && in_array((string) $val, array_map('strval', $oldValue), true))>
                                         <span class="text-sm font-medium text-gray-700">{{ $label }}</span>
                                     </label>
                                 @endforeach
                             </div>
 
-                        @elseif($tipo === 'hidden')
-                            <input type="hidden" name="respuestas[{{ $key }}]" value="{{ $oldValue }}">
+                        @elseif($tipo === 'matriz')
+                            {{-- Tabla de calificación: una fila por aspecto; en pantallas pequeñas cada fila se apila --}}
+                            <div class="space-y-3">
+                                @foreach($pregunta['filas'] as $fila => $definicion)
+                                    <fieldset class="fila-matriz rounded-xl border border-gray-200 p-3" data-fila="{{ $fila }}">
+                                        <legend class="px-1 text-sm text-gray-800 font-medium">{{ $definicion['texto'] }}</legend>
+                                        <div class="flex flex-wrap gap-2 mt-1">
+                                            @foreach($opciones as $val => $label)
+                                                <label class="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer text-sm text-gray-700 hover:border-blue-300 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
+                                                    <input type="radio" name="respuestas[{{ $key }}][{{ $fila }}]" value="{{ $val }}"
+                                                           class="w-4 h-4 text-blue-600 border-gray-300"
+                                                           @checked((string) ($oldValue[$fila] ?? '') === (string) $val)
+                                                           @if($obligatoria) required @endif>
+                                                    {{ $label }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                        <span class="error-pregunta text-xs text-rose-600 font-medium mt-1 block">@error("respuestas.$key.$fila"){{ $message }}@enderror</span>
+                                    </fieldset>
+                                @endforeach
+                            </div>
+
+                        @elseif($tipo === 'duracion')
+                            <div class="grid grid-cols-2 gap-3 max-w-md">
+                                <input type="number" name="respuestas[{{ $key }}][cantidad]" min="0" max="100000" inputmode="numeric" placeholder="Cantidad"
+                                       value="{{ $oldValue['cantidad'] ?? '' }}" class="{{ $clasesCampo }}" @if($obligatoria) required @endif>
+                                <select name="respuestas[{{ $key }}][unidad]" class="{{ $clasesCampo }}" @if($obligatoria) required @endif>
+                                    <option value="">Unidad...</option>
+                                    @foreach(\App\Support\CuestionarioCacsp::UNIDADES_TIEMPO as $val => $label)
+                                        <option value="{{ $val }}" @selected(($oldValue['unidad'] ?? '') === $val)>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         @endif
 
-                        <span class="error-pregunta text-xs text-rose-600 font-medium mt-1.5 block">@error("respuestas.$key"){{ $message }}@enderror</span>
+                        @if($alternativa)
+                            <label class="inline-flex items-center gap-2 mt-2 text-sm text-gray-700 cursor-pointer">
+                                <input type="checkbox" name="alternativas[{{ $key }}]" value="1" class="alternativa rounded border-gray-300" @checked($altMarcada)>
+                                {{ $alternativa['etiqueta'] }}
+                            </label>
+                        @endif
+
+                        <span class="error-pregunta text-xs text-rose-600 font-medium mt-1.5 block">@error("respuestas.$key"){{ $message }}@enderror @error("respuestas.$key.cantidad"){{ $message }}@enderror @error("respuestas.$key.unidad"){{ $message }}@enderror</span>
                     </div>
                 @endforeach
 
@@ -183,9 +214,9 @@
                     </div>
                 @endif
 
-                {{-- Mensaje cuando el hogar no tiene servicios --}}
-                <div id="mensaje-sin-servicios" class="hidden rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-                    Como su hogar no cuenta con servicios públicos, no es necesario responder más preguntas. Autorice el tratamiento de datos y guarde el cuestionario.
+                {{-- Mensaje cuando la encuesta termina (el hogar no tiene acueducto) --}}
+                <div id="mensaje-fin" class="hidden rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
+                    Como el hogar no cuenta con servicio de acueducto, la encuesta termina aquí. Complete los datos de control, autorice el tratamiento de datos y guarde.
                 </div>
 
                 <!-- Tratamiento de datos (Ley 1581 de 2012) -->
@@ -212,137 +243,142 @@
 
         @include('partials.footer')
 
+        <script type="application/json" id="cacsp-reglas">@json($reglasJs)</script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.getElementById('cacsp-form');
-                const condicionales = [...form.querySelectorAll('.pregunta-container[data-condicion-campo]')];
-                const P7_NINGUNO = '4';
+                const reglas = JSON.parse(document.getElementById('cacsp-reglas').textContent);
+                const contenedor = clave => form.querySelector(`.pregunta-container[data-key="${clave}"]`);
 
-                // Valores seleccionados de una pregunta (solo de campos habilitados)
-                function valores(clave) {
-                    return [...form.querySelectorAll(`[name="respuestas[${clave}]"], [name="respuestas[${clave}][]"]`)]
-                        .filter(campo => !campo.disabled)
-                        .filter(campo => (campo.type === 'checkbox' || campo.type === 'radio') ? campo.checked : campo.value !== '')
-                        .map(campo => campo.value);
+                // Valor actual de una respuesta ("P7.acueducto" = fila de una matriz); solo campos habilitados
+                function valor(ruta) {
+                    const [clave, fila] = ruta.split('.');
+                    const nombre = fila ? `respuestas[${clave}][${fila}]` : `respuestas[${clave}]`;
+                    const campos = [...form.querySelectorAll(`[name="${nombre}"], [name="${nombre}[]"]`)].filter(c => !c.disabled);
+                    const valores = campos
+                        .filter(c => (c.type === 'checkbox' || c.type === 'radio') ? c.checked : c.value.trim() !== '')
+                        .map(c => c.value);
+                    return valores;
                 }
 
-                function cumple(contenedor) {
-                    const seleccion = valores(contenedor.dataset.condicionCampo);
-                    const requeridos = JSON.parse(contenedor.dataset.condicionValor);
-
-                    switch (contenedor.dataset.condicionOperador) {
-                        case '==':
-                        case 'in_array':
-                        case 'intersect':
-                            return requeridos.some(valor => seleccion.includes(valor));
-                        default:
-                            return true;
-                    }
+                function coincide(ruta, esperado, visibles) {
+                    const base = ruta.split('.')[0];
+                    if (visibles[base] === false) return false;
+                    const actuales = valor(ruta);
+                    if (esperado === '*') return actuales.length > 0;
+                    return [].concat(esperado).map(String).some(v => actuales.includes(v));
                 }
 
-                function mostrar(contenedor, visible) {
-                    contenedor.style.display = visible ? '' : 'none';
-                    contenedor.querySelectorAll('input, select, textarea').forEach(campo => {
-                        // Un campo oculto se deshabilita: no se envía ni bloquea el envío con "required"
-                        campo.disabled = !visible;
-                        if (!visible) {
-                            if (campo.type === 'checkbox' || campo.type === 'radio') {
-                                campo.checked = false;
-                            } else {
-                                campo.value = '';
-                            }
+                const todas = (cond, vis) => !cond || Object.entries(cond).every(([r, e]) => coincide(r, e, vis));
+                const alguna = (cond, vis) => !cond || Object.entries(cond).some(([r, e]) => coincide(r, e, vis));
+
+                function habilitar(elemento, activo) {
+                    elemento.querySelectorAll('input, select, textarea').forEach(campo => {
+                        if (campo.disabled === !activo) return;
+                        campo.disabled = !activo;
+                        if (!activo && !campo.classList.contains('alternativa')) {
+                            if (campo.type === 'checkbox' || campo.type === 'radio') campo.checked = false;
+                            else if (campo.type !== 'date') campo.value = '';
                         }
                     });
                 }
 
-                function evaluarCondiciones() {
-                    // Se repite hasta que no haya cambios: resuelve condiciones en cadena (P7 → P10 → P11)
-                    let cambio = true;
-                    for (let vuelta = 0; cambio && vuelta < 10; vuelta++) {
-                        cambio = false;
-                        condicionales.forEach(contenedor => {
-                            const visible = cumple(contenedor);
-                            const estaba = contenedor.style.display !== 'none';
-                            if (visible !== estaba) {
-                                mostrar(contenedor, visible);
-                                cambio = true;
-                            }
-                        });
-                    }
+                function evaluar() {
+                    const visibles = {};
+                    let finalizado = false;
 
-                    // Ocultar secciones sin preguntas visibles (ej. Aseo si el hogar no tiene ese servicio)
-                    form.querySelectorAll('.seccion-cacsp').forEach(seccion => {
-                        const visibles = [...seccion.querySelectorAll('.pregunta-container')]
-                            .some(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
-                        seccion.style.display = visibles ? '' : 'none';
+                    Object.entries(reglas).forEach(([clave, regla]) => {
+                        const caja = contenedor(clave);
+                        let visible = (!finalizado || regla.siempre) && todas(regla.si, visibles) && alguna(regla.si_alguno, visibles);
+
+                        if (visible && regla.filas) {
+                            let alguna_fila = false;
+                            Object.entries(regla.filas).forEach(([fila, cond]) => {
+                                const filaVisible = todas(cond, visibles);
+                                const elemento = caja.querySelector(`.fila-matriz[data-fila="${fila}"]`);
+                                elemento.style.display = filaVisible ? '' : 'none';
+                                habilitar(elemento, filaVisible);
+                                alguna_fila ||= filaVisible;
+                            });
+                            visible = alguna_fila;
+                        }
+
+                        caja.style.display = visible ? '' : 'none';
+                        if (!regla.filas || !visible) habilitar(caja, visible);
+                        visibles[clave] = visible;
+
+                        // "No tiene teléfono" / "No sabe": deshabilita el campo de respuesta
+                        const alt = caja.querySelector('.alternativa');
+                        if (visible && alt) {
+                            caja.querySelectorAll('input:not(.alternativa), select, textarea').forEach(c => {
+                                c.disabled = alt.checked;
+                                if (alt.checked) c.value = '';
+                            });
+                        }
+
+                        if (visible && regla.finaliza_si && todas(regla.finaliza_si, visibles)) finalizado = true;
                     });
 
-                    const sinServicios = valores('P7').includes(P7_NINGUNO);
-                    document.getElementById('mensaje-sin-servicios').classList.toggle('hidden', !sinServicios);
+                    // Ocultar secciones sin preguntas visibles
+                    form.querySelectorAll('.seccion-cacsp').forEach(seccion => {
+                        const hay = [...seccion.querySelectorAll('.pregunta-container')].some(c => c.style.display !== 'none');
+                        seccion.style.display = hay ? '' : 'none';
+                    });
+                    document.getElementById('mensaje-fin').classList.toggle('hidden', !finalizado);
                 }
 
-                // "Ninguno" excluye a las demás opciones de servicios
-                form.querySelectorAll('[data-grupo-checkbox="P7"] input').forEach(casilla => {
-                    casilla.addEventListener('change', () => {
-                        if (!casilla.checked) return;
-                        form.querySelectorAll('[data-grupo-checkbox="P7"] input').forEach(otra => {
-                            if (otra !== casilla && (casilla.dataset.excluyente || otra.dataset.excluyente)) {
-                                otra.checked = false;
-                            }
-                        });
-                    });
-                });
+                form.addEventListener('change', evaluar);
+                form.addEventListener('input', e => { if (e.target.matches('input[type=text]')) evaluar(); });
 
-                form.addEventListener('change', evaluarCondiciones);
-
-                // Validación antes de enviar: muestra el mensaje junto a cada pregunta
-                form.addEventListener('submit', (evento) => {
+                // Validación antes de enviar: el mensaje aparece junto a cada pregunta
+                form.addEventListener('submit', evento => {
                     let primerError = null;
                     form.querySelectorAll('.error-pregunta').forEach(span => span.textContent = '');
 
-                    form.querySelectorAll('.pregunta-container').forEach(contenedor => {
-                        if (contenedor.style.display === 'none') return;
+                    form.querySelectorAll('.pregunta-container').forEach(caja => {
+                        if (caja.style.display === 'none') return;
 
-                        const grupo = contenedor.querySelector('[data-grupo-checkbox][data-obligatorio]');
-                        const campos = [...contenedor.querySelectorAll('input, select, textarea')].filter(c => !c.disabled);
-                        let mensaje = '';
+                        const marcar = (destino, mensaje) => {
+                            destino.querySelector('.error-pregunta').textContent = mensaje;
+                            primerError ??= caja;
+                        };
+
+                        // Filas de matrices
+                        caja.querySelectorAll('.fila-matriz').forEach(fila => {
+                            if (fila.style.display === 'none') return;
+                            const radios = [...fila.querySelectorAll('input[type=radio]')];
+                            if (radios.some(r => r.required) && !radios.some(r => r.checked)) marcar(fila, 'Seleccione una opción.');
+                        });
+                        if (caja.querySelector('.fila-matriz')) return;
+
+                        const grupo = caja.querySelector('[data-grupo-checkbox][data-obligatorio]');
+                        const campos = [...caja.querySelectorAll('input, select, textarea')].filter(c => !c.disabled && !c.classList.contains('alternativa'));
 
                         if (grupo && !campos.some(c => c.checked)) {
-                            mensaje = 'Seleccione al menos una opción.';
+                            marcar(caja, 'Seleccione al menos una opción.');
                         } else {
                             const invalido = campos.find(c => !c.checkValidity());
-                            if (invalido) mensaje = invalido.validationMessage || 'Esta pregunta es obligatoria.';
-                        }
-
-                        if (mensaje) {
-                            contenedor.querySelector('.error-pregunta').textContent = mensaje;
-                            primerError ??= contenedor;
+                            if (invalido) marcar(caja, invalido.validationMessage || 'Esta pregunta es obligatoria.');
                         }
                     });
 
                     const autoriza = form.querySelector('[name="autoriza"]');
-                    if (!autoriza.checked) {
-                        primerError ??= autoriza.closest('div');
+                    if (!primerError && !autoriza.checked) {
+                        evento.preventDefault();
+                        autoriza.reportValidity();
+                        return;
                     }
 
                     if (primerError) {
                         evento.preventDefault();
                         primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        if (!autoriza.checked && primerError === autoriza.closest('div')) autoriza.reportValidity();
                         return;
                     }
 
-                    // Evitar doble envío
-                    document.getElementById('cacsp-enviar').disabled = true;
+                    document.getElementById('cacsp-enviar').disabled = true; // evitar doble envío
                 });
 
-                // Estado inicial (incluye los valores devueltos si hubo errores)
-                // Ocultar sin borrar respuestas: si el formulario volvió con errores se conservan
-                condicionales.forEach(contenedor => {
-                    contenedor.style.display = 'none';
-                    contenedor.querySelectorAll('input, select, textarea').forEach(campo => campo.disabled = true);
-                });
-                evaluarCondiciones();
+                evaluar();
 
                 const errorServidor = [...form.querySelectorAll('.error-pregunta')].find(span => span.textContent.trim());
                 errorServidor?.scrollIntoView({ behavior: 'smooth', block: 'center' });
