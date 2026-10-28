@@ -33,3 +33,16 @@
 <!-- Select2 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{{-- Campos Flux en modo oscuro (login, perfil): el autocompletado del navegador les pone fondo claro
+     y el texto blanco deja de verse. Se fuerza el esquema oscuro y un fondo oscuro al autocompletar. --}}
+<style>
+    .dark [data-flux-control] { color-scheme: dark; }
+    .dark input[data-flux-control]:-webkit-autofill,
+    .dark input[data-flux-control]:-webkit-autofill:hover,
+    .dark input[data-flux-control]:-webkit-autofill:focus {
+        -webkit-text-fill-color: #fff;
+        caret-color: #fff;
+        -webkit-box-shadow: 0 0 0 1000px #262626 inset;
+        transition: background-color 9999s ease-out 0s;
+    }
+</style>
